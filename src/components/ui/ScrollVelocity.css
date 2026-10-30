@@ -1,0 +1,19 @@
+.scroll-velocity-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.scroller-track {
+  display: flex;
+  white-space: nowrap;
+  text-align: center;
+  font-family: var(--font-geist-sans), sans-serif;
+  letter-spacing: -0.02em;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  user-select: none;
+}
+
+.scroller-track span {
+  flex-shrink: 0;
+}

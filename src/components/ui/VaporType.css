@@ -1,0 +1,11 @@
+.vapor-type-container {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  line-height: 1;
+}
+
+.vapor-type-canvas {
+  display: block;
+  pointer-events: auto;
+}

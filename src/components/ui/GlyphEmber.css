@@ -1,0 +1,12 @@
+.glyph-ember-container {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  cursor: default;
+}
+
+.glyph-ember-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
