@@ -1,0 +1,101 @@
+.signal-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--signal-off, #64748b);
+  user-select: none;
+}
+
+.signal-type__beacon {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--signal-glow, #a855f7);
+  box-shadow: 0 0 10px var(--signal-glow, #a855f7), 0 0 20px var(--signal-glow, #a855f7);
+  animation: signalBeaconPulse 2s ease-in-out infinite;
+}
+
+.signal-type__text {
+  position: relative;
+  transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+.signal-type[data-state="igniting"] .signal-type__text {
+  animation: signalNeonIgnition 1.8s steps(1, end) forwards;
+}
+
+.signal-type[data-state="on"] .signal-type__text {
+  color: var(--signal-on, #e9d5ff);
+  text-shadow:
+    0 0 4px #ffffff,
+    0 0 10px var(--signal-glow, #a855f7),
+    0 0 22px var(--signal-glow, #a855f7),
+    0 0 45px var(--signal-haze, #7e22ce);
+}
+
+.signal-type__char {
+  display: inline-block;
+  transition: opacity 0.1s ease, color 0.1s ease;
+}
+
+@keyframes signalBeaconPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes signalNeonIgnition {
+  0% {
+    color: var(--signal-off, #64748b);
+    text-shadow: none;
+  }
+  12% {
+    color: var(--signal-on, #e9d5ff);
+    text-shadow: 0 0 8px var(--signal-glow, #a855f7);
+  }
+  18% {
+    color: var(--signal-off, #64748b);
+    text-shadow: none;
+  }
+  28% {
+    color: var(--signal-on, #e9d5ff);
+    text-shadow: 0 0 14px var(--signal-glow, #a855f7);
+  }
+  32% {
+    color: var(--signal-off, #64748b);
+    text-shadow: none;
+  }
+  42% {
+    color: var(--signal-on, #e9d5ff);
+    text-shadow: 0 0 18px var(--signal-glow, #a855f7);
+  }
+  46% {
+    color: var(--signal-off, #64748b);
+    text-shadow: none;
+  }
+  60% {
+    color: var(--signal-on, #e9d5ff);
+    text-shadow: 0 0 20px var(--signal-glow, #a855f7);
+  }
+  62% {
+    color: var(--signal-off, #64748b);
+    text-shadow: none;
+  }
+  75%, 100% {
+    color: var(--signal-on, #e9d5ff);
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px var(--signal-glow, #a855f7),
+      0 0 22px var(--signal-glow, #a855f7),
+      0 0 45px var(--signal-haze, #7e22ce);
+  }
+}
