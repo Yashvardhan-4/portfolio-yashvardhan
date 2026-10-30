@@ -6,14 +6,27 @@ import { carouselPlaceholderProjects, ProjectItem } from "@/data/carouselProject
 import { VariableProximity } from "@/components/ui/VariableProximity";
 import { TrueFocus } from "@/components/ui/TrueFocus";
 import { Threads } from "@/components/ui/Threads";
-import { StarBorder } from "@/components/ui/StarBorder";
 import { NeonReveal } from "@/components/ui/NeonReveal";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { ArrowUpRight, Github, X, Activity, CheckCircle2, Layers } from "lucide-react";
+import {
+  ArrowUpRight,
+  Github,
+  X,
+  Activity,
+  CheckCircle2,
+  Globe,
+  Monitor,
+  ExternalLink,
+  Code2,
+  Play,
+  Layers,
+} from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function SelectedWork() {
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
+  const [previewMode, setPreviewMode] = useState<"live" | "snapshot">("live");
+  const [interactiveCardId, setInteractiveCardId] = useState<string | null>(null);
 
   return (
     <section
@@ -53,7 +66,7 @@ export function SelectedWork() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-        {/* Header without AI slop // */}
+        {/* Section Header */}
         <div className="mb-8 grid grid-cols-1 gap-6 sm:mb-12 lg:grid-cols-12 lg:gap-8 items-start">
           <div className="lg:col-span-7">
             <div className="flex items-center gap-2">
@@ -94,12 +107,12 @@ export function SelectedWork() {
 
           <div className="lg:col-span-5 flex flex-col justify-end lg:pt-5">
             <p className="max-w-prose font-sans text-sm sm:text-base leading-relaxed text-[#94A3B8]">
-              Drag to explore production systems built for enterprise operations, download concurrency, local-first sync, and 3D graphics. Click any card to inspect architecture blueprints.
+              Explore production architectures with live interactive previews. Built for multi-stream download concurrency, local-first offline resilience, and commercial enterprise operations.
             </p>
           </div>
         </div>
 
-        {/* 3D Curved Carousel */}
+        {/* 3D Curved Carousel (Renders real website screenshot textures) */}
         <div className="relative w-full rounded-2xl border border-[#1E2430] bg-[#0E1015]/75 backdrop-blur-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
           <ConcaveCarousel
             items={carouselPlaceholderProjects}
@@ -128,11 +141,11 @@ export function SelectedWork() {
           />
         </div>
 
-        {/* Subtle navigation guidance */}
+        {/* Navigation Guidance Strip */}
         <div className="mt-4 flex flex-wrap items-center justify-between text-xs font-mono text-[#94A3B8] px-2">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7] animate-pulse" />
-            <span>Click any project card to open technical case study</span>
+            <span>Click any 3D card or live preview card to open architecture breakdown</span>
           </div>
           <div className="flex items-center gap-3">
             {carouselPlaceholderProjects.map((p, idx) => (
@@ -142,9 +155,180 @@ export function SelectedWork() {
                 onClick={() => setActiveProject(p)}
                 className="hover:text-[#C084FC] transition-colors underline-offset-4 hover:underline"
               >
-                {idx + 1}. {p.title.split(" ")[0]}
+                0{idx + 1}. {p.title.split(" ")[0]}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* 3. Dedicated Live Website Preview Cards Grid */}
+        <div className="mt-14 sm:mt-18">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-[#1E2430] pb-4">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold">
+                Interactive Systems
+              </span>
+              <h3 className="mt-1 font-serif text-2xl sm:text-3xl font-normal text-[#EDEDEF]">
+                Live Preview Cards
+              </h3>
+            </div>
+            <p className="font-mono text-xs text-[#94A3B8]">
+              Direct embedded previews &bull; Scroll, click, or test live
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {carouselPlaceholderProjects.map((project) => {
+              const isIframeActive = interactiveCardId === project.id;
+
+              return (
+                <div
+                  key={project.id}
+                  className="group flex flex-col justify-between rounded-2xl border border-[#1E2430] bg-[#0E1015]/85 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-[#A855F7]/60 hover:shadow-[0_0_35px_rgba(168,85,247,0.18)]"
+                >
+                  {/* Top: Browser Mockup Frame */}
+                  <div>
+                    {/* Browser Chrome Header */}
+                    <div className="flex items-center justify-between border-b border-[#1E2430] bg-[#08090C] px-3.5 py-2.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#EF4444]/80" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#F59E0B]/80" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-[#10B981]/80" />
+                      </div>
+
+                      <div className="flex items-center gap-1.5 rounded-md border border-[#1E2430] bg-[#0E1015] px-2.5 py-0.5 font-mono text-[10px] text-[#94A3B8]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                        <span className="truncate max-w-[140px] sm:max-w-[170px]">
+                          {project.liveUrl?.replace(/^https?:\/\//, "")}
+                        </span>
+                      </div>
+
+                      {project.liveUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setInteractiveCardId(isIframeActive ? null : project.id)}
+                          className="font-mono text-[10px] text-[#C084FC] hover:text-[#EDEDEF] transition-colors border border-[#1E2430] hover:border-[#A855F7] px-2 py-0.5 rounded bg-[#0E1015]"
+                          title={isIframeActive ? "Show screenshot" : "Interact with live site"}
+                        >
+                          {isIframeActive ? "Snapshot" : "Interact"}
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Preview Viewport */}
+                    <div className="relative w-full h-[220px] sm:h-[240px] bg-[#08090C] overflow-hidden">
+                      {isIframeActive && project.liveUrl ? (
+                        <iframe
+                          src={project.liveUrl}
+                          title={project.title}
+                          className="w-full h-full border-0"
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        />
+                      ) : (
+                        <div
+                          onClick={() => setActiveProject(project)}
+                          className="relative w-full h-full cursor-pointer overflow-hidden"
+                        >
+                          <img
+                            src={project.src}
+                            alt={project.alt}
+                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0E1015] via-transparent to-transparent opacity-60" />
+                          
+                          {/* Hover Overlay Hint */}
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#08090C]/60 backdrop-blur-[2px]">
+                            <span className="flex items-center gap-1.5 rounded-full border border-[#A855F7] bg-[#0E1015]/90 px-3.5 py-1.5 font-mono text-xs text-[#EDEDEF] shadow-[0_0_20px_rgba(168,85,247,0.35)]">
+                              <ExternalLink className="h-3.5 w-3.5 text-[#C084FC]" />
+                              Inspect Architecture
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="p-5 sm:p-6 space-y-4">
+                      <div>
+                        <span className="font-mono text-[11px] uppercase tracking-wider text-[#A855F7] font-semibold">
+                          {project.category}
+                        </span>
+                        <h4 className="mt-1 font-serif text-xl sm:text-2xl font-normal text-[#EDEDEF]">
+                          {project.title}
+                        </h4>
+                        <p className="mt-1.5 font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed line-clamp-3">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      {/* Verified Metrics Chips */}
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {project.metrics.slice(0, 2).map((m, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E2430] bg-[#08090C] px-2.5 py-1 font-mono text-[11px] text-[#EDEDEF]"
+                          >
+                            <Activity className="h-3 w-3 text-[#A855F7]" />
+                            {m}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Stack Badges */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.stack.slice(0, 4).map((tech, i) => (
+                          <span
+                            key={i}
+                            className="rounded-md border border-[#1E2430] bg-[#08090C]/80 px-2 py-0.5 font-mono text-[10px] text-[#C084FC]"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Bottom Actions */}
+                  <div className="p-5 sm:p-6 pt-0 border-t border-[#1E2430]/60 mt-4 flex items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setActiveProject(project)}
+                      className="font-mono text-xs text-[#94A3B8] hover:text-[#C084FC] transition-colors flex items-center gap-1"
+                    >
+                      <span>Architecture</span>
+                      <ArrowUpRight className="h-3 w-3" />
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-full border border-[#1E2430] p-1.5 text-[#94A3B8] hover:border-[#38BDF8] hover:text-[#38BDF8] transition-colors"
+                          aria-label="View source code on GitHub"
+                        >
+                          <Github className="h-3.5 w-3.5" />
+                        </a>
+                      )}
+
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 rounded-full border border-[#1E2430] bg-[#08090C] px-3 py-1 font-mono text-xs text-[#EDEDEF] hover:border-[#A855F7] hover:text-[#C084FC] transition-all"
+                        >
+                          <span>Live Site</span>
+                          <ExternalLink className="h-3 w-3 text-[#A855F7]" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -168,7 +352,7 @@ export function SelectedWork() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-3xl rounded-2xl border border-[#A855F7]/40 bg-[#0E1015] p-6 sm:p-8 shadow-[0_0_50px_rgba(168,85,247,0.25)] z-10 max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-4xl rounded-2xl border border-[#A855F7]/40 bg-[#0E1015] p-6 sm:p-8 shadow-[0_0_50px_rgba(168,85,247,0.25)] z-10 max-h-[90vh] overflow-y-auto"
             >
               {/* Header */}
               <div className="flex items-start justify-between gap-4 border-b border-[#1E2430] pb-5">
@@ -193,6 +377,53 @@ export function SelectedWork() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
+
+              {/* Embedded Live Website Preview Frame */}
+              {activeProject.liveUrl && (
+                <div className="mt-6 overflow-hidden rounded-xl border border-[#1E2430] bg-[#08090C] shadow-2xl">
+                  {/* macOS Browser Chrome */}
+                  <div className="flex items-center justify-between border-b border-[#1E2430] bg-[#0E1015] px-4 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-[#EF4444]/80" />
+                      <span className="h-3 w-3 rounded-full bg-[#F59E0B]/80" />
+                      <span className="h-3 w-3 rounded-full bg-[#10B981]/80" />
+                      <span className="ml-3 font-mono text-[11px] text-[#94A3B8] flex items-center gap-1.5 bg-[#08090C] px-3 py-0.5 rounded-md border border-[#1E2430]">
+                        <span className="text-[#10B981] text-xs">🔒</span>
+                        {activeProject.liveUrl}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setPreviewMode(previewMode === "live" ? "snapshot" : "live")}
+                        className="font-mono text-[11px] text-[#C084FC] hover:text-[#EDEDEF] transition-colors bg-[#1E2430]/60 hover:bg-[#1E2430] px-2.5 py-1 rounded"
+                      >
+                        {previewMode === "live" ? "View Retina Snapshot" : "Interact Live (iFrame)"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Viewport Frame */}
+                  <div className="relative w-full h-[360px] sm:h-[420px] bg-[#08090C] overflow-hidden">
+                    {previewMode === "live" ? (
+                      <iframe
+                        src={activeProject.liveUrl}
+                        title={activeProject.title}
+                        className="w-full h-full border-0"
+                        loading="lazy"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      />
+                    ) : (
+                      <img
+                        src={activeProject.src}
+                        alt={activeProject.alt}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Verified Metrics Strip */}
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
