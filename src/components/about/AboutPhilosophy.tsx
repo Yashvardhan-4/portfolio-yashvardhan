@@ -3,7 +3,6 @@
 import React from "react";
 import { CountUp } from "@/components/ui/CountUp";
 import { GlyphEmber } from "@/components/ui/GlyphEmber";
-import { FolderFloat } from "@/components/ui/FolderFloat";
 import { InterferenceRibbons } from "@/components/ui/InterferenceRibbons";
 import { ArrowUpRight, Terminal, Award, Activity, ShieldCheck } from "lucide-react";
 
@@ -68,15 +67,6 @@ export function AboutPhilosophy() {
         "SIH National Finalist selected among tens of thousands of engineering participants nationwide, and global top 1,500 ranking in Google BigCode.",
       link: null,
     },
-  ];
-
-  const engineeringPillars = [
-    "C++ Concurrency",
-    "POSIX File Descriptors",
-    "Node.js (ESM)",
-    "Supabase PostgreSQL",
-    "Dexie.js IndexedDB",
-    "Google Draco 3D",
   ];
 
   return (
@@ -175,42 +165,6 @@ export function AboutPhilosophy() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Tactile Engineering Matter.js FolderFloat */}
-        <div className="mt-16 pt-10 border-t border-[#1E2430]/70 flex flex-col sm:flex-row items-center justify-between gap-8">
-          <div>
-            <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold">
-              Interactive Engineering Vault
-            </span>
-            <h4 className="mt-1 font-serif text-2xl text-[#EDEDEF]">
-              Zero-Gravity Systems Index
-            </h4>
-            <p className="mt-1 max-w-md font-sans text-xs sm:text-sm text-[#94A3B8]">
-              Hover or click the archive folder to launch production architecture pillars into a Matter.js physics sandbox. Drag, toss, and collide the pills.
-            </p>
-          </div>
-
-          <div className="shrink-0 flex items-center justify-center p-4">
-            <FolderFloat
-              items={engineeringPillars}
-              label="Systems Vault"
-              sublabel="6 Core Pillars"
-              trigger="hover"
-              physics={true}
-              drift={0.65}
-              width={210}
-              height={148}
-              spread={190}
-              folderColor="#1E2430"
-              frontColor="#2D3748"
-              paperColor="#0E1015"
-              itemColor="#0E1015"
-              itemTextColor="#C084FC"
-              labelColor="#EDEDEF"
-              bounce={0.35}
-            />
-          </div>
         </div>
       </div>
     </section>

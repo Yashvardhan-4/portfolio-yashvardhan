@@ -1,41 +1,47 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
-import { SpiralFunnel } from "@/components/ui/SpiralFunnel";
+import { LaserFlow } from "@/components/ui/LaserFlow";
 import { VaporType } from "@/components/ui/VaporType";
 import { RotatingText } from "@/components/ui/RotatingText";
-import { GravityLetters } from "@/components/ui/GravityLetters";
+import { ScrambledText } from "@/components/ui/ScrambledText";
 import { StrokeText } from "@/components/ui/StrokeText";
 import { SignalType } from "@/components/ui/SignalType";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { ShinyText } from "@/components/ui/ShinyText";
 import { Magnet } from "@/components/ui/Magnet";
 
 export function MonumentalHero() {
-  const [headlineMode, setHeadlineMode] = useState<"vapor" | "gravity">("vapor");
+  const datumCardRef = useRef<HTMLDivElement>(null);
 
   const engineeringSpecialties = [
-    "Full-Stack Web Platforms",
-    "High-Speed Concurrency Engines",
-    "Local-First Offline Architectures",
-    "Algorithmic Problem Solving",
+    "High-Throughput Concurrency Engines",
+    "Local-First Offline Web Architectures",
+    "Distributed Enterprise ERP Platforms",
+    "Competitive Algorithmic Optimization",
   ];
 
   return (
     <div className="relative w-full min-h-[100svh] overflow-hidden bg-[#08090C] flex flex-col justify-between">
-      {/* 1. Luminous 3D Spiral Funnel (Purple Vortex Tornado of Light Filaments & Particles - Image 1) */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-85" aria-hidden="true">
-        <SpiralFunnel
-          lineCount={96}
-          particleCount={240}
-          height={5.4}
-          speed={1.0}
-          color="#A855F7"
-          accentColor="#E879F9"
-          floorColor="#7E22CE"
-          opacity={0.85}
-          interactive={true}
+      {/* 1. Luminous LaserFlow WebGL2 Background (Pouring Laser Beam, Volumetric Fog & Flowing Dust) */}
+      <div className="absolute inset-0 z-0 pointer-events-auto" aria-hidden="true">
+        <LaserFlow
+          surfaceRef={datumCardRef}
+          beamPosition={0.5}
+          surfaceLevel={0.84}
+          color="#9333EA"
+          intensity={2.0}
+          beamWidth={1.8}
+          flare={1.6}
+          spread={1.8}
+          spill={1.2}
+          fog={0.28}
+          dust={1.8}
+          streaks={1.6}
+          dots={1.0}
+          pulse={1.5}
+          speed={1.3}
+          mouseInteraction={true}
         />
       </div>
 
@@ -101,39 +107,11 @@ export function MonumentalHero() {
           </nav>
         </header>
 
-        {/* Center Stage: Vapor Type (Mist Condensation & Sand Particle Disintegration - Image 3) */}
-        <div className="my-auto py-6 sm:py-10 lg:py-14 w-full">
-          <div className="flex flex-col gap-2 w-full">
-            {/* Interactive Mode Badge Selector */}
-            <div className="flex items-center gap-2 self-start mb-1">
-              <span className="font-mono text-[10px] tracking-wider uppercase text-[#94A3B8]">
-                Mode:
-              </span>
-              <button
-                type="button"
-                onClick={() => setHeadlineMode("vapor")}
-                className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] tracking-wider uppercase transition-all ${
-                  headlineMode === "vapor"
-                    ? "bg-[#A855F7]/30 text-[#F3E8FF] border border-[#C084FC]/60 shadow-[0_0_12px_rgba(168,85,247,0.35)]"
-                    : "text-[#94A3B8] hover:text-[#EDEDEF] border border-[#1E2430]"
-                }`}
-              >
-                Vapor Disperse
-              </button>
-              <button
-                type="button"
-                onClick={() => setHeadlineMode("gravity")}
-                className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] tracking-wider uppercase transition-all ${
-                  headlineMode === "gravity"
-                    ? "bg-[#A855F7]/30 text-[#F3E8FF] border border-[#C084FC]/60 shadow-[0_0_12px_rgba(168,85,247,0.35)]"
-                    : "text-[#94A3B8] hover:text-[#EDEDEF] border border-[#1E2430]"
-                }`}
-              >
-                Slice Gravity
-              </button>
-            </div>
-
-            {headlineMode === "vapor" ? (
+        {/* Center Stage: Monumental Typography with Clear Architectural Hierarchy */}
+        <div className="my-auto py-8 sm:py-12 lg:py-16 w-full">
+          <div className="flex flex-col gap-4 w-full">
+            {/* Level 1: Monumental Display Headline with Vapor Disperse */}
+            <div className="w-full">
               <VaporType
                 words={[
                   "Systems Architect",
@@ -142,56 +120,58 @@ export function MonumentalHero() {
                   "Algorithmic Builder",
                 ]}
                 fontFamily="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
-                fontSize={78}
+                fontSize={86}
                 fontWeight="800"
                 color="#EDEDEF"
                 vaporColor="#E9D5FF"
                 glowColor="#C084FC"
-                interval={2600}
-                className="drop-shadow-[0_0_40px_rgba(168,85,247,0.35)]"
+                interval={2800}
+                className="drop-shadow-[0_0_45px_rgba(168,85,247,0.4)]"
               />
-            ) : (
-              <GravityLetters
-                words={["Systems Architect", "Software Engineer", "Full-Stack Craftsman"]}
-                fontSize={80}
-                fontWeight={800}
-                color="#EDEDEF"
-                highlightColor="#C084FC"
-                gravity={0.36}
-                sliceRadius={28}
-                restitutionDelay={1300}
-                className="drop-shadow-[0_0_40px_rgba(168,85,247,0.32)]"
-              />
-            )}
+            </div>
 
-            {/* Dynamic RotatingText Subtitle */}
-            <div className="mt-1 flex flex-wrap items-center gap-2 font-sans text-sm sm:text-base text-[#94A3B8]">
-              <span>Engineering</span>
-              <RotatingText
-                texts={engineeringSpecialties}
-                effect="flip"
-                splitBy="words"
-                highlight={true}
-                highlightColor="#A855F7"
-                rotationInterval={3000}
-                mainClassName="font-medium px-2.5 py-0.5 rounded-lg text-xs sm:text-sm font-mono shadow-[0_0_15px_rgba(168,85,247,0.35)]"
-              />
+            {/* Level 2: Highly Visible Architectural Sub-Headline */}
+            <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[#A855F7] animate-pulse" />
+                <span className="font-mono text-xs sm:text-sm uppercase tracking-widest text-[#C084FC] font-semibold">
+                  Engineering Focus:
+                </span>
+              </div>
+              <div className="text-base sm:text-xl font-sans font-medium text-[#EDEDEF]">
+                <RotatingText
+                  texts={engineeringSpecialties}
+                  effect="flip"
+                  splitBy="words"
+                  highlight={false}
+                  rotationInterval={3200}
+                  mainClassName="font-semibold text-[#F3E8FF] px-3 py-1 rounded-md bg-[#1E112A]/80 border border-[#A855F7]/30 shadow-[0_0_20px_rgba(168,85,247,0.35)]"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Architectural Datum Line, Asymmetric Narrative & Kinetic CTA */}
-        <div className="w-full">
-          <div className="w-full border-t border-[#1E2430]/70 pt-6 sm:pt-8 lg:pt-10">
+        {/* Architectural Datum Line, Laser Surface Contact & Interactive Scrambled Narrative */}
+        <div ref={datumCardRef} className="w-full">
+          <div className="w-full border-t border-[#1E2430]/80 pt-6 sm:pt-8 lg:pt-10">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8 items-start">
-              {/* Left: Positioning statement */}
+              {/* Left: Rewritten Authoritative Bio with Interactive ScrambledText */}
               <div className="md:col-span-8 lg:col-span-7">
-                <p className="max-w-prose font-sans text-base leading-[1.65] text-[#94A3B8] sm:text-lg">
-                  <ShinyText
-                    text="Software engineer specializing in high-throughput distributed systems, local-first web platforms, and low-latency reactive architectures. Driven by algorithmic depth, clean code craftsmanship, and building software that scales reliably."
-                    speed={5}
-                  />
-                </p>
+                <ScrambledText
+                  effect="scramble"
+                  radius={120}
+                  strength={1}
+                  duration={1.2}
+                  speed={0.5}
+                  scrambleChars=".:/*_#"
+                  scrambleColor="#C084FC"
+                  clickBurst={true}
+                  intro={true}
+                  className="font-sans text-base sm:text-lg leading-[1.7] text-[#94A3B8]"
+                >
+                  Computer engineering graduate specializing in high-concurrency systems, local-first offline architectures, and resilient distributed platforms. Driven by algorithmic precision, clean software craftsmanship, and engineering systems that scale reliably.
+                </ScrambledText>
               </div>
 
               {/* Right: Neon Action Button & Scroll cue */}

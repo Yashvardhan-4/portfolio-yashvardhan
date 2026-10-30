@@ -8,6 +8,7 @@ import { TrueFocus } from "@/components/ui/TrueFocus";
 import { Threads } from "@/components/ui/Threads";
 import { NeonReveal } from "@/components/ui/NeonReveal";
 import { NeonButton } from "@/components/ui/NeonButton";
+import { FolderFloat, FolderFloatItem } from "@/components/ui/FolderFloat";
 import {
   ArrowUpRight,
   Github,
@@ -25,8 +26,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export function SelectedWork() {
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
+  const [selectedVaultProject, setSelectedVaultProject] = useState<ProjectItem>(carouselPlaceholderProjects[0]);
+  const [isVaultIframeLive, setIsVaultIframeLive] = useState<boolean>(true);
   const [previewMode, setPreviewMode] = useState<"live" | "snapshot">("live");
-  const [interactiveCardId, setInteractiveCardId] = useState<string | null>(null);
 
   return (
     <section
@@ -164,174 +166,203 @@ export function SelectedWork() {
           </div>
         </div>
 
-        {/* 3. Dedicated Live Website Preview Cards Grid */}
-        <div className="mt-14 sm:mt-18">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-[#1E2430] pb-4">
+        {/* 3. Tactical Matter.js FolderFloat Project Vault & Live Stage */}
+        <div className="mt-16 sm:mt-20">
+          <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#1E2430] pb-6">
             <div>
-              <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold">
-                Interactive Systems
+              <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#C084FC] animate-pulse" />
+                Zero-Gravity Repository &bull; Systems Archive
               </span>
-              <h3 className="mt-1 font-serif text-2xl sm:text-3xl font-normal text-[#EDEDEF]">
-                Live Preview Cards
+              <h3 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#EDEDEF]">
+                Project Vault &amp; Live Systems
               </h3>
             </div>
-            <p className="font-mono text-xs text-[#94A3B8]">
-              Direct embedded previews &bull; Scroll, click, or test live
+            <p className="font-mono text-xs text-[#94A3B8] max-w-md">
+              Hover or click the vault folder to release production systems into zero gravity. Drag, throw, or select any system to launch its live environment below.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {carouselPlaceholderProjects.map((project) => {
-              const isIframeActive = interactiveCardId === project.id;
+          {/* Interactive Vault Folder */}
+          <div className="w-full mb-10 py-8 px-4 rounded-2xl border border-[#1E2430] bg-[#0E1015]/70 backdrop-blur-md flex flex-col items-center justify-center relative overflow-visible shadow-[0_15px_40px_rgba(0,0,0,0.7)]">
+            <div className="text-center mb-3">
+              <span className="font-mono text-[11px] text-[#A855F7] tracking-wider uppercase">
+                PHYSICS-ENABLED REPOSITORY
+              </span>
+            </div>
 
-              return (
+            <FolderFloat
+              items={[
+                { label: "01 / TurboIDM (32-Stream Concurrency Engine)", value: "turbo-idm" },
+                { label: "02 / Inkless (Local-First Offline Journal)", value: "inkless" },
+                { label: "03 / Shivkush Nursery & ERP (Digital Platform)", value: "shivkush-nursery-pwa" },
+                { label: "04 / Algorithmic Graph Engine (Network Flow)", value: "algorithmic-graph-engine" },
+              ]}
+              label="Project Vault"
+              sublabel="4 Production Systems"
+              trigger="hover"
+              physics={true}
+              drift={0.65}
+              width={230}
+              height={155}
+              spread={210}
+              folderColor="#1E2430"
+              frontColor="#2D3748"
+              paperColor="#0E1015"
+              itemColor="#0E1015"
+              itemTextColor="#C084FC"
+              labelColor="#EDEDEF"
+              bounce={0.35}
+              onSelect={(val) => {
+                const found = carouselPlaceholderProjects.find((p) => p.id === val);
+                if (found) setSelectedVaultProject(found);
+              }}
+            />
+
+            <div className="mt-4 flex items-center gap-2 font-mono text-xs text-[#94A3B8]">
+              <span>Active System:</span>
+              <span className="text-[#C084FC] font-semibold">{selectedVaultProject.title}</span>
+            </div>
+          </div>
+
+          {/* Dedicated Live Production System Terminal */}
+          <div className="rounded-2xl border border-[#1E2430] bg-[#0E1015]/90 backdrop-blur-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.85)]">
+            {/* Browser Chrome Header */}
+            <div className="flex items-center justify-between border-b border-[#1E2430] bg-[#08090C] px-4 py-3">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-[#EF4444]/80" />
+                <span className="h-3 w-3 rounded-full bg-[#F59E0B]/80" />
+                <span className="h-3 w-3 rounded-full bg-[#10B981]/80" />
+                <span className="ml-3 font-mono text-xs text-[#94A3B8] hidden sm:inline">
+                  {selectedVaultProject.category}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 rounded-lg border border-[#1E2430] bg-[#0E1015] px-3 py-1 font-mono text-xs text-[#EDEDEF]">
+                <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
+                <span className="truncate max-w-[200px] sm:max-w-[280px]">
+                  {selectedVaultProject.liveUrl?.replace(/^https?:\/\//, "") || "local-first system"}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {selectedVaultProject.liveUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setIsVaultIframeLive(!isVaultIframeLive)}
+                    className="font-mono text-xs text-[#C084FC] hover:text-[#EDEDEF] transition-colors border border-[#1E2430] hover:border-[#A855F7] px-2.5 py-1 rounded bg-[#0E1015]"
+                  >
+                    {isVaultIframeLive ? "Snapshot Mode" : "Interactive Live"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Viewport Frame */}
+            <div className="relative w-full h-[320px] sm:h-[440px] lg:h-[500px] bg-[#08090C] overflow-hidden">
+              {isVaultIframeLive && selectedVaultProject.liveUrl ? (
+                <iframe
+                  src={selectedVaultProject.liveUrl}
+                  title={selectedVaultProject.title}
+                  className="w-full h-full border-0"
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                />
+              ) : (
                 <div
-                  key={project.id}
-                  className="group flex flex-col justify-between rounded-2xl border border-[#1E2430] bg-[#0E1015]/85 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-[#A855F7]/60 hover:shadow-[0_0_35px_rgba(168,85,247,0.18)]"
+                  onClick={() => setActiveProject(selectedVaultProject)}
+                  className="relative w-full h-full cursor-pointer overflow-hidden group"
                 >
-                  {/* Top: Browser Mockup Frame */}
-                  <div>
-                    {/* Browser Chrome Header */}
-                    <div className="flex items-center justify-between border-b border-[#1E2430] bg-[#08090C] px-3.5 py-2.5">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#EF4444]/80" />
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#F59E0B]/80" />
-                        <span className="h-2.5 w-2.5 rounded-full bg-[#10B981]/80" />
-                      </div>
-
-                      <div className="flex items-center gap-1.5 rounded-md border border-[#1E2430] bg-[#0E1015] px-2.5 py-0.5 font-mono text-[10px] text-[#94A3B8]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
-                        <span className="truncate max-w-[140px] sm:max-w-[170px]">
-                          {project.liveUrl?.replace(/^https?:\/\//, "")}
-                        </span>
-                      </div>
-
-                      {project.liveUrl && (
-                        <button
-                          type="button"
-                          onClick={() => setInteractiveCardId(isIframeActive ? null : project.id)}
-                          className="font-mono text-[10px] text-[#C084FC] hover:text-[#EDEDEF] transition-colors border border-[#1E2430] hover:border-[#A855F7] px-2 py-0.5 rounded bg-[#0E1015]"
-                          title={isIframeActive ? "Show screenshot" : "Interact with live site"}
-                        >
-                          {isIframeActive ? "Snapshot" : "Interact"}
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Preview Viewport */}
-                    <div className="relative w-full h-[220px] sm:h-[240px] bg-[#08090C] overflow-hidden">
-                      {isIframeActive && project.liveUrl ? (
-                        <iframe
-                          src={project.liveUrl}
-                          title={project.title}
-                          className="w-full h-full border-0"
-                          loading="lazy"
-                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                        />
-                      ) : (
-                        <div
-                          onClick={() => setActiveProject(project)}
-                          className="relative w-full h-full cursor-pointer overflow-hidden"
-                        >
-                          <img
-                            src={project.src}
-                            alt={project.alt}
-                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0E1015] via-transparent to-transparent opacity-60" />
-                          
-                          {/* Hover Overlay Hint */}
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#08090C]/60 backdrop-blur-[2px]">
-                            <span className="flex items-center gap-1.5 rounded-full border border-[#A855F7] bg-[#0E1015]/90 px-3.5 py-1.5 font-mono text-xs text-[#EDEDEF] shadow-[0_0_20px_rgba(168,85,247,0.35)]">
-                              <ExternalLink className="h-3.5 w-3.5 text-[#C084FC]" />
-                              Inspect Architecture
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Card Content */}
-                    <div className="p-5 sm:p-6 space-y-4">
-                      <div>
-                        <span className="font-mono text-[11px] uppercase tracking-wider text-[#A855F7] font-semibold">
-                          {project.category}
-                        </span>
-                        <h4 className="mt-1 font-serif text-xl sm:text-2xl font-normal text-[#EDEDEF]">
-                          {project.title}
-                        </h4>
-                        <p className="mt-1.5 font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed line-clamp-3">
-                          {project.description}
-                        </p>
-                      </div>
-
-                      {/* Verified Metrics Chips */}
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {project.metrics.slice(0, 2).map((m, i) => (
-                          <span
-                            key={i}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E2430] bg-[#08090C] px-2.5 py-1 font-mono text-[11px] text-[#EDEDEF]"
-                          >
-                            <Activity className="h-3 w-3 text-[#A855F7]" />
-                            {m}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Stack Badges */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.stack.slice(0, 4).map((tech, i) => (
-                          <span
-                            key={i}
-                            className="rounded-md border border-[#1E2430] bg-[#08090C]/80 px-2 py-0.5 font-mono text-[10px] text-[#C084FC]"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Card Bottom Actions */}
-                  <div className="p-5 sm:p-6 pt-0 border-t border-[#1E2430]/60 mt-4 flex items-center justify-between gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setActiveProject(project)}
-                      className="font-mono text-xs text-[#94A3B8] hover:text-[#C084FC] transition-colors flex items-center gap-1"
-                    >
-                      <span>Architecture</span>
-                      <ArrowUpRight className="h-3 w-3" />
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="rounded-full border border-[#1E2430] p-1.5 text-[#94A3B8] hover:border-[#38BDF8] hover:text-[#38BDF8] transition-colors"
-                          aria-label="View source code on GitHub"
-                        >
-                          <Github className="h-3.5 w-3.5" />
-                        </a>
-                      )}
-
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 rounded-full border border-[#1E2430] bg-[#08090C] px-3 py-1 font-mono text-xs text-[#EDEDEF] hover:border-[#A855F7] hover:text-[#C084FC] transition-all"
-                        >
-                          <span>Live Site</span>
-                          <ExternalLink className="h-3 w-3 text-[#A855F7]" />
-                        </a>
-                      )}
-                    </div>
+                  <img
+                    src={selectedVaultProject.src}
+                    alt={selectedVaultProject.alt}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0E1015] via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#08090C]/60 backdrop-blur-[2px]">
+                    <span className="flex items-center gap-2 rounded-full border border-[#A855F7] bg-[#0E1015]/90 px-4 py-2 font-mono text-xs text-[#EDEDEF] shadow-[0_0_20px_rgba(168,85,247,0.35)]">
+                      <ExternalLink className="h-4 w-4 text-[#C084FC]" />
+                      Inspect Architecture
+                    </span>
                   </div>
                 </div>
-              );
-            })}
+              )}
+            </div>
+
+            {/* System Metadata, Stack Badges & Technical Drawer Trigger */}
+            <div className="p-6 sm:p-8 border-t border-[#1E2430] grid grid-cols-1 md:grid-cols-12 gap-6 items-center justify-between">
+              <div className="md:col-span-7">
+                <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold">
+                  {selectedVaultProject.category}
+                </span>
+                <h4 className="mt-1 font-serif text-2xl sm:text-3xl text-[#EDEDEF]">
+                  {selectedVaultProject.title}
+                </h4>
+                <p className="mt-2 font-sans text-sm text-[#94A3B8] leading-relaxed">
+                  {selectedVaultProject.description}
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {selectedVaultProject.metrics.map((m, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E2430] bg-[#08090C] px-3 py-1 font-mono text-xs text-[#EDEDEF]"
+                    >
+                      <Activity className="h-3 w-3 text-[#A855F7]" />
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="md:col-span-5 flex flex-col md:items-end gap-4">
+                <div className="flex flex-wrap gap-1.5 justify-start md:justify-end">
+                  {selectedVaultProject.stack.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="rounded-md border border-[#1E2430] bg-[#08090C]/90 px-2.5 py-1 font-mono text-[11px] text-[#C084FC]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setActiveProject(selectedVaultProject)}
+                    className="rounded-full border border-[#A855F7]/40 bg-[#1E112A] hover:bg-[#A855F7]/20 px-4 py-2 font-mono text-xs text-[#E9D5FF] transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+                  >
+                    <span>Architecture Drawer</span>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-[#C084FC]" />
+                  </button>
+
+                  {selectedVaultProject.githubUrl && (
+                    <a
+                      href={selectedVaultProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full border border-[#1E2430] p-2 text-[#94A3B8] hover:border-[#38BDF8] hover:text-[#38BDF8] transition-colors"
+                      aria-label="View source code on GitHub"
+                    >
+                      <Github className="h-4 w-4" />
+                    </a>
+                  )}
+
+                  {selectedVaultProject.liveUrl && (
+                    <a
+                      href={selectedVaultProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-full border border-[#1E2430] bg-[#08090C] px-4 py-2 font-mono text-xs text-[#EDEDEF] hover:border-[#A855F7] hover:text-[#C084FC] transition-all"
+                    >
+                      <span>Open Live</span>
+                      <ExternalLink className="h-3.5 w-3.5 text-[#A855F7]" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
