@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
-import { InterferenceRibbons } from "@/components/ui/InterferenceRibbons";
+import { SpiralFunnel } from "@/components/ui/SpiralFunnel";
+import { VaporType } from "@/components/ui/VaporType";
 import { RotatingText } from "@/components/ui/RotatingText";
 import { GravityLetters } from "@/components/ui/GravityLetters";
 import { StrokeText } from "@/components/ui/StrokeText";
@@ -12,6 +13,8 @@ import { ShinyText } from "@/components/ui/ShinyText";
 import { Magnet } from "@/components/ui/Magnet";
 
 export function MonumentalHero() {
+  const [headlineMode, setHeadlineMode] = useState<"vapor" | "gravity">("vapor");
+
   const engineeringSpecialties = [
     "Full-Stack Web Platforms",
     "High-Speed Concurrency Engines",
@@ -21,19 +24,20 @@ export function MonumentalHero() {
 
   return (
     <div className="relative w-full min-h-[100svh] overflow-hidden bg-[#08090C] flex flex-col justify-between">
-      {/* 1. Full-Screen Edge-to-Edge Interference Ribbons (Fine Luminous Wire Filaments) */}
-      <InterferenceRibbons
-        strandCount={42}
-        ribbonCount={3}
-        baseColor="#581C87"
-        accentColor="#C084FC"
-        highlightColor="#38BDF8"
-        speed={0.85}
-        twist={1.6}
-        amplitude={75}
-        frequency={0.0032}
-        opacity={0.42}
-      />
+      {/* 1. Luminous 3D Spiral Funnel (Purple Vortex Tornado of Light Filaments & Particles - Image 1) */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-85" aria-hidden="true">
+        <SpiralFunnel
+          lineCount={96}
+          particleCount={240}
+          height={5.4}
+          speed={1.0}
+          color="#A855F7"
+          accentColor="#E879F9"
+          floorColor="#7E22CE"
+          opacity={0.85}
+          interactive={true}
+        />
+      </div>
 
       <section
         aria-label="Introduction and Hero"
@@ -97,23 +101,71 @@ export function MonumentalHero() {
           </nav>
         </header>
 
-        {/* Center Stage: Gravity Letters (Sliceable Sand Physics, Falling & Pouring Back) */}
-        <div className="my-auto py-8 sm:py-12 lg:py-16 w-full">
-          <div className="flex flex-col gap-3 w-full">
-            <GravityLetters
-              words={["Systems Architect", "Software Engineer", "Full-Stack Craftsman"]}
-              fontSize={80}
-              fontWeight={800}
-              color="#EDEDEF"
-              highlightColor="#C084FC"
-              gravity={0.36}
-              sliceRadius={28}
-              restitutionDelay={1300}
-              className="drop-shadow-[0_0_40px_rgba(168,85,247,0.32)]"
-            />
+        {/* Center Stage: Vapor Type (Mist Condensation & Sand Particle Disintegration - Image 3) */}
+        <div className="my-auto py-6 sm:py-10 lg:py-14 w-full">
+          <div className="flex flex-col gap-2 w-full">
+            {/* Interactive Mode Badge Selector */}
+            <div className="flex items-center gap-2 self-start mb-1">
+              <span className="font-mono text-[10px] tracking-wider uppercase text-[#94A3B8]">
+                Mode:
+              </span>
+              <button
+                type="button"
+                onClick={() => setHeadlineMode("vapor")}
+                className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] tracking-wider uppercase transition-all ${
+                  headlineMode === "vapor"
+                    ? "bg-[#A855F7]/30 text-[#F3E8FF] border border-[#C084FC]/60 shadow-[0_0_12px_rgba(168,85,247,0.35)]"
+                    : "text-[#94A3B8] hover:text-[#EDEDEF] border border-[#1E2430]"
+                }`}
+              >
+                Vapor Disperse
+              </button>
+              <button
+                type="button"
+                onClick={() => setHeadlineMode("gravity")}
+                className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] tracking-wider uppercase transition-all ${
+                  headlineMode === "gravity"
+                    ? "bg-[#A855F7]/30 text-[#F3E8FF] border border-[#C084FC]/60 shadow-[0_0_12px_rgba(168,85,247,0.35)]"
+                    : "text-[#94A3B8] hover:text-[#EDEDEF] border border-[#1E2430]"
+                }`}
+              >
+                Slice Gravity
+              </button>
+            </div>
+
+            {headlineMode === "vapor" ? (
+              <VaporType
+                words={[
+                  "Systems Architect",
+                  "Software Engineer",
+                  "Full-Stack Craftsman",
+                  "Algorithmic Builder",
+                ]}
+                fontFamily="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
+                fontSize={78}
+                fontWeight="800"
+                color="#EDEDEF"
+                vaporColor="#E9D5FF"
+                glowColor="#C084FC"
+                interval={2600}
+                className="drop-shadow-[0_0_40px_rgba(168,85,247,0.35)]"
+              />
+            ) : (
+              <GravityLetters
+                words={["Systems Architect", "Software Engineer", "Full-Stack Craftsman"]}
+                fontSize={80}
+                fontWeight={800}
+                color="#EDEDEF"
+                highlightColor="#C084FC"
+                gravity={0.36}
+                sliceRadius={28}
+                restitutionDelay={1300}
+                className="drop-shadow-[0_0_40px_rgba(168,85,247,0.32)]"
+              />
+            )}
 
             {/* Dynamic RotatingText Subtitle */}
-            <div className="mt-2 flex flex-wrap items-center gap-2 font-sans text-sm sm:text-base text-[#94A3B8]">
+            <div className="mt-1 flex flex-wrap items-center gap-2 font-sans text-sm sm:text-base text-[#94A3B8]">
               <span>Engineering</span>
               <RotatingText
                 texts={engineeringSpecialties}

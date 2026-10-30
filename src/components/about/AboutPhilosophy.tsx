@@ -4,6 +4,7 @@ import React from "react";
 import { CountUp } from "@/components/ui/CountUp";
 import { GlyphEmber } from "@/components/ui/GlyphEmber";
 import { FolderFloat } from "@/components/ui/FolderFloat";
+import { InterferenceRibbons } from "@/components/ui/InterferenceRibbons";
 import { ArrowUpRight, Terminal, Award, Activity, ShieldCheck } from "lucide-react";
 
 export function AboutPhilosophy() {
@@ -84,6 +85,20 @@ export function AboutPhilosophy() {
       aria-label="Credentials and Academic Rigor"
       className="relative w-full border-t border-[#1E2430]/70 bg-[#08090C] py-20 sm:py-28 overflow-hidden scroll-mt-24"
     >
+      {/* Harmonic Laser Filament Weave in Credentials Section */}
+      <InterferenceRibbons
+        strandCount={38}
+        ribbonCount={2}
+        baseColor="#3B0764"
+        accentColor="#A855F7"
+        highlightColor="#38BDF8"
+        speed={0.7}
+        twist={1.4}
+        amplitude={60}
+        frequency={0.0028}
+        opacity={0.3}
+      />
+
       <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
         {/* Editorial Header */}
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#1E2430]/70 pb-8">

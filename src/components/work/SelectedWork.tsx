@@ -34,12 +34,15 @@ export function SelectedWork() {
       aria-label="Featured Projects & Engineering Work"
       className="relative w-full border-t border-[#1E2430] bg-[#08090C] py-16 sm:py-24 lg:py-28 overflow-hidden scroll-mt-24"
     >
-      {/* 1. Neon Reveal Top Light Beam */}
+      {/* 1. Neon Reveal Top Light Beam (Image 2) */}
       <NeonReveal
+        badge="HIGH-IMPACT ENGINEERING"
         title="SELECTED WORKS"
-        neonColor="#C084FC"
-        glowColor="#A855F7"
-        beamHeight="130px"
+        subtitle="Distributed Systems • Multi-Stream Concurrency • Local-First Offline PWA"
+        neonColor="#E879F9"
+        glowColor="#C084FC"
+        beamHeight="280px"
+        titleStyle="luminous"
         interactive={true}
         className="mb-8"
       />

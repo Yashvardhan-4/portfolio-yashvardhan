@@ -34,9 +34,9 @@ interface VaporParticle {
 
 export function VaporType({
   words,
-  fontFamily = "'Instrument Serif', serif",
+  fontFamily = "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
   fontSize = 76,
-  fontWeight = "400",
+  fontWeight = "800",
   fontStyle = "normal",
   color = "#EDEDEF",
   vaporColor = "#E9D5FF",
@@ -71,15 +71,23 @@ export function VaporType({
     const offCanvas = document.createElement("canvas");
     const offCtx = offCanvas.getContext("2d", { willReadFrequently: true })!;
 
-    // Compute responsive font size based on container client width
-    const getResponsiveFontSize = () => {
+    // Compute responsive font size based on container client width and word length
+    const getResponsiveFontSize = (word: string) => {
       const containerWidth = container.clientWidth || window.innerWidth || 1200;
+      let targetSize = fontSize;
       if (containerWidth < 480) {
-        return Math.min(fontSize, Math.max(34, containerWidth * 0.11));
+        targetSize = Math.min(fontSize, 40);
       } else if (containerWidth < 768) {
-        return Math.min(fontSize, Math.max(48, containerWidth * 0.08));
+        targetSize = Math.min(fontSize, 56);
+      } else if (containerWidth < 1024) {
+        targetSize = Math.min(fontSize, 68);
       }
-      return fontSize;
+      const maxAvailableWidth = containerWidth - 48;
+      const charWidthEstimate = targetSize * 0.62;
+      if (word.length * charWidthEstimate > maxAvailableWidth && maxAvailableWidth > 120) {
+        targetSize = Math.floor(maxAvailableWidth / (word.length * 0.62));
+      }
+      return Math.max(26, targetSize);
     };
 
     const sampleWord = async (word: string) => {
@@ -92,19 +100,19 @@ export function VaporType({
       }
 
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const actualFontSize = getResponsiveFontSize();
+      const actualFontSize = getResponsiveFontSize(word);
       const fontSpec = `${fontStyle} ${fontWeight} ${actualFontSize * dpr}px ${fontFamily}`;
 
       offCtx.font = fontSpec;
       const textMetrics = offCtx.measureText(word);
-      textWidth = Math.ceil(textMetrics.width) + 30 * dpr;
+      textWidth = Math.ceil(textMetrics.width) + 36 * dpr;
       textHeight = Math.ceil(actualFontSize * 1.5 * dpr);
 
       offCanvas.width = textWidth;
-      offCanvas.height = textHeight;
+      offCanvas.height = textHeight + 70 * dpr;
 
       // Ensure canvas has extra margin for vapor particles drifting up and right
-      const canvasW = textWidth + 140 * dpr;
+      const canvasW = textWidth + 160 * dpr;
       const canvasH = textHeight + 90 * dpr;
 
       canvas.width = canvasW;
@@ -119,23 +127,23 @@ export function VaporType({
       const startY = textHeight / 2 + 50 * dpr; // Leave room above for drifting vapor
       offCtx.fillText(word, startX, startY);
 
-      const imgData = offCtx.getImageData(0, 0, textWidth, textHeight + 50 * dpr);
+      const imgData = offCtx.getImageData(0, 0, textWidth, offCanvas.height);
       const data = imgData.data;
-      const step = Math.max(2, Math.floor(2 * dpr));
+      const step = Math.max(2, Math.floor(1.8 * dpr));
       const newParticles: VaporParticle[] = [];
 
       for (let y = 0; y < imgData.height; y += step) {
         for (let x = 0; x < textWidth; x += step) {
           const idx = (y * textWidth + x) * 4;
           const alpha = data[idx + 3];
-          if (alpha > 140 && Math.random() < 0.65) {
+          if (alpha > 130 && Math.random() < 0.7) {
             const originX = x;
             const originY = y;
             // Angle drifting up and to the right per reference image
-            const driftAngle = -Math.PI * 0.35 + (Math.random() - 0.5) * 0.6;
-            const speed = 25 * dpr + Math.random() * 45 * dpr;
+            const driftAngle = -Math.PI * 0.35 + (Math.random() - 0.5) * 0.65;
+            const speed = 28 * dpr + Math.random() * 50 * dpr;
 
-            const isVaporHue = Math.random() < 0.35;
+            const isVaporHue = Math.random() < 0.4;
             newParticles.push({
               originX,
               originY,
@@ -145,7 +153,7 @@ export function VaporType({
               vy: Math.sin(driftAngle) * speed,
               size: (0.75 + Math.random() * 1.3) * dpr,
               alpha: 0,
-              maxAlpha: 0.4 + Math.random() * 0.55,
+              maxAlpha: 0.45 + Math.random() * 0.55,
               phase: Math.random() * Math.PI * 2,
               active: false,
               color: isVaporHue ? vaporColor : "#FFFFFF",
@@ -184,7 +192,7 @@ export function VaporType({
       const dt = Math.min(0.04, (time - lastTime) / 1000);
       lastTime = time;
       const elapsed = time - stateTimer;
-      const actualFontSize = getResponsiveFontSize();
+      const actualFontSize = getResponsiveFontSize(currentRenderWord);
       const fontSpec = `${fontStyle} ${fontWeight} ${actualFontSize * dpr}px ${fontFamily}`;
       const startX = 20 * dpr;
       const startY = textHeight / 2 + 50 * dpr;
