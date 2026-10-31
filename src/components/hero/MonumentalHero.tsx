@@ -11,12 +11,12 @@ export function MonumentalHero() {
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
         {/* Subtle, restrained electric-violet ambient glow behind the portrait side */}
         <div
-          className="absolute w-[600px] sm:w-[720px] h-[600px] sm:h-[720px] rounded-full blur-[140px] opacity-20"
+          className="absolute w-[640px] sm:w-[760px] h-[640px] sm:h-[760px] rounded-full blur-[140px] opacity-20"
           style={{
             background:
               "radial-gradient(circle, rgba(168, 85, 247, 0.20) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 75%)",
-            top: "15%",
-            right: "5%",
+            top: "12%",
+            right: "3%",
           }}
         />
 
@@ -94,24 +94,24 @@ export function MonumentalHero() {
         aria-label="Hero Introduction"
         className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto py-6 sm:py-10 lg:py-12"
       >
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-10 xl:gap-12 items-center">
           {/* Left Column (Columns 1–7): Headline, Name, Identity & Narrative */}
           <div className="md:col-span-7 flex flex-col justify-center">
-            {/* Monumental Headline: "Curiosity, made tangible." */}
-            <h1 className="flex flex-col tracking-[-0.035em]">
+            {/* Monumental Headline: Refined Lockup with Tight Rhythmic Line Spacing */}
+            <h1 className="flex flex-col">
               {/* Line 1: Expressive Editorial Italic Serif */}
-              <span className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[6.85rem] leading-[0.92] text-[#EDEDEF]">
+              <span className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.88] tracking-[-0.025em] text-[#EDEDEF]">
                 Curiosity,
               </span>
 
-              {/* Line 2: Contemporary Modern Display Geometry */}
-              <span className="font-display font-medium text-4xl sm:text-6xl lg:text-7xl xl:text-[5.85rem] leading-[0.96] text-[#EDEDEF] mt-1 sm:mt-2">
+              {/* Line 2: Contemporary Modern Display Geometry nestled under Line 1 */}
+              <span className="font-display font-medium text-4xl sm:text-6xl lg:text-7xl xl:text-[5.75rem] leading-[0.92] tracking-[-0.04em] text-[#EDEDEF] -mt-1 sm:-mt-2 lg:-mt-3">
                 made tangible<span className="text-[#A855F7]">.</span>
               </span>
             </h1>
 
-            {/* Mobile Halftone Portrait (Visible on mobile < 768px in the flow) */}
-            <div className="block md:hidden my-6 w-full max-w-[280px] mx-auto">
+            {/* Mobile Halftone Portrait (Visible on mobile < 768px in the flow, scaled ~10% up) */}
+            <div className="block md:hidden my-6 w-full max-w-[310px] mx-auto">
               <LivingHalftone />
             </div>
 

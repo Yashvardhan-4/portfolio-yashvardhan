@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import halftoneData from "@/data/halftoneDots.json";
 
 interface Dot {
@@ -14,6 +14,7 @@ interface Dot {
   r: number;  // Current radius
   l: number;  // Luminance [0..1]
   color: string;
+  featureWeight: number; // Protection weight for core facial features
 }
 
 interface LivingHalftoneProps {
@@ -70,6 +71,10 @@ export function LivingHalftone({ className = "" }: LivingHalftoneProps) {
         color = "rgba(70, 78, 95, 0.50)";
       }
 
+      // Calculate feature preservation weight (protects eyes, nose bridge, lips from excessive distortion)
+      const isCoreFeature = x0 > 175 && x0 < 305 && y0 > 185 && y0 < 415;
+      const featureWeight = isCoreFeature ? 0.65 : 1.0;
+
       return {
         x0,
         y0,
@@ -81,6 +86,7 @@ export function LivingHalftone({ className = "" }: LivingHalftoneProps) {
         r: r0,
         l,
         color,
+        featureWeight,
       };
     });
 
@@ -134,12 +140,12 @@ export function LivingHalftone({ className = "" }: LivingHalftoneProps) {
     container.addEventListener("pointermove", handlePointerMove, { passive: true });
     container.addEventListener("pointerleave", handlePointerLeave, { passive: true });
 
-    // Physics parameters for magnetic interaction
-    const interactionRadius = 90; // Influence zone in base coords
+    // Refined physics parameters: subtle magnetic displacement with critically damped smooth recovery
+    const interactionRadius = 82; // Localized influence zone in base coords
     const interactionRadiusSq = interactionRadius * interactionRadius;
-    const maxRepulsion = 18;      // Maximum displacement in base coords (restrained, no exploding)
-    const springK = 0.085;        // Spring return tension
-    const friction = 0.80;        // Damping factor to prevent oscillation
+    const maxRepulsion = 11.5;    // Restrained displacement: prevents distorting facial features
+    const springK = 0.11;         // Firm spring tension for prompt return
+    const friction = 0.76;        // Critical damping: zero overshoot, zero ringing
 
     let time = 0;
 
@@ -169,7 +175,7 @@ export function LivingHalftone({ className = "" }: LivingHalftoneProps) {
         let targetX = p.x0;
         let targetY = p.y0;
 
-        // 1. Magnetic repulsive cursor interaction
+        // 1. Magnetic repulsive cursor interaction with smooth cosine falloff
         if (mouse.active) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
@@ -177,20 +183,21 @@ export function LivingHalftone({ className = "" }: LivingHalftoneProps) {
 
           if (distSq < interactionRadiusSq && distSq > 0.01) {
             const dist = Math.sqrt(distSq);
-            // Smooth non-linear falloff (strongest close to cursor, vanishing at boundary)
-            const factor = Math.pow(1 - dist / interactionRadius, 1.6);
-            const force = factor * maxRepulsion;
+            // Smooth cosine falloff for continuous, gentle displacement
+            const q = dist / interactionRadius;
+            const factor = Math.cos(q * Math.PI * 0.5);
+            const force = factor * factor * maxRepulsion * p.featureWeight;
             targetX = p.x0 + (dx / dist) * force;
             targetY = p.y0 + (dy / dist) * force;
           }
         } else {
           // 2. Micro-harmonic ambient breath when idle (imperceptible organic life)
-          const ambient = Math.sin(time * 0.9 + (p.x0 + p.y0) * 0.012) * 0.35;
-          targetX = p.x0 + ambient * 0.4;
-          targetY = p.y0 + ambient * 0.3;
+          const ambient = Math.sin(time * 0.8 + (p.x0 + p.y0) * 0.012) * 0.25;
+          targetX = p.x0 + ambient * 0.35;
+          targetY = p.y0 + ambient * 0.25;
         }
 
-        // 3. Damped spring physics integration
+        // 3. Critically damped spring physics integration (rapid, smooth recovery)
         const ax = (targetX - p.x) * springK;
         const ay = (targetY - p.y) * springK;
 
@@ -230,13 +237,13 @@ export function LivingHalftone({ className = "" }: LivingHalftoneProps) {
   return (
     <div
       ref={containerRef}
-      className={`relative w-full aspect-[480/641] max-w-[440px] sm:max-w-[480px] lg:max-w-[500px] mx-auto select-none touch-none ${className}`}
+      className={`relative w-full aspect-[480/641] max-w-[480px] sm:max-w-[520px] lg:max-w-[550px] xl:max-w-[580px] mx-auto select-none touch-none ${className}`}
       aria-label="Generative halftone portrait of Yashvardhan Borude"
       role="img"
     >
       {/* Restrained electric-violet ambient aura behind halftone face */}
       <div
-        className="absolute inset-x-8 top-12 bottom-12 rounded-full blur-[70px] opacity-25 pointer-events-none"
+        className="absolute inset-x-8 top-12 bottom-12 rounded-full blur-[75px] opacity-25 pointer-events-none"
         style={{
           background:
             "radial-gradient(ellipse at center, rgba(168, 85, 247, 0.22) 0%, rgba(126, 34, 206, 0.06) 50%, transparent 75%)",
