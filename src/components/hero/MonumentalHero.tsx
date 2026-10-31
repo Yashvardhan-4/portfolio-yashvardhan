@@ -1,47 +1,54 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { LivingHalftone } from "./LivingHalftone";
+import { AtmosphericBackground } from "./AtmosphericBackground";
 
 export function MonumentalHero() {
+  const [scrollY, setScrollY] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+    mediaQuery.addEventListener("change", handleMotionChange);
+
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMotionChange);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Compute text fade and translate based on scroll for seamless transition to Projects
+  const textOpacity = prefersReducedMotion ? 1 : Math.max(0, 1 - scrollY / 380);
+  const textTranslateY = prefersReducedMotion ? 0 : -Math.min(100, scrollY * 0.22);
+
   return (
     <div className="relative w-full min-h-[100svh] bg-[#08090B] text-[#EDEDEF] overflow-hidden flex flex-col justify-between selection:bg-[#A855F7] selection:text-[#08090B]">
-      {/* 1. Atmospheric Ambient Lighting (Near-Black Obsidian with Soft Peripheral Luminance) */}
-      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-        {/* Subtle, restrained electric-violet ambient glow behind the portrait side */}
-        <div
-          className="absolute w-[640px] sm:w-[760px] h-[640px] sm:h-[760px] rounded-full blur-[140px] opacity-20"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(168, 85, 247, 0.20) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 75%)",
-            top: "12%",
-            right: "3%",
-          }}
-        />
+      {/* 1. Living Atmospheric Environment Layer (Slow-Moving Light & Ambient Floating Dust) */}
+      <AtmosphericBackground />
 
-        {/* Deep perimeter vignette to ensure editorial obsidian focus */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(8,9,11,0.4)_70%,#08090B_100%)]" />
-
-        {/* Micro-architectural structural crosshairs */}
-        <span className="hidden lg:block absolute top-10 left-10 font-mono text-[11px] text-[#202530] select-none">
-          +
-        </span>
-        <span className="hidden lg:block absolute top-10 right-10 font-mono text-[11px] text-[#202530] select-none">
-          +
-        </span>
-        <span className="hidden lg:block absolute bottom-16 left-10 font-mono text-[11px] text-[#202530] select-none">
-          +
-        </span>
-        <span className="hidden lg:block absolute bottom-16 right-10 font-mono text-[11px] text-[#202530] select-none">
-          +
-        </span>
-      </div>
+      {/* Deep perimeter vignette to frame the exhibition stage */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1] bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(8,9,11,0.35)_70%,#08090B_100%)]"
+        aria-hidden="true"
+      />
 
       {/* 2. Minimal Editorial Header Navigation */}
       <header className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-5 sm:pt-8 pb-3 sm:pb-4">
         <div className="flex items-center justify-between border-b border-[#181D26]/70 pb-4 sm:pb-5">
-          {/* Wordmark */}
+          {/* Personal Wordmark */}
           <div className="flex items-center gap-3">
             <a
               href="#"
@@ -89,28 +96,59 @@ export function MonumentalHero() {
         </div>
       </header>
 
-      {/* 3. Centerstage: Asymmetric Two-Column Editorial Composition */}
+      {/* 3. Centerstage: Asymmetric Two-Column Editorial Exhibition */}
       <section
         aria-label="Hero Introduction"
         className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto py-6 sm:py-10 lg:py-12"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-10 xl:gap-12 items-center">
-          {/* Left Column (Columns 1–7): Headline, Name, Identity & Narrative */}
-          <div className="md:col-span-7 flex flex-col justify-center">
-            {/* Monumental Headline: Refined Lockup with Tight Rhythmic Line Spacing */}
-            <h1 className="flex flex-col">
-              {/* Line 1: Expressive Editorial Italic Serif */}
-              <span className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.88] tracking-[-0.025em] text-[#EDEDEF]">
+          {/* Left Column (Columns 1–7): Kinetic Headline, Personal Anchor & Narrative */}
+          <div
+            className="md:col-span-7 flex flex-col justify-center transition-all duration-300 ease-out"
+            style={{
+              opacity: textOpacity,
+              transform: `translateY(${textTranslateY}px)`,
+              pointerEvents: textOpacity < 0.1 ? "none" : "auto",
+            }}
+          >
+            {/* Monumental Kinetic Headline: "Curiosity, made tangible." */}
+            <h1 className="flex flex-col select-none">
+              {/* Line 1: Expressive Editorial Italic Serif with Subtle Illumination Sweep */}
+              <span
+                className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.88] tracking-[-0.025em]"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 30%, #FFFFFF 48%, #E9D5FF 58%, #EDEDEF 72%, #EDEDEF 100%)",
+                  backgroundSize: "220% auto",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
+                }}
+              >
                 Curiosity,
               </span>
 
               {/* Line 2: Contemporary Modern Display Geometry nestled under Line 1 */}
-              <span className="font-display font-medium text-4xl sm:text-6xl lg:text-7xl xl:text-[5.75rem] leading-[0.92] tracking-[-0.04em] text-[#EDEDEF] -mt-1 sm:-mt-2 lg:-mt-3">
-                made tangible<span className="text-[#A855F7]">.</span>
+              <span
+                className="font-display font-medium text-4xl sm:text-6xl lg:text-7xl xl:text-[5.75rem] leading-[0.92] tracking-[-0.04em] -mt-1 sm:-mt-2 lg:-mt-3"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 35%, #FFFFFF 52%, #F3E8FF 62%, #EDEDEF 78%, #EDEDEF 100%)",
+                  backgroundSize: "220% auto",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
+                  animationDelay: "2.8s",
+                }}
+              >
+                made tangible
+                <span className="text-[#A855F7] inline-block ml-0.5 animate-[violetPulse_3.5s_ease-in-out_infinite]">
+                  .
+                </span>
               </span>
             </h1>
 
-            {/* Mobile Halftone Portrait (Visible on mobile < 768px in the flow, scaled ~10% up) */}
+            {/* Mobile Halftone Portrait (Visible on mobile < 768px in the flow) */}
             <div className="block md:hidden my-6 w-full max-w-[310px] mx-auto">
               <LivingHalftone />
             </div>
@@ -153,7 +191,7 @@ export function MonumentalHero() {
             </div>
           </div>
 
-          {/* Right Column (Columns 8–12): Generative Halftone Magnetic Portrait on Tablet & Desktop */}
+          {/* Right Column (Columns 8–12): Generative Halftone Magnetic Artwork with Reveal, Scan & Scroll Dissolve */}
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
             <LivingHalftone />
           </div>

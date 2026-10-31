@@ -32,6 +32,26 @@
   }
 }
 
+@keyframes kineticShine {
+  0% {
+    background-position: 250% center;
+  }
+  100% {
+    background-position: -250% center;
+  }
+}
+
+@keyframes violetPulse {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
+  }
+}
+
 * {
   box-sizing: border-box;
 }
