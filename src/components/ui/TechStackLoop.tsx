@@ -156,9 +156,6 @@ export function TechStackLoop() {
             Production Technologies &amp; Architecture
           </h2>
         </div>
-        <span className="font-mono text-xs text-[#94A3B8]">
-          [ DRAG OR HOVER TO PAUSE ]
-        </span>
       </div>
 
       <div className="w-full">
