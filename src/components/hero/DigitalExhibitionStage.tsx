@@ -9,8 +9,8 @@ export interface DigitalExhibitionStageProps {
   headlineAnchorRef: React.RefObject<HTMLDivElement>;
   line1Ref: React.RefObject<HTMLElement>;
   line2Ref: React.RefObject<HTMLElement>;
-  headlineStage: "curiosity" | "engineered";
-  onHeadlineStageChange: (stage: "curiosity" | "engineered") => void;
+  headlineStage?: "curiosity" | "engineered";
+  onHeadlineStageChange?: (stage: "curiosity" | "engineered") => void;
   triggerTransformSignal?: number;
 }
 
@@ -85,8 +85,8 @@ export function DigitalExhibitionStage({
   headlineAnchorRef,
   line1Ref,
   line2Ref,
-  headlineStage,
-  onHeadlineStageChange,
+  headlineStage = "curiosity",
+  onHeadlineStageChange = () => {},
   triggerTransformSignal = 0,
 }: DigitalExhibitionStageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -863,7 +863,7 @@ export function DigitalExhibitionStage({
     headlineAnchorRef,
     line1Ref,
     line2Ref,
-    onHeadlineStageChange,
+    onHeadlineStageChange = () => {},
   ]);
 
   return (

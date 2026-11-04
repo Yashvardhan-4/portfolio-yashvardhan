@@ -4,21 +4,21 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
+import { BlurredTextTicker } from "@/components/ui/BlurredTextTicker";
+import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
+import { AnimatedSVGUnderline } from "@/components/ui/AnimatedSVGUnderline";
 
 export function MonumentalHero() {
   const [scrollY, setScrollY] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [headlineStage, setHeadlineStage] = useState<"curiosity" | "engineered">("curiosity");
-  const [triggerSignal, setTriggerSignal] = useState(0);
   const [hasMounted, setHasMounted] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Layout anchor references for master unbounded canvas
   const desktopAnchorRef = useRef<HTMLDivElement>(null);
   const mobileAnchorRef = useRef<HTMLDivElement>(null);
   const headlineAnchorRef = useRef<HTMLDivElement>(null);
   const line1Ref = useRef<HTMLSpanElement>(null);
-  const line2Ref = useRef<HTMLSpanElement>(null);
+  const line2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mountTimer = setTimeout(() => {
@@ -49,33 +49,18 @@ export function MonumentalHero() {
   const textOpacity = prefersReducedMotion ? 1 : Math.max(0, 1 - scrollY / 380);
   const textTranslateY = prefersReducedMotion ? 0 : -Math.min(100, scrollY * 0.22);
 
-  const handleManualTrigger = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setHeadlineStage((prev) => (prev === "curiosity" ? "engineered" : "curiosity"));
-
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 50);
-    }, 280);
-  };
-
   return (
     <div className="relative w-full min-h-[100svh] bg-[#08090B] text-[#EDEDEF] overflow-hidden flex flex-col justify-between selection:bg-[#A855F7] selection:text-[#08090B]">
-      {/* 1. Living Atmospheric Environment Layer (Slow-Moving Light & Ambient Floating Dust) */}
+      {/* 1. Living Atmospheric Environment Layer (Mathematical Wave Filaments & Algorithmic Constellation) */}
       <AtmosphericBackground />
 
-      {/* 2. Master Unbounded Digital Exhibition Canvas (Portrait Dots, Physical Typography & Scan) */}
+      {/* 2. Master Unbounded Digital Exhibition Canvas (Portrait Dots, Physics & Scanning Wave) */}
       <DigitalExhibitionStage
         desktopAnchorRef={desktopAnchorRef}
         mobileAnchorRef={mobileAnchorRef}
         headlineAnchorRef={headlineAnchorRef}
         line1Ref={line1Ref}
-        line2Ref={line2Ref}
-        headlineStage={headlineStage}
-        onHeadlineStageChange={setHeadlineStage}
-        triggerTransformSignal={triggerSignal}
+        line2Ref={line2Ref as any}
       />
 
       {/* Deep perimeter vignette to frame the exhibition stage */}
@@ -84,7 +69,7 @@ export function MonumentalHero() {
         aria-hidden="true"
       />
 
-      {/* 3. Minimal Editorial Header Navigation */}
+      {/* 3. Minimal Editorial Header Navigation with Animated SVG Underlinks */}
       <header className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-5 sm:pt-8 pb-3 sm:pb-4">
         <div className="flex items-center justify-between border-b border-[#181D26]/70 pb-4 sm:pb-5">
           {/* Personal Wordmark */}
@@ -100,25 +85,25 @@ export function MonumentalHero() {
             </a>
           </div>
 
-          {/* Understated Editorial Navigation Links */}
-          <nav aria-label="Primary Navigation" className="flex items-center gap-4 sm:gap-8 text-xs font-sans">
+          {/* Understated Editorial Navigation Links with Organic Animated Underlines */}
+          <nav aria-label="Primary Navigation" className="flex items-center gap-5 sm:gap-8 text-xs font-sans">
             <a
               href="#work"
               className="hidden sm:inline text-[#94A3B8] hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
             >
-              Work
+              <AnimatedSVGUnderline strokeColor="#A855F7">Work</AnimatedSVGUnderline>
             </a>
             <a
               href="#about"
               className="hidden sm:inline text-[#94A3B8] hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
             >
-              About
+              <AnimatedSVGUnderline strokeColor="#A855F7">About</AnimatedSVGUnderline>
             </a>
             <a
               href="#contact"
               className="hidden md:inline text-[#94A3B8] hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
             >
-              Contact
+              <AnimatedSVGUnderline strokeColor="#A855F7">Contact</AnimatedSVGUnderline>
             </a>
 
             {/* Subtle Contact Action */}
@@ -140,28 +125,25 @@ export function MonumentalHero() {
         aria-label="Hero Introduction"
         className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto py-6 sm:py-10 lg:py-12"
       >
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-10 xl:gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 lg:gap-12 xl:gap-16 items-center">
           {/* Left Column (Columns 1–7): Physical Typography, Personal Anchor & Narrative */}
           <div
-            className="md:col-span-7 flex flex-col justify-center transition-all duration-300 ease-out"
+            className="md:col-span-7 flex flex-col justify-center transition-all duration-300 ease-out max-w-full md:max-w-[560px] lg:max-w-[620px]"
             style={{
               opacity: textOpacity,
               transform: `translateY(${textTranslateY}px)`,
               pointerEvents: textOpacity < 0.1 ? "none" : "auto",
             }}
           >
-            {/* Monumental Kinetic Headline with Zero Clipping */}
+            {/* Monumental Kinetic Headline with Zero Clipping & Auto Blurred-Text Ticker */}
             <div
               ref={headlineAnchorRef}
-              className="relative flex flex-col select-none py-1 pb-2 overflow-visible cursor-pointer group/headline"
-              onClick={handleManualTrigger}
-              title="Click to trigger transformation"
-              aria-live="polite"
+              className="relative flex flex-col select-none py-1 pb-2 overflow-visible group/headline"
             >
               {/* Line 1: Expressive Editorial Italic Serif with Kinetic Illumination & Optical Emergence */}
               <span
                 ref={line1Ref}
-                className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[6.75rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2.5 inline-block select-none transform-gpu"
+                className="font-serif italic font-normal text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2.5 inline-block select-none transform-gpu"
                 style={{
                   background:
                     "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 30%, #FFFFFF 48%, #E9D5FF 58%, #EDEDEF 72%, #EDEDEF 100%)",
@@ -169,81 +151,44 @@ export function MonumentalHero() {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
-                  opacity: !hasMounted || isTransitioning ? 0 : 1,
-                  filter: !hasMounted || isTransitioning ? "blur(14px)" : "blur(0px)",
-                  transform: !hasMounted
-                    ? "translateY(24px) scale(0.99)"
-                    : isTransitioning
-                    ? "translateY(-12px) scale(0.99)"
-                    : "translateY(0px) scale(1)",
+                  opacity: hasMounted ? 1 : 0,
+                  filter: hasMounted ? "blur(0px)" : "blur(14px)",
+                  transform: hasMounted ? "translateY(0px) scale(1)" : "translateY(24px) scale(0.99)",
                   transition: prefersReducedMotion
                     ? "none"
-                    : isTransitioning
-                    ? "opacity 260ms cubic-bezier(0.16, 1, 0.3, 1), filter 260ms cubic-bezier(0.16, 1, 0.3, 1), transform 260ms cubic-bezier(0.16, 1, 0.3, 1)"
                     : "opacity 950ms cubic-bezier(0.16, 1, 0.3, 1), filter 950ms cubic-bezier(0.16, 1, 0.3, 1), transform 950ms cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               >
-                {headlineStage === "curiosity" ? "Curiosity," : "Ideas,"}
+                Curiosity,
               </span>
 
-              {/* Line 2: Contemporary Modern Display Geometry nestled under Line 1 */}
-              <span
+              {/* Line 2: Automatic Ticker-Blurred-Text Reel with Distance Blur, Soft Fade & Zero Overlap */}
+              <div
                 ref={line2Ref}
-                className="font-display font-medium text-3xl sm:text-5xl lg:text-[3.85rem] xl:text-[4.65rem] leading-[1.02] tracking-[-0.038em] -mt-1 sm:-mt-2 lg:-mt-2.5 inline-block select-none transform-gpu"
+                className="font-display font-medium text-2xl sm:text-4xl md:text-[2.25rem] lg:text-[2.75rem] xl:text-[3.25rem] leading-[1.1] tracking-[-0.035em] -mt-0.5 sm:-mt-1.5 lg:-mt-2 block select-none transform-gpu"
                 style={{
-                  opacity: !hasMounted || isTransitioning ? 0 : 1,
-                  filter: !hasMounted || isTransitioning ? "blur(14px)" : "blur(0px)",
-                  transform: !hasMounted
-                    ? "translateY(22px) scale(0.99)"
-                    : isTransitioning
-                    ? "translateY(-10px) scale(0.99)"
-                    : "translateY(0px) scale(1)",
+                  opacity: hasMounted ? 1 : 0,
+                  filter: hasMounted ? "blur(0px)" : "blur(14px)",
+                  transform: hasMounted ? "translateY(0px) scale(1)" : "translateY(22px) scale(0.99)",
                   transition: prefersReducedMotion
                     ? "none"
-                    : isTransitioning
-                    ? "opacity 260ms cubic-bezier(0.16, 1, 0.3, 1) 30ms, filter 260ms cubic-bezier(0.16, 1, 0.3, 1) 30ms, transform 260ms cubic-bezier(0.16, 1, 0.3, 1) 30ms"
                     : "opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, filter 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms",
                 }}
               >
-                <span
-                  style={{
-                    background:
-                      "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 35%, #FFFFFF 52%, #F3E8FF 62%, #EDEDEF 78%, #EDEDEF 100%)",
-                    backgroundSize: "220% auto",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
-                    animationDelay: "2.8s",
-                  }}
-                >
-                  {headlineStage === "curiosity" ? "made tangible" : "engineered to endure"}
-                </span>
-                <span className="text-[#A855F7] inline-block ml-1 drop-shadow-[0_0_12px_rgba(168,85,247,0.75)] animate-[violetPulse_3.5s_ease-in-out_infinite] select-none">
-                  .
-                </span>
-              </span>
-
-              {/* Architectural Perspective Datum Rail */}
-              <div
-                className="mt-4 sm:mt-5 flex items-center gap-3 select-none"
-                style={{
-                  opacity: hasMounted ? 1 : 0,
-                  transform: hasMounted ? "translateY(0px)" : "translateY(12px)",
-                  transition: prefersReducedMotion
-                    ? "none"
-                    : "opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) 280ms, transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 280ms",
-                }}
-              >
-                <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-[#8E95A5]">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#A855F7] animate-pulse" aria-hidden="true" />
-                  <span className="text-[#EDEDEF] font-medium">Phase {headlineStage === "curiosity" ? "01" : "02"}</span>
-                  <span className="text-[#374151]">/</span>
-                  <span>{headlineStage === "curiosity" ? "Curiosity & Exploration" : "Systems & Engineering"}</span>
-                </div>
-                <div className="hidden sm:block h-px w-8 bg-[#181D26]" aria-hidden="true" />
-                <span className="text-[10px] font-mono tracking-wider text-[#6B7280] group-hover/headline:text-[#C084FC] transition-colors">
-                  {headlineStage === "curiosity" ? "Shift perspective ↗" : "Revert perspective ↺"}
-                </span>
+                <BlurredTextTicker
+                  items={[
+                    "made tangible.",
+                    "engineered to endure.",
+                    "built with rigor.",
+                    "scaled with resilience.",
+                  ]}
+                  interval={3600}
+                  activeColor="#EDEDEF"
+                  inactiveColor="#64748B"
+                  blurAmount={4}
+                  highlightPeriod={true}
+                  onHoverPause={false}
+                />
               </div>
             </div>
 
@@ -269,9 +214,17 @@ export function MonumentalHero() {
               </span>
             </div>
 
-            {/* Supporting Description */}
+            {/* Supporting Description with Framer Hover Highlighter */}
             <p className="mt-3 sm:mt-4 max-w-xl font-sans text-xs sm:text-sm lg:text-base leading-[1.7] text-[#94A3B8] font-normal">
-              Building thoughtful software through engineering, experimentation and computational thinking.
+              Building thoughtful software through{" "}
+              <HoverHighlighter color="#A855F7" opacity={25}>
+                engineering
+              </HoverHighlighter>
+              , experimentation and{" "}
+              <HoverHighlighter color="#A855F7" opacity={25}>
+                computational thinking
+              </HoverHighlighter>
+              .
             </p>
 
             {/* Action Group */}
@@ -298,14 +251,14 @@ export function MonumentalHero() {
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
             <div
               ref={desktopAnchorRef}
-              className="w-full aspect-[480/513] max-w-[460px] sm:max-w-[500px] lg:max-w-[540px] xl:max-w-[560px] pointer-events-none"
+              className="w-full aspect-[480/513] max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto"
               aria-label="Desktop Portrait Spatial Guide"
             />
           </div>
         </div>
       </section>
 
-      {/* 5. Architectural Editorial Datum Rail (Footer Rail of Hero Section) */}
+      {/* 5. Architectural Editorial Datum Rail (Footer Rail of Hero Section) with Ticker-Blurred-Text on Discipline */}
       <footer className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-4 pb-6 sm:pb-7">
         <div className="border-t border-[#181D26]/70 pt-3.5 sm:pt-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 font-mono text-[10px] sm:text-[11px] tracking-wider text-[#94A3B8]">
@@ -315,10 +268,24 @@ export function MonumentalHero() {
               <span className="text-[#EDEDEF] mt-0.5 block">Pune, IN</span>
             </div>
 
-            {/* Index 02 */}
+            {/* Index 02: Rotating Discipline Reel */}
             <div>
               <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">DISCIPLINE</span>
-              <span className="text-[#EDEDEF] mt-0.5 block">Systems &amp; Concurrency</span>
+              <BlurredTextTicker
+                items={[
+                  "Systems & Concurrency",
+                  "Distributed Computing",
+                  "Algorithmic Precision",
+                  "Full-Stack Architecture",
+                ]}
+                interval={4200}
+                activeColor="#EDEDEF"
+                inactiveColor="#64748B"
+                blurAmount={2.5}
+                highlightPeriod={false}
+                className="mt-0.5"
+                itemClassName="text-[10px] sm:text-[11px] font-mono"
+              />
             </div>
 
             {/* Index 03 */}

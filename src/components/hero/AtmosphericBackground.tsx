@@ -14,6 +14,10 @@ export function AtmosphericBackground() {
 
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     let prefersReducedMotion = mediaQuery.matches;
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      prefersReducedMotion = e.matches;
+    };
+    mediaQuery.addEventListener("change", handleMotionChange);
 
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
@@ -26,67 +30,161 @@ export function AtmosphericBackground() {
 
     window.addEventListener("resize", handleResize, { passive: true });
 
-    // Generate 38 delicate atmospheric floating dust particles
-    const particleCount = 38;
-    const dustParticles = Array.from({ length: particleCount }, (_, i) => ({
+    // Mouse position for subtle gravitational interaction
+    const mouse = { x: -9999, y: -9999, active: false };
+    const handlePointerMove = (e: PointerEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    };
+    const handlePointerLeave = () => {
+      mouse.active = false;
+      mouse.x = -9999;
+      mouse.y = -9999;
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+
+    // 1. Constellation Network Nodes (Algorithmic / Systems Lattice)
+    const nodeCount = 48;
+    const nodes = Array.from({ length: nodeCount }, (_, i) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: -0.08 - Math.random() * 0.14, // Gentle upward drift
-      radius: 0.6 + Math.random() * 0.9,
-      baseAlpha: 0.12 + Math.random() * 0.22,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.18,
+      radius: 0.8 + Math.random() * 0.8,
+      baseAlpha: 0.14 + Math.random() * 0.22,
       phase: Math.random() * Math.PI * 2,
-      tint: i % 5 === 0 ? "rgba(192, 132, 252," : "rgba(237, 237, 239,",
+      tint: i % 4 === 0 ? "rgba(168, 85, 247," : "rgba(237, 237, 239,",
     }));
+
+    // 2. Harmonic Filament Waves Parameters
+    const waveCount = 3;
 
     let animationFrameId: number;
     let time = 0;
 
     const render = () => {
-      time += 0.008;
-
+      time += 0.006;
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Slow-moving, non-synchronized organic ambient light centers
-      // Light Center 1 (Subtle electric-violet illumination drift)
-      const cx1 = width * (0.65 + Math.sin(time * 0.4) * 0.08);
-      const cy1 = height * (0.35 + Math.cos(time * 0.3) * 0.08);
+      // 1. Ambient Living Light Beacons (Deep Field Depth)
+      const cx1 = width * (0.68 + Math.sin(time * 0.35) * 0.07);
+      const cy1 = height * (0.32 + Math.cos(time * 0.28) * 0.07);
       const grad1 = ctx.createRadialGradient(cx1, cy1, 10, cx1, cy1, width * 0.45);
-      grad1.addColorStop(0, "rgba(168, 85, 247, 0.055)");
-      grad1.addColorStop(0.5, "rgba(126, 34, 206, 0.018)");
+      grad1.addColorStop(0, "rgba(168, 85, 247, 0.065)");
+      grad1.addColorStop(0.5, "rgba(126, 34, 206, 0.022)");
       grad1.addColorStop(1, "rgba(8, 9, 11, 0)");
-
       ctx.fillStyle = grad1;
       ctx.fillRect(0, 0, width, height);
 
-      // Light Center 2 (Subtle sapphire-indigo counter-balance drift)
-      const cx2 = width * (0.25 + Math.cos(time * 0.28) * 0.06);
-      const cy2 = height * (0.60 + Math.sin(time * 0.35) * 0.06);
-      const grad2 = ctx.createRadialGradient(cx2, cy2, 10, cx2, cy2, width * 0.4);
-      grad2.addColorStop(0, "rgba(99, 102, 241, 0.035)");
-      grad2.addColorStop(0.6, "rgba(79, 70, 229, 0.010)");
+      const cx2 = width * (0.22 + Math.cos(time * 0.25) * 0.05);
+      const cy2 = height * (0.62 + Math.sin(time * 0.30) * 0.05);
+      const grad2 = ctx.createRadialGradient(cx2, cy2, 10, cx2, cy2, width * 0.38);
+      grad2.addColorStop(0, "rgba(99, 102, 241, 0.04)");
+      grad2.addColorStop(0.6, "rgba(79, 70, 229, 0.012)");
       grad2.addColorStop(1, "rgba(8, 9, 11, 0)");
-
       ctx.fillStyle = grad2;
       ctx.fillRect(0, 0, width, height);
 
       if (!prefersReducedMotion) {
-        // 2. Render delicate floating dust particles
-        for (let i = 0; i < particleCount; i++) {
-          const p = dustParticles[i];
+        // 2. Mathematical Harmonic Filament Waves (Floating in Background)
+        for (let w = 0; w < waveCount; w++) {
+          const yBase = height * (0.35 + w * 0.22);
+          const freq = 0.0018 + w * 0.0006;
+          const amp = 24 + w * 12;
+          const speed = time * (0.8 + w * 0.35);
 
-          p.x += p.vx + Math.sin(time + p.phase) * 0.12;
-          p.y += p.vy;
+          ctx.beginPath();
+          ctx.strokeStyle =
+            w === 0
+              ? "rgba(168, 85, 247, 0.035)"
+              : w === 1
+              ? "rgba(192, 132, 252, 0.025)"
+              : "rgba(147, 197, 253, 0.02)";
+          ctx.lineWidth = 1.0;
 
-          // Wrap around canvas boundaries smoothly
-          if (p.y < -10) {
-            p.y = height + 10;
-            p.x = Math.random() * width;
+          for (let x = 0; x <= width; x += 12) {
+            let y =
+              yBase +
+              Math.sin(x * freq + speed) * amp +
+              Math.cos(x * freq * 0.5 - speed * 0.7) * (amp * 0.5);
+
+            // Subtle mouse repulsion on wave line
+            if (mouse.active) {
+              const dx = x - mouse.x;
+              const dy = y - mouse.y;
+              const distSq = dx * dx + dy * dy;
+              if (distSq < 16000 && distSq > 0.1) {
+                const dist = Math.sqrt(distSq);
+                const force = (1 - dist / 126) * 16;
+                y += (dy / dist) * force;
+              }
+            }
+
+            if (x === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
           }
+          ctx.stroke();
+        }
+
+        // 3. Constellation Nodes & Connecting Dynamic Filaments
+        const maxDist = 110;
+        const maxDistSq = maxDist * maxDist;
+
+        // Draw connections
+        for (let i = 0; i < nodeCount; i++) {
+          const p1 = nodes[i];
+          for (let j = i + 1; j < nodeCount; j++) {
+            const p2 = nodes[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distSq = dx * dx + dy * dy;
+
+            if (distSq < maxDistSq) {
+              const alpha = (1 - distSq / maxDistSq) * 0.045;
+              ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`;
+              ctx.lineWidth = 0.75;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Update & Render Nodes
+        for (let i = 0; i < nodeCount; i++) {
+          const p = nodes[i];
+
+          // Gentle ambient drift
+          p.x += p.vx + Math.sin(time + p.phase) * 0.10;
+          p.y += p.vy + Math.cos(time + p.phase) * 0.08;
+
+          // Subtle cursor repulsion
+          if (mouse.active) {
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < 14400 && distSq > 0.01) {
+              const dist = Math.sqrt(distSq);
+              const factor = (1 - dist / 120) * 0.8;
+              p.x += (dx / dist) * factor;
+              p.y += (dy / dist) * factor;
+            }
+          }
+
+          // Boundary wrap
           if (p.x < -10) p.x = width + 10;
           if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          if (p.y > height + 10) p.y = -10;
 
-          const shimmer = Math.sin(time * 1.5 + p.phase) * 0.08;
+          const shimmer = Math.sin(time * 1.8 + p.phase) * 0.06;
           const currentAlpha = Math.max(0.04, p.baseAlpha + shimmer);
 
           ctx.fillStyle = `${p.tint} ${currentAlpha})`;
@@ -104,6 +202,9 @@ export function AtmosphericBackground() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerleave", handlePointerLeave);
+      mediaQuery.removeEventListener("change", handleMotionChange);
     };
   }, []);
 
