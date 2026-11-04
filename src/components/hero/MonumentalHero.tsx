@@ -178,9 +178,9 @@ export function MonumentalHero() {
                 <BlurredTextTicker
                   items={[
                     "made tangible.",
-                    "engineered to endure.",
-                    "built with rigor.",
-                    "scaled with resilience.",
+                    "built to last.",
+                    "designed for people.",
+                    "solving real problems.",
                   ]}
                   interval={3600}
                   activeColor="#EDEDEF"
@@ -210,21 +210,21 @@ export function MonumentalHero() {
                 </h1>
               </div>
               <span className="font-mono text-xs text-[#94A3B8] tracking-wide">
-                — Computer Engineering &amp; Systems Architecture
+                — Software Developer &amp; Problem Solver
               </span>
             </div>
 
             {/* Supporting Description with Framer Hover Highlighter */}
             <p className="mt-3 sm:mt-4 max-w-xl font-sans text-xs sm:text-sm lg:text-base leading-[1.7] text-[#94A3B8] font-normal">
-              Building thoughtful software through{" "}
+              I love turning ideas into{" "}
               <HoverHighlighter color="#A855F7" opacity={25}>
-                engineering
+                things people can use
               </HoverHighlighter>
-              , experimentation and{" "}
+              . I build websites, applications, and tools that{" "}
               <HoverHighlighter color="#A855F7" opacity={25}>
-                computational thinking
-              </HoverHighlighter>
-              .
+                solve real problems
+              </HoverHighlighter>{" "}
+              — exploring new technologies and bringing ideas to life.
             </p>
 
             {/* Action Group */}
@@ -233,7 +233,7 @@ export function MonumentalHero() {
                 href="#work"
                 className="group relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#EDEDEF] text-[#08090B] font-sans text-xs sm:text-sm font-semibold tracking-tight transition-all duration-300 hover:bg-white hover:shadow-[0_0_24px_rgba(255,255,255,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A855F7]"
               >
-                <span>Explore Selected Work</span>
+                <span>Explore My Projects</span>
                 <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5 text-[#08090B]" />
               </a>
 
@@ -258,25 +258,25 @@ export function MonumentalHero() {
         </div>
       </section>
 
-      {/* 5. Architectural Editorial Datum Rail (Footer Rail of Hero Section) with Ticker-Blurred-Text on Discipline */}
+      {/* 5. Architectural Editorial Datum Rail (Footer Rail of Hero Section) with Ticker-Blurred-Text on Role */}
       <footer className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-4 pb-6 sm:pb-7">
         <div className="border-t border-[#181D26]/70 pt-3.5 sm:pt-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 font-mono text-[10px] sm:text-[11px] tracking-wider text-[#94A3B8]">
             {/* Index 01 */}
             <div>
               <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">LOCATION</span>
-              <span className="text-[#EDEDEF] mt-0.5 block">Pune, IN</span>
+              <span className="text-[#EDEDEF] mt-0.5 block">Pune, India</span>
             </div>
 
-            {/* Index 02: Rotating Discipline Reel */}
+            {/* Index 02: Rotating Role Reel */}
             <div>
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">DISCIPLINE</span>
+              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">FOCUS</span>
               <BlurredTextTicker
                 items={[
-                  "Systems & Concurrency",
-                  "Distributed Computing",
-                  "Algorithmic Precision",
-                  "Full-Stack Architecture",
+                  "Full-Stack Development",
+                  "Web Applications",
+                  "Competitive Programming",
+                  "Interactive Experiences",
                 ]}
                 interval={4200}
                 activeColor="#EDEDEF"
@@ -299,7 +299,7 @@ export function MonumentalHero() {
               <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">STATUS</span>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7] animate-ping" aria-hidden="true" />
-                <span className="text-[#EDEDEF] font-medium">Open to High-Impact Roles</span>
+                <span className="text-[#EDEDEF] font-medium">Open to Opportunities</span>
               </div>
             </div>
           </div>

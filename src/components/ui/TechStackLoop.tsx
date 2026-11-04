@@ -144,16 +144,16 @@ const TECH_LOGOS: LogoItem[] = [
 export function TechStackLoop() {
   return (
     <section
-      aria-label="Core Engineering Stack & Tooling"
+      aria-label="Technologies & Tools"
       className="relative w-full border-t border-[#1E2430] bg-[#0A0C11] py-10 sm:py-14 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
           <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold">
-            Technical Stack
+            My Toolkit
           </span>
           <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-normal text-[#EDEDEF]">
-            Production Technologies &amp; Architecture
+            Technologies I Work With
           </h2>
         </div>
       </div>
