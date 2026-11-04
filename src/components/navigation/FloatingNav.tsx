@@ -64,6 +64,7 @@ export function FloatingNav() {
           hoverEffect="glide"
           indicator="dot"
           highlightColor="#A855F7"
+          highlightTextColor="#FFFFFF"
           className="shadow-[0_12px_40px_rgba(0,0,0,0.85)] border border-[#1E2430]/90 bg-[#0A0D14]/90 backdrop-blur-xl"
         />
 
