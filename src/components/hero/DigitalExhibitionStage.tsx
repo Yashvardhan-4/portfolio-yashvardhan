@@ -335,7 +335,8 @@ export function DigitalExhibitionStage({
     initiateTransformRef.current = initiateTransformation;
 
     // Auto-trigger the signature physical typography transformation after 4.2s of reading
-    const autoTriggerTimer = setTimeout(() => {
+    const autoTriggerTimer: any = null; // Auto-trigger disabled
+    if (false) setTimeout(() => {
       initiateTransformation();
     }, 4200);
 

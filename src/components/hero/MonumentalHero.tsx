@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowUpRight, ArrowDown, RotateCcw } from "lucide-react";
+import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
 
@@ -10,6 +10,8 @@ export function MonumentalHero() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [headlineStage, setHeadlineStage] = useState<"curiosity" | "engineered">("curiosity");
   const [triggerSignal, setTriggerSignal] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Layout anchor references for master unbounded canvas
   const desktopAnchorRef = useRef<HTMLDivElement>(null);
@@ -19,6 +21,9 @@ export function MonumentalHero() {
   const line2Ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    const mountTimer = setTimeout(() => {
+      setHasMounted(true);
+    }, 60);
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setPrefersReducedMotion(mediaQuery.matches);
 
@@ -34,6 +39,7 @@ export function MonumentalHero() {
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
+      clearTimeout(mountTimer);
       mediaQuery.removeEventListener("change", handleMotionChange);
       window.removeEventListener("scroll", handleScroll);
     };
@@ -44,7 +50,15 @@ export function MonumentalHero() {
   const textTranslateY = prefersReducedMotion ? 0 : -Math.min(100, scrollY * 0.22);
 
   const handleManualTrigger = () => {
-    setTriggerSignal((prev) => prev + 1);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setHeadlineStage((prev) => (prev === "curiosity" ? "engineered" : "curiosity"));
+
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 50);
+    }, 280);
   };
 
   return (
@@ -144,50 +158,91 @@ export function MonumentalHero() {
               title="Click to trigger transformation"
               aria-live="polite"
             >
-              {/* Line 1: Expressive Editorial Italic Serif */}
+              {/* Line 1: Expressive Editorial Italic Serif with Kinetic Illumination & Optical Emergence */}
               <span
                 ref={line1Ref}
-                className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[6.25rem] leading-[1.0] tracking-[-0.02em] text-[#EDEDEF] pb-1.5 transition-opacity duration-500"
+                className="font-serif italic font-normal text-5xl sm:text-7xl lg:text-8xl xl:text-[6.75rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2.5 inline-block select-none transform-gpu"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 30%, #FFFFFF 48%, #E9D5FF 58%, #EDEDEF 72%, #EDEDEF 100%)",
+                  backgroundSize: "220% auto",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
+                  opacity: !hasMounted || isTransitioning ? 0 : 1,
+                  filter: !hasMounted || isTransitioning ? "blur(14px)" : "blur(0px)",
+                  transform: !hasMounted
+                    ? "translateY(24px) scale(0.99)"
+                    : isTransitioning
+                    ? "translateY(-12px) scale(0.99)"
+                    : "translateY(0px) scale(1)",
+                  transition: prefersReducedMotion
+                    ? "none"
+                    : isTransitioning
+                    ? "opacity 260ms cubic-bezier(0.16, 1, 0.3, 1), filter 260ms cubic-bezier(0.16, 1, 0.3, 1), transform 260ms cubic-bezier(0.16, 1, 0.3, 1)"
+                    : "opacity 950ms cubic-bezier(0.16, 1, 0.3, 1), filter 950ms cubic-bezier(0.16, 1, 0.3, 1), transform 950ms cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
               >
                 {headlineStage === "curiosity" ? "Curiosity," : "Ideas,"}
               </span>
 
-              {/* Line 2: Contemporary Modern Display Geometry with Non-Clipping Period */}
+              {/* Line 2: Contemporary Modern Display Geometry nestled under Line 1 */}
               <span
                 ref={line2Ref}
-                className="font-display font-medium text-3xl sm:text-4xl md:text-5xl lg:text-[3.65rem] xl:text-[4.25rem] leading-[1.06] tracking-[-0.035em] text-[#EDEDEF] pt-0.5 transition-opacity duration-300"
+                className="font-display font-medium text-3xl sm:text-5xl lg:text-[3.85rem] xl:text-[4.65rem] leading-[1.02] tracking-[-0.038em] -mt-1 sm:-mt-2 lg:-mt-2.5 inline-block select-none transform-gpu"
+                style={{
+                  opacity: !hasMounted || isTransitioning ? 0 : 1,
+                  filter: !hasMounted || isTransitioning ? "blur(14px)" : "blur(0px)",
+                  transform: !hasMounted
+                    ? "translateY(22px) scale(0.99)"
+                    : isTransitioning
+                    ? "translateY(-10px) scale(0.99)"
+                    : "translateY(0px) scale(1)",
+                  transition: prefersReducedMotion
+                    ? "none"
+                    : isTransitioning
+                    ? "opacity 260ms cubic-bezier(0.16, 1, 0.3, 1) 30ms, filter 260ms cubic-bezier(0.16, 1, 0.3, 1) 30ms, transform 260ms cubic-bezier(0.16, 1, 0.3, 1) 30ms"
+                    : "opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, filter 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms",
+                }}
               >
-                {headlineStage === "curiosity" ? (
-                  <>
-                    <span>made </span>
-                    <span className="whitespace-nowrap">
-                      tangible
-                      <span className="text-[#A855F7] inline-block ml-0.5 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)] animate-[violetPulse_3.5s_ease-in-out_infinite]">
-                        .
-                      </span>
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span>engineered </span>
-                    <span className="whitespace-nowrap">
-                      to endure
-                      <span className="text-[#A855F7] inline-block ml-0.5 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)] animate-[violetPulse_3.5s_ease-in-out_infinite]">
-                        .
-                      </span>
-                    </span>
-                  </>
-                )}
+                <span
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 35%, #FFFFFF 52%, #F3E8FF 62%, #EDEDEF 78%, #EDEDEF 100%)",
+                    backgroundSize: "220% auto",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
+                    animationDelay: "2.8s",
+                  }}
+                >
+                  {headlineStage === "curiosity" ? "made tangible" : "engineered to endure"}
+                </span>
+                <span className="text-[#A855F7] inline-block ml-1 drop-shadow-[0_0_12px_rgba(168,85,247,0.75)] animate-[violetPulse_3.5s_ease-in-out_infinite] select-none">
+                  .
+                </span>
               </span>
 
-              {/* Subtle Tactile Replay & Stage Indicator */}
-              <div className="mt-2.5 flex items-center gap-2 opacity-50 group-hover/headline:opacity-90 transition-opacity">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8]">
-                  {headlineStage === "curiosity" ? "Curiosity → Engineering" : "Ideas → Systems"}
-                </span>
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#C084FC]">
-                  <RotateCcw className="w-2.5 h-2.5" />
-                  <span>[ Click headline to transform ]</span>
+              {/* Architectural Perspective Datum Rail */}
+              <div
+                className="mt-4 sm:mt-5 flex items-center gap-3 select-none"
+                style={{
+                  opacity: hasMounted ? 1 : 0,
+                  transform: hasMounted ? "translateY(0px)" : "translateY(12px)",
+                  transition: prefersReducedMotion
+                    ? "none"
+                    : "opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) 280ms, transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 280ms",
+                }}
+              >
+                <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-[#8E95A5]">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#A855F7] animate-pulse" aria-hidden="true" />
+                  <span className="text-[#EDEDEF] font-medium">Phase {headlineStage === "curiosity" ? "01" : "02"}</span>
+                  <span className="text-[#374151]">/</span>
+                  <span>{headlineStage === "curiosity" ? "Curiosity & Exploration" : "Systems & Engineering"}</span>
+                </div>
+                <div className="hidden sm:block h-px w-8 bg-[#181D26]" aria-hidden="true" />
+                <span className="text-[10px] font-mono tracking-wider text-[#6B7280] group-hover/headline:text-[#C084FC] transition-colors">
+                  {headlineStage === "curiosity" ? "Shift perspective ↗" : "Revert perspective ↺"}
                 </span>
               </div>
             </div>
@@ -205,9 +260,9 @@ export function MonumentalHero() {
             <div className="mt-4 sm:mt-7 pt-4 sm:pt-6 border-t border-[#181D26] flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-3">
               <div className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7]" aria-hidden="true" />
-                <span className="font-display text-base sm:text-lg font-medium text-[#EDEDEF] tracking-tight">
+                <h1 className="font-display text-base sm:text-lg font-medium text-[#EDEDEF] tracking-tight m-0 inline">
                   Yashvardhan Borude
-                </span>
+                </h1>
               </div>
               <span className="font-mono text-xs text-[#94A3B8] tracking-wide">
                 — Computer Engineering &amp; Systems Architecture
