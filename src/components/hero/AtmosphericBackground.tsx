@@ -68,6 +68,17 @@ export function AtmosphericBackground() {
 
     // 2. Harmonic Filament Waves Parameters
     const waveCount = 3;
+    // Rain streaks on window pane (for light theme)
+    const streakCount = 18;
+    const rainStreaks = Array.from({ length: streakCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      length: 18 + Math.random() * 32,
+      speed: 0.45 + Math.random() * 0.75,
+      opacity: 0.03 + Math.random() * 0.05,
+      width: 0.75 + Math.random() * 0.75,
+    }));
+
 
     let animationFrameId: number;
     let time = 0;
@@ -81,9 +92,9 @@ export function AtmosphericBackground() {
       const cy1 = height * (0.32 + Math.cos(time * 0.28) * 0.07);
       const grad1 = ctx.createRadialGradient(cx1, cy1, 10, cx1, cy1, width * 0.45);
       if (isLight) {
-        grad1.addColorStop(0, "rgba(42, 114, 78, 0.055)");
-        grad1.addColorStop(0.5, "rgba(59, 130, 150, 0.022)");
-        grad1.addColorStop(1, "rgba(245, 247, 243, 0)");
+        grad1.addColorStop(0, "rgba(71, 120, 94, 0.065)");
+        grad1.addColorStop(0.4, "rgba(185, 216, 208, 0.035)");
+        grad1.addColorStop(1, "rgba(243, 243, 233, 0)");
       } else {
         grad1.addColorStop(0, "rgba(168, 85, 247, 0.065)");
         grad1.addColorStop(0.5, "rgba(126, 34, 206, 0.022)");
@@ -96,9 +107,9 @@ export function AtmosphericBackground() {
       const cy2 = height * (0.62 + Math.sin(time * 0.30) * 0.05);
       const grad2 = ctx.createRadialGradient(cx2, cy2, 10, cx2, cy2, width * 0.38);
       if (isLight) {
-        grad2.addColorStop(0, "rgba(51, 122, 140, 0.04)");
-        grad2.addColorStop(0.6, "rgba(34, 103, 67, 0.015)");
-        grad2.addColorStop(1, "rgba(245, 247, 243, 0)");
+        grad2.addColorStop(0, "rgba(185, 216, 208, 0.05)");
+        grad2.addColorStop(0.6, "rgba(71, 120, 94, 0.02)");
+        grad2.addColorStop(1, "rgba(243, 243, 233, 0)");
       } else {
         grad2.addColorStop(0, "rgba(99, 102, 241, 0.04)");
         grad2.addColorStop(0.6, "rgba(79, 70, 229, 0.012)");
@@ -106,6 +117,54 @@ export function AtmosphericBackground() {
       }
       ctx.fillStyle = grad2;
       ctx.fillRect(0, 0, width, height);
+
+      
+      // Render Rain Window Atmosphere in Light Mode
+      if (isLight && !prefersReducedMotion) {
+        // 1. Soft Window Rain Streaks
+        ctx.lineCap = "round";
+        for (let s = 0; s < streakCount; s++) {
+          const st = rainStreaks[s];
+          st.y += st.speed;
+          if (st.y > height + 40) {
+            st.y = -40;
+            st.x = Math.random() * width;
+          }
+
+          ctx.strokeStyle = `rgba(71, 120, 94, ${st.opacity})`;
+          ctx.lineWidth = st.width;
+          ctx.beginPath();
+          ctx.moveTo(st.x, st.y);
+          ctx.lineTo(st.x + 0.5, st.y + st.length);
+          ctx.stroke();
+
+          // Delicate droplet head at bottom of streak
+          ctx.fillStyle = `rgba(185, 216, 208, ${st.opacity * 1.5})`;
+          ctx.beginPath();
+          ctx.arc(st.x + 0.5, st.y + st.length, st.width * 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 2. Gentle Foliage Silhouettes at Canvas Periphery (looking out conservatory window)
+        // Top-right trailing vine branch
+        ctx.save();
+        ctx.fillStyle = "rgba(71, 120, 94, 0.032)";
+        ctx.beginPath();
+        ctx.moveTo(width, 0);
+        ctx.bezierCurveTo(width - 120, 40, width - 200, 140, width - 160, 220);
+        ctx.bezierCurveTo(width - 130, 180, width - 80, 120, width, 80);
+        ctx.closePath();
+        ctx.fill();
+
+        // Secondary subtle leaf silhouette
+        ctx.beginPath();
+        ctx.ellipse(width - 150, 130, 28, 12, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(width - 110, 175, 24, 10, Math.PI / 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
 
       if (!prefersReducedMotion) {
         // 2. Mathematical Harmonic Filament Waves (Floating in Background)

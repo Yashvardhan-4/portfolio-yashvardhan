@@ -30,23 +30,23 @@
 }
 
 [data-theme="light"] {
-  /* The Ghibli Petrichor & Summer Meadow Palette */
-  --bg: #F5F7F3;                 /* Morning rain mist parchment */
-  --bg-secondary: #EDF1E8;       /* Damp moss garden stone */
-  --surface: #E8ECE2;            /* Riverstone surface */
-  --surface-hover: #DDE4D5;      /* Sunlit leaf stone hover */
-  --surface-card: #FFFFFF;       /* Glazed porcelain card */
-  --fg: #17231C;                 /* Deep chlorophyll pine ink */
-  --fg-muted: #485E50;           /* Wet sage shadow */
-  --fg-subtle: #6F8576;          /* Misty rain monospace */
-  --border: #D2DBC9;             /* Pressed herbarium hairline */
-  --border-subtle: #E2E8DC;      /* Delicate rain border */
-  --accent: #2A724E;             /* Ghibli Waterfall Fern Emerald */
-  --accent-secondary: #3B8296;   /* Pond Ripple Rain Blue */
-  --accent-muted: rgba(42, 114, 78, 0.12);
-  --accent-glow: rgba(42, 114, 78, 0.25);
-  --accent-nature: #226743;      /* Deep lush moss */
-  --accent-water: #337A8C;       /* Rain puddle slate blue */
+  /* Warm Ivory & Ghibli Petrichor Rain Garden Palette */
+  --bg: #F3F3E9;                 /* Warm ivory main background */
+  --bg-secondary: #EAEFE2;       /* Damp moss garden tone */
+  --surface: #E5EBDD;            /* Soft sage secondary surfaces */
+  --surface-hover: #DDE5D5;      /* Sunlit leaf sage hover */
+  --surface-card: #EBF0E4;       /* Soft sage porcelain card */
+  --fg: #20352B;                 /* Forest ink primary text */
+  --fg-muted: #4B6354;           /* Wet sage body copy */
+  --fg-subtle: #768F80;          /* Moss mist monospace labels */
+  --border: #D0DDD0;             /* Moss mist borders and details */
+  --border-subtle: #DEE7DE;      /* Delicate mist hairline */
+  --accent: #47785E;             /* Leaf green interactive accent */
+  --accent-secondary: #B9D8D0;   /* Rainwater subtle visual accent */
+  --accent-muted: rgba(71, 120, 94, 0.12);
+  --accent-glow: rgba(71, 120, 94, 0.22);
+  --accent-nature: #35634A;      /* Deep lush moss */
+  --accent-water: #4A8E82;       /* Rainwater slate green */
 }
 
 @keyframes shine {

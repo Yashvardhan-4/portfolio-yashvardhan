@@ -20,7 +20,7 @@ export function MinimalEditorialNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const accentColor = theme === "light" ? "#2A724E" : "#A855F7";
+  const accentColor = theme === "light" ? "#47785E" : "#A855F7";
 
   return (
     <header
@@ -78,7 +78,7 @@ export function MinimalEditorialNav() {
             onClick={toggleTheme}
             className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono font-medium transition-all duration-300 active:scale-95 ${
               theme === "light"
-                ? "border-[#D2DBC9] bg-[#E8ECE2] text-[#17231C] hover:border-[#2A724E] shadow-sm"
+                ? "border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] hover:border-[var(--accent)] shadow-sm"
                 : "border-[#1E2430] bg-[#0E1015]/80 text-[#8E95A5] hover:border-[#A855F7] hover:text-[#EDEDEF]"
             }`}
             aria-label={`Switch to ${theme === "dark" ? "Petrichor Light Mode" : "Obsidian Dark Mode"}`}
@@ -95,7 +95,7 @@ export function MinimalEditorialNav() {
             href="#contact"
             className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-mono font-medium tracking-wider transition-all duration-300 active:scale-[0.98] ${
               theme === "light"
-                ? "border-[#D2DBC9] bg-[#FFFFFF] text-[#17231C] hover:border-[#2A724E] hover:bg-[#F0F4EC] shadow-sm"
+                ? "border-[var(--border)] bg-[var(--surface-card)] text-[var(--fg)] hover:border-[var(--accent)] hover:bg-[var(--surface-hover)] shadow-sm"
                 : "border-[#1E2430] bg-[#0E1015]/80 text-[#EDEDEF] hover:border-[#A855F7]/80 hover:bg-[#A855F7]/10 shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
             }`}
             aria-label="Navigate to contact section"
@@ -113,7 +113,7 @@ export function MinimalEditorialNav() {
             onClick={toggleTheme}
             className={`flex h-10 px-3 items-center gap-1.5 rounded-xl border text-xs font-mono font-medium transition-all ${
               theme === "light"
-                ? "border-[#D2DBC9] bg-[#E8ECE2] text-[#17231C]"
+                ? "border-[var(--border)] bg-[var(--surface)] text-[var(--fg)]"
                 : "border-[#1E2430] bg-[#0E1015] text-[#EDEDEF]"
             }`}
             aria-label="Toggle theme"

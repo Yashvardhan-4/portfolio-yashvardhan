@@ -28,6 +28,7 @@ interface PortraitDot {
   luminousColor: string;
   colorLight: string;
   luminousColorLight: string;
+  radiusMultiplierLight: number;
   featureWeight: number;
   dissolveAngle: number;
   dissolveSpeed: number;
@@ -177,41 +178,75 @@ export function DigitalExhibitionStage({
     const rawDots = halftoneData.dots as Array<[number, number, number, number]>;
 
     const portraitDots: PortraitDot[] = rawDots.map(([x0, y0, r0, l], i) => {
-      let color = "rgba(245, 245, 247, 0.95)";
-      let luminousColor = "rgba(255, 255, 255, 1.0)";
-      let colorLight = "rgba(23, 35, 28, 0.95)";
-      let luminousColorLight = "rgba(42, 114, 78, 1.0)";
-
-      if (l > 0.8) {
-        color = "rgba(255, 255, 255, 0.98)";
-        luminousColor = "rgba(255, 255, 255, 1.0)";
-        colorLight = "rgba(23, 35, 28, 0.98)";
-        luminousColorLight = "rgba(42, 114, 78, 1.0)";
-      } else if (l > 0.55) {
-        color = "rgba(226, 232, 240, 0.90)";
-        luminousColor = "rgba(245, 240, 255, 1.0)";
-        colorLight = "rgba(32, 50, 40, 0.90)";
-        luminousColorLight = "rgba(42, 114, 78, 0.95)";
-      } else if (l > 0.35) {
-        color = "rgba(180, 190, 205, 0.78)";
-        luminousColor = "rgba(220, 215, 245, 0.95)";
-        colorLight = "rgba(50, 75, 60, 0.80)";
-        luminousColorLight = "rgba(59, 130, 150, 0.90)";
-      } else if (l > 0.18) {
-        color = "rgba(120, 130, 150, 0.65)";
-        luminousColor = "rgba(180, 175, 220, 0.85)";
-        colorLight = "rgba(75, 105, 88, 0.65)";
-        luminousColorLight = "rgba(59, 130, 150, 0.80)";
-      } else {
-        color = "rgba(70, 78, 95, 0.50)";
-        luminousColor = "rgba(130, 125, 170, 0.70)";
-        colorLight = "rgba(105, 135, 118, 0.50)";
-        luminousColorLight = "rgba(75, 105, 88, 0.70)";
-      }
-
       // Facial feature weighting (protects eyes, nose bridge, lips)
       const isCoreFeature = x0 > 175 && x0 < 305 && y0 > 185 && y0 < 415;
       const featureWeight = isCoreFeature ? 0.65 : 1.0;
+
+      // Distance from portrait center for outer perimeter fade-out into warm ivory
+      const dxEdge = (x0 - baseWidth * 0.5) / 195;
+      const dyEdge = (y0 - baseHeight * 0.5) / 230;
+      const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
+      const edgeFade = distEdge > 0.82 ? Math.max(0, 1 - (distEdge - 0.82) / 0.26) : 1.0;
+
+      // --- DARK THEME MAPPING (Luminous phosphor starlight against #060709) ---
+      let color = "rgba(245, 245, 247, 0.95)";
+      let luminousColor = "rgba(255, 255, 255, 1.0)";
+      if (l > 0.8) {
+        color = "rgba(255, 255, 255, 0.98)";
+        luminousColor = "rgba(255, 255, 255, 1.0)";
+      } else if (l > 0.55) {
+        color = "rgba(226, 232, 240, 0.90)";
+        luminousColor = "rgba(245, 240, 255, 1.0)";
+      } else if (l > 0.35) {
+        color = "rgba(180, 190, 205, 0.78)";
+        luminousColor = "rgba(220, 215, 245, 0.95)";
+      } else if (l > 0.18) {
+        color = "rgba(120, 130, 150, 0.65)";
+        luminousColor = "rgba(180, 175, 220, 0.85)";
+      } else {
+        color = "rgba(70, 78, 95, 0.50)";
+        luminousColor = "rgba(130, 125, 170, 0.70)";
+      }
+
+      // --- LIGHT THEME MAPPING (Forest-green Monochromatic Duotone against #F3F3E9) ---
+      // Darkest dots: #20352B (RGB 32, 53, 43) -> Low luminance shadows, contours, eyes, hair
+      // Mid-tone dots: #47785E (RGB 71, 120, 94) -> Cheek modeling, facial volume
+      // Highlight dots: #A9BDA8 (RGB 169, 189, 168) -> Lit skin, forehead, bridge of nose
+      let colorLight = "rgba(32, 53, 43, 0.95)";
+      let luminousColorLight = "rgba(71, 120, 94, 0.98)";
+      let radiusMultiplierLight = 1.0;
+
+      if (l < 0.28) {
+        // Deep shadows & facial contours (eyes, pupils, brow lines, mouth seam)
+        const alpha = Math.min(0.96, (0.86 + (0.28 - l) * 0.4) * (isCoreFeature ? 1.0 : edgeFade));
+        colorLight = `rgba(32, 53, 43, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(71, 120, 94, 1.0)";
+        radiusMultiplierLight = 1.30;
+      } else if (l < 0.46) {
+        // Shadow-to-mid tone transition (jawline, eye sockets, temples)
+        const alpha = 0.80 * edgeFade;
+        colorLight = `rgba(42, 72, 58, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(71, 120, 94, 0.96)";
+        radiusMultiplierLight = 1.12;
+      } else if (l < 0.66) {
+        // True midtones (cheeks, facial planes, neck)
+        const alpha = 0.72 * edgeFade;
+        colorLight = `rgba(71, 120, 94, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(42, 72, 58, 0.92)";
+        radiusMultiplierLight = 0.92;
+      } else if (l < 0.82) {
+        // Soft skin highlights (forehead, cheekbone shine)
+        const alpha = 0.48 * edgeFade;
+        colorLight = `rgba(169, 189, 168, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(71, 120, 94, 0.85)";
+        radiusMultiplierLight = 0.70;
+      } else {
+        // Specular highlights (paper ivory #F3F3E9 shines through)
+        const alpha = 0.28 * edgeFade;
+        colorLight = `rgba(169, 189, 168, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(71, 120, 94, 0.75)";
+        radiusMultiplierLight = 0.52;
+      }
 
       // Deterministic angle & speed for smooth scroll-driven dissolve
       const dx = x0 - baseWidth * 0.5;
@@ -239,6 +274,7 @@ export function DigitalExhibitionStage({
         luminousColor,
         colorLight,
         luminousColorLight,
+        radiusMultiplierLight,
         featureWeight,
         dissolveAngle: angle,
         dissolveSpeed: speed,
@@ -459,6 +495,7 @@ export function DigitalExhibitionStage({
       // SECTION A: RENDER PORTRAIT HALFTONE DOTS (UNBOUNDED)
       // ----------------------------------------------------
       const numDots = portraitDots.length;
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
 
       for (let i = 0; i < numDots; i++) {
         const p = portraitDots[i];
@@ -468,8 +505,8 @@ export function DigitalExhibitionStage({
         const baseY = anchorY + p.y0 * portraitScale;
 
         if (prefersReducedMotion) {
-          const currentRadius = p.r0 * portraitScale;
-          ctx.fillStyle = p.color;
+          const currentRadius = isLight ? p.r0 * p.radiusMultiplierLight * portraitScale : p.r0 * portraitScale;
+          ctx.fillStyle = isLight ? p.colorLight : p.color;
           ctx.beginPath();
           ctx.arc(baseX, baseY, currentRadius, 0, Math.PI * 2);
           ctx.fill();
@@ -561,9 +598,10 @@ export function DigitalExhibitionStage({
 
         if (dissolveAlpha <= 0.005) continue;
 
+        const baseDotRadius = isLight ? p.r0 * p.radiusMultiplierLight : p.r0;
         let drawRadius = Math.max(
           0.2,
-          p.r0 * portraitScale * revealScale * (1 - dissolveEase * 0.45)
+          baseDotRadius * portraitScale * revealScale * (1 - dissolveEase * 0.45)
         );
 
         if (isLitByScan) {
@@ -577,7 +615,6 @@ export function DigitalExhibitionStage({
         }
 
         // Render dot with luminous or monochrome tone (theme-aware)
-        const isLight = document.documentElement.getAttribute("data-theme") === "light";
         if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2 || mouseBoost > 0.25) {
           ctx.fillStyle = isLight ? p.luminousColorLight : p.luminousColor;
         } else {

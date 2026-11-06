@@ -3,6 +3,7 @@ import "./globals.css";
 import { profile } from "@/data/profile";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { RainRippleEffect } from "@/components/ui/RainRippleEffect";
+import { SproutMascot } from "@/components/mascot/SproutMascot";
 
 const SITE_URL = "https://www.yashvardhanborude.tech";
 
@@ -224,6 +225,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased transition-colors duration-300">
         <ThemeProvider>
           <RainRippleEffect />
+          <SproutMascot />
           {children}
         </ThemeProvider>
       </body>

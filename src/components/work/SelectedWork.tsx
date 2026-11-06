@@ -18,6 +18,24 @@ export function SelectedWork() {
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
   const [modalTab, setModalTab] = useState<"overview" | "architecture">("overview");
 
+  const openProjectModal = (project: ProjectItem) => {
+    setActiveProject(project);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("sprout-inspect-modal", { detail: { open: true, title: project.title } })
+      );
+    }
+  };
+
+  const closeProjectModal = () => {
+    setActiveProject(null);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("sprout-inspect-modal", { detail: { open: false } })
+      );
+    }
+  };
+
   return (
     <section
       id="work"
@@ -84,7 +102,7 @@ export function SelectedWork() {
 
                         {/* High-Resolution Viewport Preview */}
                         <div
-                          onClick={() => setActiveProject(project)}
+                          onClick={() => openProjectModal(project)}
                           className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--bg)] cursor-pointer"
                         >
                           <img
@@ -178,7 +196,7 @@ export function SelectedWork() {
 
                         <button
                           type="button"
-                          onClick={() => setActiveProject(project)}
+                          onClick={() => openProjectModal(project)}
                           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] font-mono text-xs transition-all active:scale-[0.98]"
                         >
                           <Layers className="h-3.5 w-3.5 text-[var(--accent)]" />
@@ -227,7 +245,7 @@ export function SelectedWork() {
 
                 <button
                   type="button"
-                  onClick={() => setActiveProject(null)}
+                  onClick={closeProjectModal}
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                   aria-label="Close project modal"
                 >
@@ -378,7 +396,7 @@ export function SelectedWork() {
 
                 <button
                   type="button"
-                  onClick={() => setActiveProject(null)}
+                  onClick={closeProjectModal}
                   className="font-mono text-xs text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors"
                 >
                   Close [Esc]

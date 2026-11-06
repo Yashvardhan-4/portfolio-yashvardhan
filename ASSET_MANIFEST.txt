@@ -14,3 +14,14 @@
 - /favicon.ico : Multi-resolution site favicon
 - /favicon.svg : Vector mark for modern browsers
 - /og-image.png : OpenGraph preview banner for social sharing
+
+[INTERACTIVE MASCOT: SPROUT — THE CURIOUS SEED]
+- src/components/mascot/SproutMascot.tsx : Master companion controller, state machine, cursor spring physics, and interaction bus
+- src/components/mascot/SproutPixelArt.tsx : High-DPI crisp pixel-art SVG frame engine with dynamic pupil tracking and expression matrices
+- src/components/mascot/SproutMascot.css : Pixelated rendering directives (image-rendering: pixelated), keyframe springs, floating particle physics
+- src/components/mascot/sprout-types.ts : Type definitions for mascot states, palettes, physics coordinates, and environmental targets
+- src/components/mascot/sprout-frames.ts : Pixel matrices (26x26) for Idle, Blink, Walk, Run, Jump, Land, Inspect, Surprise, Happy, Sleep, and WakeUp
+- Visual Direction : Distinctive pixel-art seed creature with two green leaves, large dark expressive eyes, blush cheeks, dark forest outline, and ground shadow
+- Animation States : IDLE, LOOK_AROUND, FOLLOW, INSPECT, JUMP, SLEEP, WAKE_UP, HAPPY
+- Theme Adaptation : Light (Warm Ivory/Ghibli Petrichor) & Dark (Obsidian Matrix/Bioluminescent Garden)
+- A11y & Performance : Hardware-gated on fine pointers only, disabled on touch screens, reduced-motion fallback, pointer-events: none (zero click obstruction)
