@@ -5,22 +5,16 @@ import {
   Github,
   Linkedin,
   Terminal,
-  Check,
-  Copy,
   ArrowUp,
   MapPin,
   Clock,
-  Send,
   Mail,
 } from "lucide-react";
-import { PaperCrumpleForm } from "./PaperCrumpleForm";
+import { ConversationalInquiryForm } from "./ConversationalInquiryForm";
 
 export function ContactColophon() {
-  const [copied, setCopied] = useState(false);
-  const [emailCopied, setEmailCopied] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
 
-  const command = "npx yashvardhan";
   const email = "yashvardhanborude7@gmail.com";
 
   useEffect(() => {
@@ -41,18 +35,6 @@ export function ContactColophon() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleCopyCommand = () => {
-    navigator.clipboard.writeText(command);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2400);
-  };
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(email);
-    setEmailCopied(true);
-    setTimeout(() => setEmailCopied(false), 2400);
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -61,104 +43,47 @@ export function ContactColophon() {
     <footer
       id="contact"
       aria-label="Contact and Channels"
-      className="relative w-full border-t border-[#1E2430] bg-[#060709] overflow-hidden scroll-mt-20 pt-20 sm:pt-28 pb-12 sm:pb-16"
+      className="relative w-full border-t border-[#1E2430] bg-[#060709] overflow-hidden scroll-mt-20 pt-20 sm:pt-28 pb-8 sm:pb-10"
     >
+      {/* Colossal Monumental Name in the Background */}
+      <div
+        className="pointer-events-none select-none absolute inset-x-0 bottom-8 sm:bottom-6 flex justify-center items-end overflow-hidden z-0 opacity-[0.035] sm:opacity-[0.045]"
+        aria-hidden="true"
+      >
+        <span className="font-display font-black text-[14vw] tracking-tighter uppercase whitespace-nowrap text-[#EDEDEF] leading-none">
+          YASHVARDHAN BORUDE
+        </span>
+      </div>
+
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
-        {/* Section Header: Pure Editorial Typography (No AI Slashes, No Numbers) */}
-        <div className="max-w-3xl mx-auto text-center space-y-4">
+        {/* Section Header */}
+        <div className="max-w-3xl mx-auto text-center space-y-4 mb-12 sm:mb-16">
           <span className="font-mono text-xs uppercase tracking-widest text-[#A855F7] font-semibold block">
-            Get in Touch
+            Initiate Contact
           </span>
 
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal text-[#EDEDEF] tracking-tight leading-[1.02]">
-            Ready to build something impactful?
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal text-[#EDEDEF] tracking-tight leading-[1.04]">
+            Start a project or talk about a role.
           </h2>
 
           <p className="font-sans text-sm sm:text-base leading-relaxed text-[#8E95A5] max-w-xl mx-auto">
-            Available for full-time software engineering roles, high-performance tooling, and interesting projects. My inbox is always open.
+            Whether you want to build an application, accelerate an engineering team, or discuss a full-time role, let&apos;s start the conversation.
           </p>
         </div>
 
-        {/* Tactile Paper Crumple Contact Form */}
-        <div className="my-12">
-          <PaperCrumpleForm />
+        {/* Single Unified Conversational Inquiry Form */}
+        <div className="mb-14 sm:mb-16">
+          <ConversationalInquiryForm />
         </div>
 
-        {/* Quick Contact & Terminal Strip */}
-        <div className="max-w-3xl mx-auto border border-[#1E2430] bg-[#0E1015] p-6 sm:p-8 shadow-2xl mb-12">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E2430] pb-6">
-            <div>
-              <span className="font-mono text-[10px] uppercase tracking-wider text-[#8E95A5] block">
-                Direct Email
-              </span>
-              <p className="font-mono text-sm sm:text-base text-[#EDEDEF] font-semibold">
-                {email}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <a
-                href={`mailto:${email}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#EDEDEF] text-[#08090C] font-mono text-xs font-semibold hover:bg-white transition-all active:scale-[0.98]"
-              >
-                <Mail className="h-3.5 w-3.5 text-[#08090C]" />
-                <span>Send Email</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={handleCopyEmail}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#1E2430] bg-[#08090C] font-mono text-xs text-[#EDEDEF] hover:border-[#A855F7] hover:text-[#C084FC] transition-all"
-                aria-label="Copy email address"
-              >
-                {emailCopied ? (
-                  <>
-                    <Check className="h-3.5 w-3.5 text-[#10B981]" />
-                    <span>Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3.5 w-3.5 text-[#8E95A5]" />
-                    <span>Copy</span>
-                  </>
-                )}
-              </button>
-            </div>
+        {/* Live Status & Telemetry Strip */}
+        <div className="max-w-4xl mx-auto pb-8 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[#8E95A5] border-b border-[#1E2430]/70">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
+            <span className="text-[#EDEDEF]">Open to Software Engineering Roles &amp; Select Projects</span>
           </div>
 
-          {/* Terminal Command Row */}
-          <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E2430] pb-6">
-            <div className="flex items-center gap-2 font-mono text-sm text-[#EDEDEF]">
-              <Terminal className="h-4 w-4 text-[#A855F7]" />
-              <span>{command}</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleCopyCommand}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#1E2430] bg-[#08090C] font-mono text-xs text-[#8E95A5] hover:text-[#EDEDEF] hover:border-[#A855F7] transition-all"
-            >
-              {copied ? (
-                <>
-                  <Check className="h-3.5 w-3.5 text-[#10B981]" />
-                  <span>Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3.5 w-3.5" />
-                  <span>Copy Command</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Telemetry Datum Badges */}
-          <div className="pt-6 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[#8E95A5]">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
-              <span className="text-[#EDEDEF]">Open to Software Engineering Roles</span>
-            </div>
-
+          <div className="flex items-center gap-6">
             <div className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5 text-[#A855F7]" />
               <span className="text-[#EDEDEF] tabular-nums">{currentTime || "Live IST"}</span>
@@ -172,70 +97,84 @@ export function ContactColophon() {
           </div>
         </div>
 
-        {/* Social Networks Row */}
-        <div className="max-w-3xl mx-auto pt-2 pb-14 border-b border-[#1E2430] flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          <a
-            href="https://github.com/Yashvardhan-4"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#1E2430] bg-[#0E1015] font-mono text-xs text-[#8E95A5] hover:text-[#EDEDEF] hover:border-[#A855F7] transition-all"
-          >
-            <Github className="h-4 w-4 text-[#C084FC]" />
-            <span>GitHub Profile</span>
-          </a>
-
-          <a
-            href="https://linkedin.com/in/yashvardhan-borude-8640a6319"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#1E2430] bg-[#0E1015] font-mono text-xs text-[#8E95A5] hover:text-[#EDEDEF] hover:border-[#38BDF8] transition-all"
-          >
-            <Linkedin className="h-4 w-4 text-[#38BDF8]" />
-            <span>LinkedIn Profile</span>
-          </a>
-
-          <a
-            href="https://leetcode.com/u/yashvardhan_4/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#1E2430] bg-[#0E1015] font-mono text-xs text-[#8E95A5] hover:text-[#EDEDEF] hover:border-[#FFA116] transition-all"
-          >
-            <Terminal className="h-4 w-4 text-[#FFA116]" />
-            <span>LeetCode (315+ Solved)</span>
-          </a>
-
-          <a
-            href="https://codeforces.com/profile/yashvardhanborude7"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#1E2430] bg-[#0E1015] font-mono text-xs text-[#8E95A5] hover:text-[#EDEDEF] hover:border-[#38BDF8] transition-all"
-          >
-            <Terminal className="h-4 w-4 text-[#38BDF8]" />
-            <span>Codeforces (Pupil)</span>
-          </a>
-        </div>
-
-        {/* Monumental Name Typography across Footer */}
-        <div className="pt-14 pb-8 text-center select-none overflow-hidden">
-          <h2 className="font-display font-bold text-4xl sm:text-6xl md:text-7xl lg:text-9xl tracking-tight text-[#EDEDEF] uppercase opacity-95 transition-all">
-            Yashvardhan Borude
-          </h2>
-        </div>
-
-        {/* Distinctive Minimal Editorial Colophon & Sign-Off (No YB Logo) */}
-        <div className="pt-8 border-t border-[#1E2430] flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-xs text-[#8E95A5]">
-          <p>
-            &copy; {new Date().getFullYear()} Yashvardhan Borude. Built with Next.js &amp; WebGL.
+        {/* All Links in Bottom of Footer in One Single Unified Line */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 font-mono text-[11px] sm:text-xs text-[#8E95A5]">
+          <p className="text-[#8E95A5] tracking-tight whitespace-nowrap">
+            &copy; {new Date().getFullYear()} Yashvardhan Borude
           </p>
 
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#1E2430] bg-[#0E1015] text-[#8E95A5] hover:text-[#EDEDEF] hover:border-[#A855F7] transition-all active:scale-[0.98]"
+          <nav
+            aria-label="Footer Channels"
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-5"
           >
-            <span>Back to top</span>
-            <ArrowUp className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 text-[#A855F7]" />
-          </button>
+            <a
+              href="https://github.com/Yashvardhan-4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-1.5 hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
+            >
+              <Github className="h-3 w-3 text-[#C084FC] transition-transform group-hover:scale-110" />
+              <span>GitHub</span>
+            </a>
+
+            <span className="text-[#2C3545]" aria-hidden="true">•</span>
+
+            <a
+              href="https://linkedin.com/in/yashvardhan-borude-8640a6319"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-1.5 hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#38BDF8]"
+            >
+              <Linkedin className="h-3 w-3 text-[#38BDF8] transition-transform group-hover:scale-110" />
+              <span>LinkedIn</span>
+            </a>
+
+            <span className="text-[#2C3545]" aria-hidden="true">•</span>
+
+            <a
+              href="https://leetcode.com/u/yashvardhan_4/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-1.5 hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#FFA116]"
+            >
+              <Terminal className="h-3 w-3 text-[#FFA116] transition-transform group-hover:scale-110" />
+              <span>LeetCode</span>
+            </a>
+
+            <span className="text-[#2C3545]" aria-hidden="true">•</span>
+
+            <a
+              href="https://codeforces.com/profile/yashvardhanborude7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-1.5 hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#38BDF8]"
+            >
+              <Terminal className="h-3 w-3 text-[#38BDF8] transition-transform group-hover:scale-110" />
+              <span>Codeforces</span>
+            </a>
+
+            <span className="text-[#2C3545]" aria-hidden="true">•</span>
+
+            <a
+              href={`mailto:${email}`}
+              className="group flex items-center gap-1.5 hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#A855F7]"
+            >
+              <Mail className="h-3 w-3 text-[#A855F7] transition-transform group-hover:scale-110" />
+              <span>Email</span>
+            </a>
+
+            <span className="text-[#2C3545]" aria-hidden="true">•</span>
+
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="group flex items-center gap-1 hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#A855F7]"
+              aria-label="Scroll to top of page"
+            >
+              <span>Back to Top</span>
+              <ArrowUp className="h-3 w-3 text-[#A855F7] transition-transform group-hover:-translate-y-0.5" />
+            </button>
+          </nav>
         </div>
       </div>
     </footer>
