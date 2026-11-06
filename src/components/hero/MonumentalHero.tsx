@@ -3,11 +3,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { AtmosphericBackground } from "./AtmosphericBackground";
+import Threads from "@/components/ui/Threads";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
 import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
 
 export function MonumentalHero() {
   const [scrollY, setScrollY] = useState(0);
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      setIsLightMode(document.documentElement.getAttribute("data-theme") === "light");
+    };
+    updateTheme();
+    window.addEventListener("theme-change", updateTheme);
+    window.addEventListener("themechange", updateTheme);
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.attributeName === "data-theme") updateTheme();
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => {
+      window.removeEventListener("theme-change", updateTheme);
+      window.removeEventListener("themechange", updateTheme);
+      observer.disconnect();
+    };
+  }, []);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -49,10 +71,37 @@ export function MonumentalHero() {
 
   return (
     <div className="relative w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-hidden flex flex-col justify-between transition-colors duration-300">
-      {/* 1. Living Atmospheric Environment Layer (Mathematical Wave Filaments & Algorithmic Constellation) */}
-      <AtmosphericBackground />
+      {/* 1. ReactBits Background Animation: Threads (Active in Dark Mode for fluid WebGL ribbons on pitch black) */}
+      <div
+        className={`absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700 ${
+          isLightMode ? "opacity-0" : "opacity-100"
+        }`}
+        aria-hidden="true"
+      >
+        <Threads
+          color={[0.66, 0.33, 0.97]}
+          accentColor={[0.75, 0.52, 0.99]}
+          amplitude={1.15}
+          distance={0.28}
+          enableMouseInteraction={true}
+          lineCount={42}
+          thickness={1.1}
+          opacity={0.42}
+          className="w-full h-full"
+        />
+      </div>
 
-      {/* 2. Master Unbounded Digital Exhibition Canvas (Portrait Dots, Physics & Scanning Wave) */}
+      {/* 2. Living Conservatory Environment Layer (Active in Light Mode: Rain streaks, sun beam, puddle ripples) */}
+      <div
+        className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-700 ${
+          isLightMode ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden="true"
+      >
+        <AtmosphericBackground />
+      </div>
+
+      {/* 3. Master Unbounded Digital Exhibition Canvas (Portrait Dots, Physics & Scanning Wave) */}
       <DigitalExhibitionStage
         desktopAnchorRef={desktopAnchorRef}
         mobileAnchorRef={mobileAnchorRef}
@@ -61,9 +110,9 @@ export function MonumentalHero() {
         line2Ref={line2Ref as any}
       />
 
-      {/* Deep perimeter vignette to frame the exhibition stage */}
+      {/* Pure perimeter vignette to softly frame the exhibition stage without lightening black */}
       <div
-        className="absolute inset-0 pointer-events-none z-[1] bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--border-subtle)_80%,var(--bg)_100%)] opacity-35"
+        className="absolute inset-0 pointer-events-none z-[1] bg-[radial-gradient(ellipse_at_center,transparent_55%,var(--bg)_100%)] opacity-40"
         aria-hidden="true"
       />
 
@@ -180,7 +229,7 @@ export function MonumentalHero() {
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
             {/* Subtle Ambient Radial Glow behind Portrait */}
             <div 
-              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none"
+              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none opacity-30"
               aria-hidden="true" 
             />
 

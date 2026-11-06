@@ -563,7 +563,8 @@ export function DigitalExhibitionStage({
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const distSq = dx * dx + dy * dy;
-          const interactionRadius = 125;
+          // Refined, intimate interaction radius (tightened from 125 to 45px to eliminate massive circular halo)
+          const interactionRadius = 45;
           const interactionRadiusSq = interactionRadius * interactionRadius;
 
           if (distSq < interactionRadiusSq && distSq > 0.01) {
@@ -572,7 +573,7 @@ export function DigitalExhibitionStage({
             const factor = Math.cos(q * Math.PI * 0.5);
             mouseBoost = factor * factor;
             // Feature weight prevents excessive distortion on facial features while maintaining responsive tactile flow
-            const force = mouseBoost * 13.5 * p.featureWeight;
+            const force = mouseBoost * 4.5 * p.featureWeight;
             targetX += (dx / dist) * force;
             targetY += (dy / dist) * force;
           }
@@ -644,12 +645,13 @@ export function DigitalExhibitionStage({
         if (sparkBoost > 0) {
           drawRadius *= (1 + sparkBoost * 0.3);
         }
-        if (mouseBoost > 0.08) {
-          drawRadius *= (1 + mouseBoost * 0.35); // Subtle dot expansion on cursor proximity
+        if (mouseBoost > 0.15) {
+          drawRadius *= (1 + mouseBoost * 0.18); // Subtle dot expansion on immediate cursor proximity
         }
 
         // Render dot with luminous or monochrome tone (theme-aware)
-        if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2 || mouseBoost > 0.25) {
+        // Luminous highlight restricted to immediate micro-focus (mouseBoost > 0.65) for an intimate pinpoint glint
+        if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2 || mouseBoost > 0.65) {
           ctx.fillStyle = isLight ? p.luminousColorLight : p.luminousColor;
         } else {
           ctx.fillStyle = isLight ? p.colorLight : p.color;

@@ -25,3 +25,9 @@
 - Animation States : IDLE, LOOK_AROUND, FOLLOW, INSPECT, JUMP, SLEEP, WAKE_UP, HAPPY
 - Theme Adaptation : Light (Warm Ivory/Ghibli Petrichor) & Dark (Obsidian Matrix/Bioluminescent Garden)
 - A11y & Performance : Hardware-gated on fine pointers only, disabled on touch screens, reduced-motion fallback, pointer-events: none (zero click obstruction)
+
+[STUDIO GHIBLI NATURE ATMOSPHERE (LIGHT MODE EXCLUSIVE)]
+- /images/ghibli-countryside-summer.jpg : Kazuo Oga-inspired summer rolling hills and azure sky (used for Hero landscape and AboutPhilosophy herbarium watermark)
+- /images/ghibli-mossy-waterfall.jpg : Enchanted mossy forest waterfall and grotto (used for SelectedWork ambient backdrop)
+- /images/ghibli-rain-puddle-ripples.jpg : Tranquil rain puddle with concentric ripples (used for ContactColophon twilight water reflection)
+- Isolation Policy : Strictly rendered when [data-theme='light']; 100% disabled/transparent in Dark Mode to preserve cybernetic terminal aesthetic.
