@@ -15,17 +15,19 @@ export function AboutPhilosophy() {
       aria-label="Education, Certifications, and Achievements"
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] py-20 sm:py-28 overflow-hidden scroll-mt-20 transition-colors duration-300"
     >
-      {/* Studio Ghibli Herbarium Botanical Ambient Layer (Strictly Light Mode Only) */}
+      {/* Studio Ghibli Full-Width Herbarium Landscape Backdrop (Strictly Light Mode Only) */}
       {isLight && (
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none transition-opacity duration-700"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
           aria-hidden="true"
         >
+          {/* Full-width Ghibli Countryside Meadow & Terraced Hills (Reference 1) */}
           <div
-            className="absolute -bottom-16 right-0 w-[560px] h-[400px] bg-no-repeat bg-contain opacity-[0.07] mix-blend-multiply blur-[0.4px]"
+            className="absolute inset-0 w-full h-full bg-cover bg-bottom opacity-25 mix-blend-multiply"
             style={{ backgroundImage: `url('/images/ghibli-countryside-summer.jpg')` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/85 via-transparent to-[var(--bg)]/85" />
         </div>
       )}
 

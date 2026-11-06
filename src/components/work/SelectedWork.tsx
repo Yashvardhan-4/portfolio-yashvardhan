@@ -45,26 +45,20 @@ export function SelectedWork() {
       aria-label="Selected Projects and Built Tools"
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] py-20 sm:py-28 scroll-mt-16 transition-colors duration-300"
     >
-      {/* Studio Ghibli Mossy Grotto Ambient Layer (Strictly Light Mode Only) */}
+      {/* Studio Ghibli Full-Width Mossy Waterfall Backdrop (Strictly Light Mode Only) */}
       {isLight && (
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none transition-opacity duration-700"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
           aria-hidden="true"
         >
-          {/* Soft painted mossy waterfall and forest canopy wash */}
+          {/* Full-width Ghibli Mossy Forest Waterfall (Reference 2) */}
           <div
-            className="absolute top-12 -right-28 w-[780px] h-[520px] bg-no-repeat bg-contain opacity-[0.09] mix-blend-multiply blur-[0.4px]"
+            className="absolute inset-0 w-full h-full bg-cover bg-center opacity-30 mix-blend-multiply"
             style={{ backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')` }}
           />
-          <div
-            className="absolute bottom-20 -left-28 w-[700px] h-[480px] bg-no-repeat bg-contain opacity-[0.08] mix-blend-multiply blur-[0.4px]"
-            style={{
-              backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')`,
-              transform: "scaleX(-1)",
-            }}
-          />
-          {/* Soft vertical gradient to blend smoothly into the linen canvas */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)]" />
+          {/* Natural vignette wash so cards and typography have pristine contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] opacity-85" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/80 via-transparent to-[var(--bg)]/80" />
         </div>
       )}
 

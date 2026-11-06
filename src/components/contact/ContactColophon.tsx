@@ -48,17 +48,19 @@ export function ContactColophon() {
       aria-label="Contact and Channels"
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] overflow-hidden min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between pt-16 sm:pt-20 pb-3 sm:pb-4 transition-colors duration-300"
     >
-      {/* Studio Ghibli Twilight Rain Reflection Ambient Layer (Strictly Light Mode Only) */}
+      {/* Studio Ghibli Full-Width Twilight Rain Puddle Backdrop (Strictly Light Mode Only) */}
       {isLight && (
         <div
-          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none transition-opacity duration-700"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
           aria-hidden="true"
         >
+          {/* Full-width Ghibli Rain Puddle with Concentric Ripples & Stones (Reference 3) */}
           <div
-            className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[900px] h-[340px] bg-no-repeat bg-contain opacity-[0.08] mix-blend-multiply blur-[0.5px]"
+            className="absolute inset-0 w-full h-full bg-cover bg-bottom opacity-28 mix-blend-multiply"
             style={{ backgroundImage: `url('/images/ghibli-rain-puddle-ripples.jpg')` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)] opacity-85" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/85 via-transparent to-[var(--bg)]/85" />
         </div>
       )}
 

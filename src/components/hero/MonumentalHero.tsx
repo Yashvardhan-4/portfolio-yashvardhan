@@ -73,7 +73,24 @@ export function MonumentalHero() {
         />
       </div>
 
-      {/* 2. Living Conservatory Environment Layer (Active in Light Mode: Rain streaks, sun beam, puddle ripples) */}
+      {/* 2. Studio Ghibli Full-Width Summer Landscape Backdrop (Light Mode Only) */}
+      {isLightMode && (
+        <div
+          className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none"
+          aria-hidden="true"
+        >
+          {/* Full-width Ghibli Summer Countryside Sky & Rolling Hills (Reference 1) */}
+          <div
+            className="absolute inset-0 w-full h-full bg-cover bg-[center_top] opacity-35 mix-blend-multiply"
+            style={{ backgroundImage: `url('/images/ghibli-countryside-summer.jpg')` }}
+          />
+          {/* Soft linear paper gradient overlay ensuring text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 via-[var(--bg)]/65 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg)]" />
+        </div>
+      )}
+
+      {/* 3. Living Conservatory Environment Layer (Active in Light Mode: Rain streaks, sun beam, puddle ripples) */}
       <div
         className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-700 ${
           isLightMode ? "opacity-100" : "opacity-0 pointer-events-none"
