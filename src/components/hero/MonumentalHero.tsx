@@ -2,34 +2,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import Threads from "@/components/ui/Threads";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
 import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
 
 export function MonumentalHero() {
+  const { theme } = useTheme();
+  const isLightMode = theme === "light";
   const [scrollY, setScrollY] = useState(0);
-  const [isLightMode, setIsLightMode] = useState(false);
-
-  useEffect(() => {
-    const updateTheme = () => {
-      setIsLightMode(document.documentElement.getAttribute("data-theme") === "light");
-    };
-    updateTheme();
-    window.addEventListener("theme-change", updateTheme);
-    window.addEventListener("themechange", updateTheme);
-    const observer = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        if (m.attributeName === "data-theme") updateTheme();
-      }
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => {
-      window.removeEventListener("theme-change", updateTheme);
-      window.removeEventListener("themechange", updateTheme);
-      observer.disconnect();
-    };
-  }, []);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -229,7 +211,7 @@ export function MonumentalHero() {
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
             {/* Subtle Ambient Radial Glow behind Portrait */}
             <div 
-              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none opacity-30"
+              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none opacity-25"
               aria-hidden="true" 
             />
 

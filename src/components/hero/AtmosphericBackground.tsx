@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 // ============================================================================
 // STUDIO GHIBLI LIGHT MODE TYPES & STRUCTURES (DIRECTION A: THE HORIZON)
@@ -54,34 +55,13 @@ interface DarkConstellationNode {
 
 export function AtmosphericBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isLightMode, setIsLightMode] = useState(false);
+  const { theme } = useTheme();
+  const isLightMode = theme === "light";
+  const themeRef = useRef(theme);
 
-  // Synchronize theme state with rock-solid MutationObserver + custom events
   useEffect(() => {
-    const updateTheme = () => {
-      const isLight = document.documentElement.getAttribute("data-theme") === "light";
-      setIsLightMode(isLight);
-    };
-    updateTheme();
-
-    window.addEventListener("theme-change", updateTheme);
-    window.addEventListener("themechange", updateTheme);
-
-    const observer = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        if (m.attributeName === "data-theme") {
-          updateTheme();
-        }
-      }
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-    return () => {
-      window.removeEventListener("theme-change", updateTheme);
-      window.removeEventListener("themechange", updateTheme);
-      observer.disconnect();
-    };
-  }, []);
+    themeRef.current = theme;
+  }, [theme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

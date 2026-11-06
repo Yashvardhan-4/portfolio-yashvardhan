@@ -11,8 +11,11 @@ import {
   Mail,
 } from "lucide-react";
 import { ConversationalInquiryForm } from "./ConversationalInquiryForm";
+import { useTheme } from "@/context/ThemeContext";
 
 export function ContactColophon() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const [currentTime, setCurrentTime] = useState("");
 
   const email = "yashvardhanborude7@gmail.com";
@@ -46,16 +49,18 @@ export function ContactColophon() {
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] overflow-hidden min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between pt-16 sm:pt-20 pb-3 sm:pb-4 transition-colors duration-300"
     >
       {/* Studio Ghibli Twilight Rain Reflection Ambient Layer (Strictly Light Mode Only) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-0 [html[data-theme='light']_&]:opacity-100 transition-opacity duration-700"
-        aria-hidden="true"
-      >
+      {isLight && (
         <div
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[900px] h-[340px] bg-no-repeat bg-contain opacity-[0.06] mix-blend-multiply blur-[0.5px]"
-          style={{ backgroundImage: `url('/images/ghibli-rain-puddle-ripples.jpg')` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]" />
-      </div>
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none transition-opacity duration-700"
+          aria-hidden="true"
+        >
+          <div
+            className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[900px] h-[340px] bg-no-repeat bg-contain opacity-[0.08] mix-blend-multiply blur-[0.5px]"
+            style={{ backgroundImage: `url('/images/ghibli-rain-puddle-ripples.jpg')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]" />
+        </div>
+      )}
 
       {/* Background Architectural Name Wordmark Behind Footer Content */}
       <div

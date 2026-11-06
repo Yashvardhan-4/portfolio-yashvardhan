@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { carouselPlaceholderProjects, ProjectItem } from "@/data/carouselProjects";
 import { ShivkushDiagram } from "./ProjectDiagrams";
+import { useTheme } from "@/context/ThemeContext";
 import {
   ArrowUpRight,
   Github,
@@ -15,6 +16,8 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 
 export function SelectedWork() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
   const [modalTab, setModalTab] = useState<"overview" | "architecture">("overview");
 
@@ -43,32 +46,34 @@ export function SelectedWork() {
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] py-20 sm:py-28 scroll-mt-16 transition-colors duration-300"
     >
       {/* Studio Ghibli Mossy Grotto Ambient Layer (Strictly Light Mode Only) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-0 [html[data-theme='light']_&]:opacity-100 transition-opacity duration-700"
-        aria-hidden="true"
-      >
-        {/* Soft painted mossy waterfall and forest canopy wash */}
+      {isLight && (
         <div
-          className="absolute top-12 -right-28 w-[780px] h-[520px] bg-no-repeat bg-contain opacity-[0.075] mix-blend-multiply blur-[0.4px]"
-          style={{ backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')` }}
-        />
-        <div
-          className="absolute bottom-20 -left-28 w-[700px] h-[480px] bg-no-repeat bg-contain opacity-[0.065] mix-blend-multiply blur-[0.4px]"
-          style={{
-            backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')`,
-            transform: "scaleX(-1)",
-          }}
-        />
-        {/* Soft vertical gradient to blend smoothly into the linen canvas */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)]" />
-      </div>
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none transition-opacity duration-700"
+          aria-hidden="true"
+        >
+          {/* Soft painted mossy waterfall and forest canopy wash */}
+          <div
+            className="absolute top-12 -right-28 w-[780px] h-[520px] bg-no-repeat bg-contain opacity-[0.09] mix-blend-multiply blur-[0.4px]"
+            style={{ backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')` }}
+          />
+          <div
+            className="absolute bottom-20 -left-28 w-[700px] h-[480px] bg-no-repeat bg-contain opacity-[0.08] mix-blend-multiply blur-[0.4px]"
+            style={{
+              backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')`,
+              transform: "scaleX(-1)",
+            }}
+          />
+          {/* Soft vertical gradient to blend smoothly into the linen canvas */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)]" />
+        </div>
+      )}
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
         {/* Section Header */}
         <div className="mb-14 sm:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end border-b border-[var(--border)] pb-8">
           <div className="lg:col-span-7">
             <span className="font-mono text-xs text-[var(--accent)] tracking-widest uppercase font-semibold flex items-center gap-2">
-              <span className="hidden [html[data-theme='light']_&]:inline text-xs" aria-hidden="true">🌿</span>
+              {isLight && <span className="text-xs" aria-hidden="true">🌿</span>}
               Selected Work
             </span>
             <h2 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-6xl font-normal text-[var(--fg)] tracking-tight leading-[0.98]">
@@ -97,12 +102,14 @@ export function SelectedWork() {
               >
                 <article className="group relative rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] shadow-2xl hover:border-[var(--accent)]/50 transition-all duration-500 overflow-hidden">
                   {/* Botanical Field Folio Index (Strictly Light Mode Only) */}
-                  <div
-                    className="hidden [html[data-theme='light']_&]:block absolute top-3.5 right-6 font-mono text-[9px] text-[var(--accent)]/45 pointer-events-none select-none tracking-widest uppercase z-10"
-                    aria-hidden="true"
-                  >
-                    FOLIO · 0{index + 1}
-                  </div>
+                  {isLight && (
+                    <div
+                      className="absolute top-3.5 right-6 font-mono text-[9px] text-[var(--accent)]/50 pointer-events-none select-none tracking-widest uppercase z-10"
+                      aria-hidden="true"
+                    >
+                      FOLIO · 0{index + 1}
+                    </div>
+                  )}
 
                   {/* Card Inner Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center p-6 sm:p-8 lg:p-10">
@@ -112,9 +119,9 @@ export function SelectedWork() {
                         {/* Browser Chrome Header */}
                         <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-4 py-2.5">
                           <div className="flex items-center gap-2">
-                            <span className="h-2.5 w-2.5 rounded-full bg-[#EF4444]/80 [html[data-theme='light']_&]:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" />
-                            <span className="h-2.5 w-2.5 rounded-full bg-[#F59E0B]/80 [html[data-theme='light']_&]:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" />
-                            <span className="h-2.5 w-2.5 rounded-full bg-[#10B981]/80 [html[data-theme='light']_&]:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" />
+                            <span className={`h-2.5 w-2.5 rounded-full bg-[#EF4444]/80 ${isLight ? "shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" : ""}`} />
+                            <span className={`h-2.5 w-2.5 rounded-full bg-[#F59E0B]/80 ${isLight ? "shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" : ""}`} />
+                            <span className={`h-2.5 w-2.5 rounded-full bg-[#10B981]/80 ${isLight ? "shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" : ""}`} />
                             {project.liveUrl && (
                               <span className="ml-3 font-mono text-[11px] text-[var(--fg-muted)] hidden sm:flex items-center gap-1.5 bg-[var(--bg)] px-2.5 py-0.5 rounded border border-[var(--border)]">
                                 <span className="text-[#10B981] text-xs">🔒</span>

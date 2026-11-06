@@ -3,8 +3,12 @@
 import React from "react";
 import { GraduationCap, Award, Terminal, ArrowUpRight } from "lucide-react";
 import { CountUp } from "@/components/ui/CountUp";
+import { useTheme } from "@/context/ThemeContext";
 
 export function AboutPhilosophy() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+
   return (
     <section
       id="about"
@@ -12,23 +16,25 @@ export function AboutPhilosophy() {
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] py-20 sm:py-28 overflow-hidden scroll-mt-20 transition-colors duration-300"
     >
       {/* Studio Ghibli Herbarium Botanical Ambient Layer (Strictly Light Mode Only) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-0 [html[data-theme='light']_&]:opacity-100 transition-opacity duration-700"
-        aria-hidden="true"
-      >
+      {isLight && (
         <div
-          className="absolute -bottom-16 right-0 w-[560px] h-[400px] bg-no-repeat bg-contain opacity-[0.055] mix-blend-multiply blur-[0.4px]"
-          style={{ backgroundImage: `url('/images/ghibli-countryside-summer.jpg')` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)]" />
-      </div>
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none transition-opacity duration-700"
+          aria-hidden="true"
+        >
+          <div
+            className="absolute -bottom-16 right-0 w-[560px] h-[400px] bg-no-repeat bg-contain opacity-[0.07] mix-blend-multiply blur-[0.4px]"
+            style={{ backgroundImage: `url('/images/ghibli-countryside-summer.jpg')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)]" />
+        </div>
+      )}
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
         {/* Section Header */}
         <div className="mb-14 sm:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end border-b border-[var(--border)] pb-8">
           <div className="lg:col-span-7">
             <span className="font-mono text-xs text-[var(--accent)] tracking-widest uppercase font-semibold flex items-center gap-2">
-              <span className="hidden [html[data-theme='light']_&]:inline text-xs" aria-hidden="true">🍃</span>
+              {isLight && <span className="text-xs" aria-hidden="true">🍃</span>}
               Education &amp; Achievements
             </span>
             <h2 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-6xl font-normal text-[var(--fg)] tracking-tight leading-[0.98]">

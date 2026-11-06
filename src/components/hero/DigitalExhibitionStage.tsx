@@ -527,6 +527,77 @@ export function DigitalExhibitionStage({
       }
 
       // ----------------------------------------------------
+      // SECTION A0: OCCLUSION BACKDROP (Keeps threads & ambient layers strictly BEHIND the portrait)
+      // ----------------------------------------------------
+      if (revealProgress > 0.15) {
+        const pCenterX = anchorX + baseWidth * portraitScale * 0.50;
+        const pCenterY = anchorY + baseHeight * portraitScale * 0.48;
+        const pRadiusX = baseWidth * portraitScale * 0.45;
+        const pRadiusY = baseHeight * portraitScale * 0.50;
+        const maskAlpha = Math.min(1.0, revealEase) * Math.max(0.0, 1.0 - dissolveEase * 1.6);
+
+        if (maskAlpha > 0.01) {
+          ctx.save();
+          const bgRgb = isLight ? "245, 239, 235" : "0, 0, 0";
+
+          // Head & Facial Occlusion Mask
+          const headGrad = ctx.createRadialGradient(
+            pCenterX,
+            pCenterY - pRadiusY * 0.10,
+            pRadiusX * 0.1,
+            pCenterX,
+            pCenterY - pRadiusY * 0.10,
+            pRadiusX * 0.95
+          );
+          headGrad.addColorStop(0, `rgba(${bgRgb}, ${0.98 * maskAlpha})`);
+          headGrad.addColorStop(0.75, `rgba(${bgRgb}, ${0.94 * maskAlpha})`);
+          headGrad.addColorStop(0.90, `rgba(${bgRgb}, ${0.60 * maskAlpha})`);
+          headGrad.addColorStop(1, `rgba(${bgRgb}, 0)`);
+
+          ctx.fillStyle = headGrad;
+          ctx.beginPath();
+          ctx.ellipse(
+            pCenterX,
+            pCenterY - pRadiusY * 0.10,
+            pRadiusX * 0.95,
+            pRadiusY * 0.65,
+            0,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Collar & Shoulders Occlusion Mask
+          const shoulderGrad = ctx.createRadialGradient(
+            pCenterX,
+            pCenterY + pRadiusY * 0.38,
+            pRadiusX * 0.15,
+            pCenterX,
+            pCenterY + pRadiusY * 0.38,
+            pRadiusX * 1.15
+          );
+          shoulderGrad.addColorStop(0, `rgba(${bgRgb}, ${0.98 * maskAlpha})`);
+          shoulderGrad.addColorStop(0.70, `rgba(${bgRgb}, ${0.92 * maskAlpha})`);
+          shoulderGrad.addColorStop(0.90, `rgba(${bgRgb}, ${0.50 * maskAlpha})`);
+          shoulderGrad.addColorStop(1, `rgba(${bgRgb}, 0)`);
+
+          ctx.fillStyle = shoulderGrad;
+          ctx.beginPath();
+          ctx.ellipse(
+            pCenterX,
+            pCenterY + pRadiusY * 0.38,
+            pRadiusX * 1.15,
+            pRadiusY * 0.48,
+            0,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // ----------------------------------------------------
       // SECTION A: RENDER PORTRAIT HALFTONE DOTS (UNBOUNDED)
       // ----------------------------------------------------
       const numDots = portraitDots.length;
@@ -964,7 +1035,7 @@ export function DigitalExhibitionStage({
   return (
     <canvas
       ref={canvasRef}
-      className="absolute top-0 left-0 w-full h-[125%] pointer-events-none z-[10] block"
+      className="absolute top-0 left-0 w-full h-[125%] pointer-events-none z-[20] block"
       aria-hidden="true"
     />
   );

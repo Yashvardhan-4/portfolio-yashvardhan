@@ -2,6 +2,7 @@
 
 import React from "react";
 import { LogoLoop, LogoItem } from "./LogoLoop";
+import { useTheme } from "@/context/ThemeContext";
 
 // Authentic SVGs for Verified Technologies
 const TECH_LOGOS: LogoItem[] = [
@@ -137,21 +138,26 @@ const TECH_LOGOS: LogoItem[] = [
 ];
 
 export function TechStackLoop() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+
   return (
     <section
       aria-label="Technologies & Tools"
       className="relative w-full border-t border-[var(--border)] bg-[var(--surface)] py-10 sm:py-14 overflow-hidden transition-colors duration-300"
     >
       {/* Studio Ghibli Stream Hairline Shimmer (Strictly Light Mode Only) */}
-      <div
-        className="hidden [html[data-theme='light']_&]:block absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#47785E]/35 to-transparent pointer-events-none"
-        aria-hidden="true"
-      />
+      {isLight && (
+        <div
+          className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#47785E]/35 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+      )}
 
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
           <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent)] font-semibold flex items-center gap-2">
-            <span className="hidden [html[data-theme='light']_&]:inline text-xs" aria-hidden="true">🌱</span>
+            {isLight && <span className="text-xs" aria-hidden="true">🌱</span>}
             My Toolkit
           </span>
           <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-normal text-[var(--fg)]">
