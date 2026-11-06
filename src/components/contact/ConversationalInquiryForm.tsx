@@ -263,6 +263,8 @@ Please reach me back at: ${email || "[Email]"}
             <div className="font-serif text-xl sm:text-2xl md:text-3xl text-[#EDEDEF] leading-[2.1] sm:leading-[2.4] tracking-normal">
               <span>Hello Yashvardhan, my name is </span>
               <input
+                id="inquiry-sender-name"
+                name="senderName"
                 type="text"
                 placeholder="your name"
                 value={name}
@@ -276,6 +278,8 @@ Please reach me back at: ${email || "[Email]"}
               />
               <span> from </span>
               <input
+                id="inquiry-sender-company"
+                name="senderCompany"
                 type="text"
                 placeholder="company or website"
                 value={company}
@@ -377,6 +381,8 @@ Please reach me back at: ${email || "[Email]"}
               {/* Common Return Email */}
               <span> You can reach me back at </span>
               <input
+                id="inquiry-sender-email"
+                name="senderEmail"
                 type="email"
                 placeholder="your.email@example.com"
                 value={email}
