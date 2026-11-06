@@ -471,27 +471,29 @@ export function DigitalExhibitionStage({
         }
 
         // Magnetic cursor interaction (active only when near equilibrium and not heavily dissolved)
+        let mouseBoost = 0;
         if (mouse.active && !isMobile && revealProgress > 0.8 && dissolveFactor < 0.3) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const distSq = dx * dx + dy * dy;
-          const interactionRadius = 88;
+          const interactionRadius = 125;
           const interactionRadiusSq = interactionRadius * interactionRadius;
 
           if (distSq < interactionRadiusSq && distSq > 0.01) {
             const dist = Math.sqrt(distSq);
             const q = dist / interactionRadius;
             const factor = Math.cos(q * Math.PI * 0.5);
-            // Feature weight prevents excessive distortion on facial features
-            const force = factor * factor * 12.0 * p.featureWeight;
+            mouseBoost = factor * factor;
+            // Feature weight prevents excessive distortion on facial features while maintaining responsive tactile flow
+            const force = mouseBoost * 13.5 * p.featureWeight;
             targetX += (dx / dist) * force;
             targetY += (dy / dist) * force;
           }
         } else if (revealProgress >= 1.0 && dissolveFactor < 0.2) {
           // Subtle idle ambient harmonic breath
-          const ambient = Math.sin(time * 0.8 + (p.x0 + p.y0) * 0.012) * 0.3;
-          targetX += ambient * 0.35;
-          targetY += ambient * 0.25;
+          const ambient = Math.sin(time * 0.9 + (p.x0 + p.y0) * 0.012) * 0.35;
+          targetX += ambient * 0.4;
+          targetY += ambient * 0.3;
         }
 
         // Scroll-driven unbounded dissolution displacement
@@ -554,9 +556,12 @@ export function DigitalExhibitionStage({
         if (sparkBoost > 0) {
           drawRadius *= (1 + sparkBoost * 0.3);
         }
+        if (mouseBoost > 0.08) {
+          drawRadius *= (1 + mouseBoost * 0.35); // Subtle dot expansion on cursor proximity
+        }
 
         // Render dot with luminous or monochrome tone
-        if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2) {
+        if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2 || mouseBoost > 0.25) {
           ctx.fillStyle = p.luminousColor;
         } else {
           ctx.fillStyle = p.color;

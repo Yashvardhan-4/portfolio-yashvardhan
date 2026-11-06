@@ -4,9 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
-import { BlurredTextTicker } from "@/components/ui/BlurredTextTicker";
 import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
-import { AnimatedSVGUnderline } from "@/components/ui/AnimatedSVGUnderline";
 
 export function MonumentalHero() {
   const [scrollY, setScrollY] = useState(0);
@@ -72,7 +70,7 @@ export function MonumentalHero() {
       {/* Centerstage: Asymmetric Two-Column Editorial Exhibition */}
       <section
         aria-label="Hero Introduction"
-        className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto pt-24 sm:pt-28 pb-8 sm:pb-12"
+        className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto pt-20 sm:pt-24 pb-6 sm:pb-8"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 lg:gap-12 xl:gap-16 items-center">
           {/* Left Column (Columns 1–7): Physical Typography, Personal Anchor & Narrative */}
@@ -84,15 +82,15 @@ export function MonumentalHero() {
               pointerEvents: textOpacity < 0.1 ? "none" : "auto",
             }}
           >
-            {/* Monumental Kinetic Headline with Zero Clipping & Auto Blurred-Text Ticker */}
+            {/* Monumental Headline: Refined Editorial Proportions */}
             <div
               ref={headlineAnchorRef}
-              className="relative flex flex-col select-none py-1 pb-2 overflow-visible group/headline"
+              className="relative flex flex-col select-none py-1 pb-1 overflow-visible group/headline"
             >
-              {/* Line 1: Expressive Editorial Italic Serif with Kinetic Illumination & Optical Emergence */}
+              {/* Line 1: Expressive Editorial Italic Serif */}
               <span
                 ref={line1Ref}
-                className="font-serif italic font-normal text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2.5 inline-block select-none transform-gpu"
+                className="font-serif italic font-normal text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2 inline-block select-none transform-gpu"
                 style={{
                   background:
                     "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 30%, #FFFFFF 48%, #E9D5FF 58%, #EDEDEF 72%, #EDEDEF 100%)",
@@ -111,10 +109,10 @@ export function MonumentalHero() {
                 Curiosity,
               </span>
 
-              {/* Line 2: Automatic Ticker-Blurred-Text Reel with Distance Blur, Soft Fade & Zero Overlap */}
+              {/* Line 2: Confident, Distinctive Sans-Serif Line */}
               <div
                 ref={line2Ref}
-                className="font-display font-medium text-2xl sm:text-4xl md:text-[2.25rem] lg:text-[2.75rem] xl:text-[3.25rem] leading-[1.1] tracking-[-0.035em] -mt-0.5 sm:-mt-1.5 lg:-mt-2 block select-none transform-gpu"
+                className="font-display font-semibold text-3xl sm:text-5xl md:text-[2.75rem] lg:text-[3.5rem] xl:text-[4.25rem] leading-[1.02] tracking-[-0.035em] text-[#EDEDEF] block select-none transform-gpu"
                 style={{
                   opacity: hasMounted ? 1 : 0,
                   filter: hasMounted ? "blur(0px)" : "blur(14px)",
@@ -124,20 +122,7 @@ export function MonumentalHero() {
                     : "opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, filter 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms",
                 }}
               >
-                <BlurredTextTicker
-                  items={[
-                    "made tangible.",
-                    "built to last.",
-                    "designed for people.",
-                    "solving real problems.",
-                  ]}
-                  interval={3600}
-                  activeColor="#EDEDEF"
-                  inactiveColor="#64748B"
-                  blurAmount={4}
-                  highlightPeriod={true}
-                  onHoverPause={false}
-                />
+                made tangible.
               </div>
             </div>
 
@@ -150,44 +135,39 @@ export function MonumentalHero() {
               />
             </div>
 
-            {/* Prominent Personal Identity Structural Anchor */}
-            <div className="mt-4 sm:mt-7 pt-4 sm:pt-6 border-t border-[#181D26] flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-3">
-              <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7]" aria-hidden="true" />
-                <h1 className="font-display text-base sm:text-lg font-medium text-[#EDEDEF] tracking-tight m-0 inline">
-                  Yashvardhan Borude
-                </h1>
-              </div>
-              <span className="font-mono text-xs text-[#94A3B8] tracking-wide">
-                — Software Developer &amp; Problem Solver
+            {/* Non-Redundant Purpose Anchor */}
+            <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[#181D26] flex items-center gap-2.5">
+              <span className="h-2 w-2 rounded-full bg-[#A855F7] animate-pulse" aria-hidden="true" />
+              <span className="font-mono text-xs sm:text-[13px] text-[#EDEDEF] tracking-wider uppercase font-semibold">
+                Computer Engineering · Builder
               </span>
             </div>
 
-            {/* Supporting Description with Framer Hover Highlighter */}
+            {/* Punchy, Non-Generic Description */}
             <p className="mt-3 sm:mt-4 max-w-xl font-sans text-xs sm:text-sm lg:text-base leading-[1.7] text-[#94A3B8] font-normal">
-              I love turning ideas into{" "}
+              I explore technology, experiment with ideas, and build software that turns{" "}
               <HoverHighlighter color="#A855F7" opacity={25}>
-                things people can use
-              </HoverHighlighter>
-              . I build websites, applications, and tools that{" "}
-              <HoverHighlighter color="#A855F7" opacity={25}>
-                solve real problems
+                interesting problems
               </HoverHighlighter>{" "}
-              — exploring new technologies and bringing ideas to life.
+              into{" "}
+              <HoverHighlighter color="#A855F7" opacity={25}>
+                useful experiences
+              </HoverHighlighter>
+              .
             </p>
 
-            {/* Action Group */}
-            <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* Purpose-Driven Action Group */}
+            <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
               <a
                 href="#work"
                 className="group relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#EDEDEF] text-[#08090B] font-sans text-xs sm:text-sm font-semibold tracking-tight transition-all duration-300 hover:bg-white hover:shadow-[0_0_24px_rgba(255,255,255,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A855F7]"
               >
-                <span>Explore My Projects</span>
+                <span>Explore My Work</span>
                 <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5 text-[#08090B]" />
               </a>
 
               <a
-                href="mailto:yashvardhanborude7@gmail.com"
+                href="#contact"
                 className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full border border-[#202634] bg-[#0E121A]/80 text-xs sm:text-sm font-sans font-medium text-[#EDEDEF] hover:border-[#A855F7]/70 hover:bg-[#141924] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A855F7]"
               >
                 <span>Get in Touch</span>
@@ -198,57 +178,57 @@ export function MonumentalHero() {
 
           {/* Right Column (Columns 8–12): Desktop Unbounded Halftone Portrait Spatial Anchor */}
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
+            {/* Subtle Ambient Radial Glow behind Portrait */}
+            <div 
+              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.12)_0%,transparent_70%)] blur-2xl pointer-events-none"
+              aria-hidden="true" 
+            />
+
             <div
               ref={desktopAnchorRef}
-              className="w-full aspect-[480/513] max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto"
+              className="w-full aspect-[480/513] max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10"
               aria-label="Desktop Portrait Spatial Guide"
             />
           </div>
         </div>
       </section>
 
-      {/* 5. Architectural Editorial Datum Rail (Footer Rail of Hero Section) with Ticker-Blurred-Text on Role */}
-      <footer className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-4 pb-6 sm:pb-7">
-        <div className="border-t border-[#181D26]/70 pt-3.5 sm:pt-4">
+      {/* Subtle Scroll Affordance Indicator */}
+      <div className="relative z-20 flex flex-col items-center justify-center pt-1 pb-2 text-[#64748B] pointer-events-none select-none">
+        <span className="font-mono text-[9px] uppercase tracking-widest block mb-1 text-[#64748B]/70">
+          Scroll to explore
+        </span>
+        <div className="w-[1px] h-4 bg-gradient-to-b from-[#A855F7]/80 to-transparent" />
+      </div>
+
+      {/* 5. Architectural Editorial Datum Rail with Refined Labels */}
+      <footer className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-2 pb-5 sm:pb-6">
+        <div className="border-t border-[#181D26]/70 pt-3 sm:pt-3.5">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 font-mono text-[10px] sm:text-[11px] tracking-wider text-[#94A3B8]">
-            {/* Index 01 */}
+            {/* Index 01: Based In */}
             <div>
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">LOCATION</span>
+              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">BASED IN</span>
               <span className="text-[#EDEDEF] mt-0.5 block">Pune, India</span>
             </div>
 
-            {/* Index 02: Rotating Role Reel */}
+            {/* Index 02: Currently Exploring */}
             <div>
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">FOCUS</span>
-              <BlurredTextTicker
-                items={[
-                  "Full-Stack Development",
-                  "Web Applications",
-                  "Competitive Programming",
-                  "Interactive Experiences",
-                ]}
-                interval={4200}
-                activeColor="#EDEDEF"
-                inactiveColor="#64748B"
-                blurAmount={2.5}
-                highlightPeriod={false}
-                className="mt-0.5"
-                itemClassName="text-[10px] sm:text-[11px] font-mono"
-              />
+              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">EXPLORING</span>
+              <span className="text-[#EDEDEF] mt-0.5 block">Software &amp; Systems</span>
             </div>
 
-            {/* Index 03 */}
+            {/* Index 03: Studying */}
             <div>
               <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">EDUCATION</span>
-              <span className="text-[#EDEDEF] mt-0.5 block">B.E. Computer Engineering</span>
+              <span className="text-[#EDEDEF] mt-0.5 block">Computer Engineering</span>
             </div>
 
-            {/* Index 04: Status with Live Pulse */}
+            {/* Index 04: Availability */}
             <div className="flex flex-col sm:items-end">
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">STATUS</span>
+              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">AVAILABILITY</span>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7] animate-ping" aria-hidden="true" />
-                <span className="text-[#EDEDEF] font-medium">Open to Opportunities</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" aria-hidden="true" />
+                <span className="text-[#EDEDEF] font-medium">Open to Collaboration</span>
               </div>
             </div>
           </div>
