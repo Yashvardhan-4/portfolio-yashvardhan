@@ -4,38 +4,44 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { SproutPixelArt } from "./SproutPixelArt";
 import { LIGHT_PALETTE, DARK_PALETTE } from "./sprout-frames";
-import { MascotState, FacingDirection, FloatingParticle } from "./sprout-types";
+import { MascotState, FacingDirection, FloatingParticle, CardPerchAnchor } from "./sprout-types";
 import "./SproutMascot.css";
 
-const SLEEP_INACTIVITY_MS = 22000; // 22 seconds of inactivity triggers sleep
-const BLINK_INTERVAL_MS = 3800; // Blink rhythm
+const SLEEP_INACTIVITY_MS = 22000; // 22s of inactivity
+const BLINK_INTERVAL_MS = 4000;
+const WALK_SPEED = 2.1; // Autonomous pet walking speed (pixels per frame)
+const RUN_SPEED = 3.6; // Running speed when user is far away
 
 export function SproutMascot() {
   const { theme } = useTheme();
-  const palette = theme === "light" ? LIGHT_PALETTE : DARK_PALETTE;
+  const isDarkMode = theme === "dark";
+  const palette = isDarkMode ? DARK_PALETTE : LIGHT_PALETTE;
 
-  // Mascot state
+  // Mascot display state
   const [mascotState, setMascotState] = useState<MascotState>("IDLE");
   const [facing, setFacing] = useState<FacingDirection>("right");
   const [hopY, setHopY] = useState(0);
   const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
+  const [stepPhase, setStepPhase] = useState<0 | 1>(0);
   const [particles, setParticles] = useState<FloatingParticle[]>([]);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
 
-  // References for 60fps RAF loop without React re-renders
-  const posRef = useRef({ x: 120, y: 220 });
-  const targetRef = useRef({ x: 120, y: 220 });
-  const mouseRef = useRef({ x: 120, y: 220 });
-  const lastMousePos = useRef({ x: 120, y: 220 });
+  // References for autonomous physics loop (zero React re-renders during motion)
+  const posRef = useRef({ x: 140, y: 240 });
+  const targetRef = useRef({ x: 140, y: 240 });
+  const mouseRef = useRef({ x: 140, y: 240 });
   const lastActiveTime = useRef(Date.now());
   const rafId = useRef<number | null>(null);
-  const hopPhaseRef = useRef(0);
+
+  // Autonomous walking state
+  const isWalkingRef = useRef(false);
+  const walkDecisionTimer = useRef<NodeJS.Timeout | null>(null);
+  const walkCycleStep = useRef(0);
+  const currentSpeedRef = useRef(WALK_SPEED);
   const jumpVelocityRef = useRef(0);
   const jumpOffsetRef = useRef(0);
-  const inspectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const sleepZTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const blinkTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const activePerchRef = useRef<CardPerchAnchor | null>(null);
   const isSleepingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const particleIdCounter = useRef(0);
@@ -68,7 +74,7 @@ export function SproutMascot() {
     []
   );
 
-  // Check hardware capability: fine pointer & hover (desktop / laptop mice)
+  // Hardware capability check: only on devices with fine pointer & hover (desktop)
   useEffect(() => {
     const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -76,153 +82,230 @@ export function SproutMascot() {
     setIsEnabled(hasFinePointer);
     setIsReducedMotion(prefersReduced);
 
-    // Initial position on screen
     if (typeof window !== "undefined") {
-      const initX = Math.min(window.innerWidth - 80, Math.max(60, window.innerWidth * 0.75));
-      const initY = Math.min(window.innerHeight - 100, Math.max(120, window.innerHeight * 0.4));
+      const initX = Math.min(window.innerWidth - 80, Math.max(60, window.innerWidth * 0.8));
+      const initY = Math.min(window.innerHeight - 100, Math.max(120, window.innerHeight * 0.35));
       posRef.current = { x: initX, y: initY };
       targetRef.current = { x: initX, y: initY };
       mouseRef.current = { x: initX, y: initY };
     }
   }, []);
 
-  // Theme switch listener: Sprout does a happy celebrate hop
+  // Theme switch reaction: Sprout does an excited celebratory bounce!
   useEffect(() => {
     const handleThemeChange = () => {
       setMascotState("HAPPY");
       jumpVelocityRef.current = -12;
-      spawnParticle("leaf", 10, -22, theme === "light" ? "#47785E" : "#4E9B70");
+      spawnParticle("leaf", 8, -22, isDarkMode ? "#80ED99" : "#47785E");
       setTimeout(() => {
         setMascotState("IDLE");
-      }, 1400);
+      }, 1200);
     };
 
     window.addEventListener("theme-change", handleThemeChange);
     return () => window.removeEventListener("theme-change", handleThemeChange);
-  }, [theme, spawnParticle]);
+  }, [isDarkMode, spawnParticle]);
 
-  // Main interaction listeners: mouse move, clicks, element inspections
+  // Main interaction listeners: mouse tracking, card perching, button cheering, clicks
   useEffect(() => {
     if (!isEnabled) return;
 
     const handlePointerMove = (e: PointerEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
+      lastActiveTime.current = Date.now();
 
-      const distFromLast = Math.hypot(
-        e.clientX - lastMousePos.current.x,
-        e.clientY - lastMousePos.current.y
-      );
-
-      // Wake up from sleep if cursor moved meaningfully
-      if (isSleepingRef.current && distFromLast > 8) {
+      // Wake up if sleeping
+      if (isSleepingRef.current) {
         isSleepingRef.current = false;
         setMascotState("WAKE_UP");
-        jumpVelocityRef.current = -10;
+        jumpVelocityRef.current = -9;
         spawnParticle("exclamation", 0, -20);
         setTimeout(() => {
           setMascotState("IDLE");
-        }, 600);
+        }, 500);
       }
 
-      lastActiveTime.current = Date.now();
-      lastMousePos.current = { x: e.clientX, y: e.clientY };
+      // If currently perching on a card, stay perching unless mouse moves far away (> 240px)
+      if (activePerchRef.current) {
+        const distFromPerch = Math.hypot(
+          e.clientX - activePerchRef.current.x,
+          e.clientY - activePerchRef.current.y
+        );
+        if (distFromPerch < 220) {
+          return; // Continue sitting on the card happily!
+        } else {
+          activePerchRef.current = null; // Hop off ledge
+        }
+      }
 
-      // Calculate companion offset:
-      // Sprout travels beside the cursor (trailing side) without covering the pointer
-      const isMovingRight = e.clientX >= posRef.current.x;
-      const offsetX = isMovingRight ? -38 : 38;
-      const offsetY = 28;
+      // Check distance between Sprout's current position and the mouse
+      const distToMouse = Math.hypot(e.clientX - posRef.current.x, e.clientY - posRef.current.y);
 
-      targetRef.current = {
-        x: Math.min(window.innerWidth - 56, Math.max(16, e.clientX + offsetX)),
-        y: Math.min(window.innerHeight - 60, Math.max(20, e.clientY + offsetY)),
-      };
+      // PERSONAL SPACE BUBBLE:
+      // If mouse is within 90px, Sprout DOES NOT walk! It stays in place and simply tracks with eyes.
+      if (distToMouse < 90) {
+        if (isWalkingRef.current && distToMouse < 60) {
+          isWalkingRef.current = false;
+          setMascotState("IDLE");
+        }
+        return;
+      }
+
+      // If mouse is farther away, Sprout starts walking after a brief natural hesitation
+      if (!isWalkingRef.current) {
+        if (walkDecisionTimer.current) clearTimeout(walkDecisionTimer.current);
+
+        walkDecisionTimer.current = setTimeout(() => {
+          if (isSleepingRef.current) return;
+
+          // Target is beside the cursor (trailing side), never directly underneath it
+          const isMouseRight = mouseRef.current.x >= posRef.current.x;
+          const offsetX = isMouseRight ? -48 : 48;
+          const offsetY = 32;
+
+          targetRef.current = {
+            x: Math.min(window.innerWidth - 56, Math.max(16, mouseRef.current.x + offsetX)),
+            y: Math.min(window.innerHeight - 60, Math.max(20, mouseRef.current.y + offsetY)),
+          };
+
+          isWalkingRef.current = true;
+        }, 220);
+      } else {
+        // While already walking, smoothly guide target destination near cursor
+        const isMouseRight = e.clientX >= posRef.current.x;
+        const offsetX = isMouseRight ? -48 : 48;
+        const offsetY = 32;
+
+        targetRef.current = {
+          x: Math.min(window.innerWidth - 56, Math.max(16, e.clientX + offsetX)),
+          y: Math.min(window.innerHeight - 60, Math.max(20, e.clientY + offsetY)),
+        };
+      }
     };
 
+    // Click reaction: Sprout does an excited jump!
     const handlePointerDown = () => {
       lastActiveTime.current = Date.now();
 
-      // If sleeping, immediately wake up
       if (isSleepingRef.current) {
         isSleepingRef.current = false;
         setMascotState("WAKE_UP");
       } else {
-        // Perform excited surprise jump on user click!
         setMascotState("JUMP");
-        jumpVelocityRef.current = -15;
+        jumpVelocityRef.current = -14;
         spawnParticle("exclamation", 0, -22);
 
         setTimeout(() => {
           setMascotState("HAPPY");
           setTimeout(() => {
-            setMascotState("IDLE");
-          }, 800);
-        }, 500);
+            if (!isWalkingRef.current && !activePerchRef.current) {
+              setMascotState("IDLE");
+            }
+          }, 700);
+        }, 450);
       }
     };
 
-    // Inspect hovered interactive elements (project cards, CTAs, links)
+    // SECTION & ELEMENT CONTEXTUAL INSPECTION / PERCHING:
+    // When hovering over project cards, buttons, or inputs, Sprout perches on the edge or cheers!
     const handleElementHover = (e: MouseEvent) => {
       if (isSleepingRef.current) return;
 
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
-      const card = target.closest(
-        "a, button, [role='button'], .project-card, article, #work, #about, #contact"
-      );
+      // 1. PROJECT CARDS: Perch cutely on the top edge/ledge of the card!
+      const projectCard = target.closest(
+        "article, .project-card, [data-project-card], [id^='project-']"
+      ) as HTMLElement | null;
 
-      if (card && card !== target.closest("header")) {
-        const rect = card.getBoundingClientRect();
-        // Check if card is visible
-        if (rect.width > 20 && rect.height > 20) {
-          // Guide Sprout to peek curiously near the corner of the hovered element
-          const peekX = Math.min(
-            window.innerWidth - 56,
-            Math.max(16, rect.right > window.innerWidth / 2 ? rect.left - 36 : rect.right + 12)
+      if (projectCard && !projectCard.closest("header")) {
+        const rect = projectCard.getBoundingClientRect();
+        if (rect.width > 120 && rect.height > 100) {
+          // Calculate top-edge perch coordinate (sitting right on top border)
+          const perchX = Math.min(
+            window.innerWidth - 60,
+            Math.max(rect.left + 48, rect.left + rect.width * 0.4)
           );
-          const peekY = Math.min(window.innerHeight - 60, Math.max(20, rect.top + 8));
+          const perchY = Math.max(16, rect.top - 24); // sits on upper border line
 
-          targetRef.current = { x: peekX, y: peekY };
+          activePerchRef.current = {
+            x: perchX,
+            y: perchY,
+            edge: "top",
+            element: projectCard,
+          };
 
-          if (inspectTimeoutRef.current) clearTimeout(inspectTimeoutRef.current);
-          setMascotState("INSPECT");
-          spawnParticle("question", 0, -22);
+          targetRef.current = { x: perchX, y: perchY };
+          isWalkingRef.current = true;
+          return;
+        }
+      }
 
-          inspectTimeoutRef.current = setTimeout(() => {
-            setMascotState("IDLE");
-          }, 2400);
+      // 2. PRIMARY BUTTONS & CTAs: Stand adjacent and cheer!
+      const button = target.closest("button, [role='button'], a.inline-flex") as HTMLElement | null;
+      if (button && !button.closest("header") && !activePerchRef.current) {
+        const rect = button.getBoundingClientRect();
+        if (rect.width > 30) {
+          // Position beside the button
+          const isLeft = rect.left > 80;
+          const cheerX = isLeft ? rect.left - 42 : rect.right + 12;
+          const cheerY = Math.max(16, rect.top - 4);
+
+          targetRef.current = { x: cheerX, y: cheerY };
+          isWalkingRef.current = true;
+          setMascotState("CHEER");
+          return;
+        }
+      }
+
+      // 3. CONTACT FORM INPUTS: Sit attentively at the top corner of the form
+      const formInput = target.closest("input, textarea") as HTMLElement | null;
+      if (formInput) {
+        const form = formInput.closest("form") as HTMLElement | null;
+        if (form) {
+          const rect = form.getBoundingClientRect();
+          const deskX = Math.min(window.innerWidth - 60, rect.right - 54);
+          const deskY = Math.max(20, rect.top - 26);
+
+          targetRef.current = { x: deskX, y: deskY };
+          isWalkingRef.current = true;
+          setMascotState("PERCH");
         }
       }
     };
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
-    document.addEventListener("mouseover", handleElementHover, { passive: true });
-
+    // Modal Inspection Event
     const handleModalInspect = (e: Event) => {
       const customEvent = e as CustomEvent<{ open: boolean; title?: string }>;
       if (customEvent.detail?.open) {
         isSleepingRef.current = false;
         lastActiveTime.current = Date.now();
 
-        // Guide Sprout to peek over the top-right edge of the modal
-        const modalX = Math.min(window.innerWidth - 64, Math.max(20, window.innerWidth * 0.5 + 260));
+        // Guide Sprout to perch on the top-right ledge of the modal window
+        const modalX = Math.min(window.innerWidth - 64, window.innerWidth * 0.5 + 260);
         const modalY = Math.max(48, window.innerHeight * 0.12);
         targetRef.current = { x: modalX, y: modalY };
+        isWalkingRef.current = true;
 
-        setMascotState("INSPECT");
-        spawnParticle("question", 0, -22);
+        setTimeout(() => {
+          setMascotState("PERCH");
+          spawnParticle("question", 0, -22);
+        }, 350);
       } else {
         setMascotState("HAPPY");
         jumpVelocityRef.current = -12;
         spawnParticle("leaf", 0, -22);
+        activePerchRef.current = null;
         setTimeout(() => {
           setMascotState("IDLE");
-        }, 800);
+        }, 700);
       }
     };
 
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    document.addEventListener("mouseover", handleElementHover, { passive: true });
     window.addEventListener("sprout-inspect-modal", handleModalInspect);
 
     return () => {
@@ -230,7 +313,7 @@ export function SproutMascot() {
       window.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("mouseover", handleElementHover);
       window.removeEventListener("sprout-inspect-modal", handleModalInspect);
-      if (inspectTimeoutRef.current) clearTimeout(inspectTimeoutRef.current);
+      if (walkDecisionTimer.current) clearTimeout(walkDecisionTimer.current);
     };
   }, [isEnabled, spawnParticle]);
 
@@ -238,46 +321,39 @@ export function SproutMascot() {
   useEffect(() => {
     if (!isEnabled) return;
 
-    const scheduleBlink = () => {
-      blinkTimerRef.current = setTimeout(() => {
-        if (!isSleepingRef.current && mascotState === "IDLE") {
-          setMascotState("LOOK_AROUND");
-          setTimeout(() => {
-            if (!isSleepingRef.current) setMascotState("IDLE");
-          }, 200);
-        }
-        scheduleBlink();
-      }, BLINK_INTERVAL_MS + Math.random() * 2000);
-    };
+    const interval = setInterval(() => {
+      if (!isSleepingRef.current && !isWalkingRef.current && mascotState === "IDLE") {
+        setMascotState("LOOK_AROUND");
+        setTimeout(() => {
+          if (!isSleepingRef.current && !isWalkingRef.current) setMascotState("IDLE");
+        }, 220);
+      }
+    }, BLINK_INTERVAL_MS);
 
-    scheduleBlink();
-    return () => {
-      if (blinkTimerRef.current) clearTimeout(blinkTimerRef.current);
-    };
+    return () => clearInterval(interval);
   }, [isEnabled, mascotState]);
 
-  // Periodic Sleep Z Particle Spawner
+  // Sleep Z Particles Timer
   useEffect(() => {
-    if (!isEnabled) return;
+    if (!isEnabled || mascotState !== "SLEEP") return;
+    isSleepingRef.current = true;
 
-    if (mascotState === "SLEEP") {
-      isSleepingRef.current = true;
-      const interval = setInterval(() => {
-        spawnParticle("z", 4, -20);
-      }, 2400);
-      sleepZTimerRef.current = interval as unknown as NodeJS.Timeout;
-      return () => clearInterval(interval);
-    }
+    const interval = setInterval(() => {
+      spawnParticle("z", 4, -20);
+    }, 2400);
+
+    return () => clearInterval(interval);
   }, [isEnabled, mascotState, spawnParticle]);
 
-  // 60FPS Physics & Animation Tick Loop
+  // 60FPS AUTONOMOUS LOCOMOTION & PHYSICS ENGINE:
+  // Decoupled from mouse speed — Sprout walks at its own steady pace with discrete step hops!
   useEffect(() => {
     if (!isEnabled) return;
 
     let prevTime = performance.now();
 
     const loop = (currentTime: number) => {
-      const dt = Math.min(64, currentTime - prevTime);
+      const dt = Math.min(50, currentTime - prevTime);
       prevTime = currentTime;
 
       const currentX = posRef.current.x;
@@ -291,39 +367,24 @@ export function SproutMascot() {
 
       // Check sleep timeout
       const inactiveMs = Date.now() - lastActiveTime.current;
-      if (inactiveMs > SLEEP_INACTIVITY_MS && !isSleepingRef.current) {
+      if (inactiveMs > SLEEP_INACTIVITY_MS && !isSleepingRef.current && !isWalkingRef.current) {
         isSleepingRef.current = true;
         setMascotState("SLEEP");
       }
 
-      // Smooth spring lerp for movement
-      const lerpFactor = isReducedMotion ? 0.05 : 0.085;
-      const nextX = currentX + dx * lerpFactor;
-      const nextY = currentY + dy * lerpFactor;
-
-      posRef.current = { x: nextX, y: nextY };
-
-      // Update facing orientation
-      if (Math.abs(dx) > 3) {
-        setFacing(dx > 0 ? "right" : "left");
-      }
-
-      // Calculate dynamic pupil offset based on mouse pointer position
-      const mouseDx = mouseRef.current.x - nextX;
-      const mouseDy = mouseRef.current.y - nextY;
+      // Update gaze pupils in real-time towards the mouse pointer
+      const mouseDx = mouseRef.current.x - currentX;
+      const mouseDy = mouseRef.current.y - currentY;
       const rawPupilX = Math.max(-1, Math.min(1, Math.round(mouseDx / 55)));
       const rawPupilY = Math.max(-1, Math.min(1, Math.round(mouseDy / 55)));
-
-      // When flipped horizontally (facing left), adjust pupil X direction
-      const orientedPupilX = dx < 0 ? -rawPupilX : rawPupilX;
+      const orientedPupilX = facing === "left" ? -rawPupilX : rawPupilX;
       setPupilOffset({ x: orientedPupilX, y: rawPupilY });
 
-      // Handle vertical jump & gravity physics
+      // Handle vertical jump/cheer velocity
       if (jumpVelocityRef.current !== 0 || jumpOffsetRef.current < 0) {
         jumpOffsetRef.current += jumpVelocityRef.current;
         jumpVelocityRef.current += 0.85; // Gravity
 
-        // Landing on ground plane
         if (jumpOffsetRef.current >= 0) {
           jumpOffsetRef.current = 0;
           jumpVelocityRef.current = 0;
@@ -331,37 +392,59 @@ export function SproutMascot() {
         } else {
           setHopY(jumpOffsetRef.current);
         }
-      } else if (!isSleepingRef.current) {
-        // Natural bouncy hops while walking / running
-        if (distance > 10 && !isReducedMotion) {
-          hopPhaseRef.current += dt * (distance > 140 ? 0.024 : 0.016);
-          const hopHeight = distance > 140 ? 9 : 5;
-          const currentHop = -Math.abs(Math.sin(hopPhaseRef.current)) * hopHeight;
+      }
+
+      // AUTONOMOUS WALKING LOCOMOTION:
+      // Sprout walks to target at fixed, capped speed with cute step cycles
+      if (isWalkingRef.current && distance > 10) {
+        // Face movement direction
+        if (Math.abs(dx) > 2) {
+          setFacing(dx > 0 ? "right" : "left");
+        }
+
+        // Running speed only if cursor is very far away (> 320px)
+        const isRunning = distance > 320;
+        currentSpeedRef.current = isRunning ? RUN_SPEED : WALK_SPEED;
+
+        // Move a fixed step per frame (not dragging with mouse!)
+        const moveRatio = Math.min(1, currentSpeedRef.current / distance);
+        const nextX = currentX + dx * moveRatio;
+        const nextY = currentY + dy * moveRatio;
+
+        posRef.current = { x: nextX, y: nextY };
+
+        // Discrete step-hop cadence (left foot, land, right foot, land)
+        if (!isReducedMotion && jumpOffsetRef.current === 0) {
+          walkCycleStep.current += dt * (isRunning ? 0.024 : 0.018);
+          const hopHeight = isRunning ? 8 : 4.5;
+          const currentHop = -Math.abs(Math.sin(walkCycleStep.current)) * hopHeight;
           setHopY(currentHop);
 
-          // State updates during locomotion
-          if (mascotState !== "JUMP" && mascotState !== "HAPPY" && mascotState !== "INSPECT") {
-            setMascotState(distance > 140 ? "RUN" : "FOLLOW");
-          }
-        } else {
-          // Settled on ground
-          hopPhaseRef.current = 0;
-          setHopY(0);
+          // Alternating foot step frames
+          const phase = Math.sin(walkCycleStep.current) >= 0 ? 0 : 1;
+          setStepPhase(phase);
 
-          if (
-            mascotState !== "SLEEP" &&
-            mascotState !== "HAPPY" &&
-            mascotState !== "JUMP" &&
-            mascotState !== "INSPECT"
-          ) {
-            setMascotState("IDLE");
+          if (mascotState !== "JUMP" && mascotState !== "HAPPY") {
+            setMascotState(isRunning ? "RUN" : "FOLLOW");
           }
+        }
+      } else if (isWalkingRef.current && distance <= 10) {
+        // ARRIVED AT DESTINATION!
+        isWalkingRef.current = false;
+        walkCycleStep.current = 0;
+        setHopY(0);
+
+        // If arrived at a card perch anchor, sit cutely on the ledge!
+        if (activePerchRef.current) {
+          setMascotState("PERCH");
+        } else if (mascotState !== "SLEEP" && mascotState !== "HAPPY" && mascotState !== "JUMP") {
+          setMascotState("IDLE");
         }
       }
 
-      // Apply transform directly to container element for optimal 60fps performance
+      // Directly update container translation for silky 60fps performance
       if (containerRef.current) {
-        containerRef.current.style.transform = `translate3d(${nextX}px, ${nextY}px, 0)`;
+        containerRef.current.style.transform = `translate3d(${posRef.current.x}px, ${posRef.current.y}px, 0)`;
       }
 
       rafId.current = requestAnimationFrame(loop);
@@ -372,9 +455,8 @@ export function SproutMascot() {
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [isEnabled, isReducedMotion, mascotState]);
+  }, [isEnabled, isReducedMotion, mascotState, facing]);
 
-  // If touch device or disabled, render nothing
   if (!isEnabled) {
     return null;
   }
@@ -403,8 +485,8 @@ export function SproutMascot() {
                   style={{
                     left: `calc(50% + ${p.x}px)`,
                     top: `${p.y}px`,
-                    color: theme === "light" ? "#47785E" : "#B9D8C4",
-                    textShadow: "0 1px 2px rgba(0,0,0,0.4)",
+                    color: isDarkMode ? "#80ED99" : "#47785E",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.5)",
                   }}
                 >
                   Z
@@ -445,7 +527,7 @@ export function SproutMascot() {
                   style={{
                     left: `calc(50% + ${p.x}px)`,
                     top: `${p.y}px`,
-                    fill: p.color || (theme === "light" ? "#47785E" : "#4E9B70"),
+                    fill: p.color || (isDarkMode ? "#80ED99" : "#47785E"),
                   }}
                 >
                   <path d="M5,1 C8,1 9,4 9,7 C9,9 7,9 5,9 C3,9 1,7 1,4 C1,2 3,1 5,1 Z" />
@@ -466,6 +548,8 @@ export function SproutMascot() {
           size={46}
           hopY={hopY}
           isSleeping={mascotState === "SLEEP"}
+          isDarkMode={isDarkMode}
+          stepPhase={stepPhase}
         />
       </div>
     </aside>

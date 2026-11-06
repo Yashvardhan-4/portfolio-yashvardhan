@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { SPROUT_FRAMES } from "./sprout-frames";
 import { MascotPalette, MascotState, FacingDirection } from "./sprout-types";
 
@@ -10,8 +10,10 @@ interface SproutPixelArtProps {
   facing: FacingDirection;
   pupilOffset: { x: number; y: number };
   size?: number;
-  hopY?: number; // Jump / hop vertical offset in pixels
+  hopY?: number;
   isSleeping?: boolean;
+  isDarkMode?: boolean;
+  stepPhase?: number; // 0 or 1 for alternating walk steps
 }
 
 export function SproutPixelArt({
@@ -22,8 +24,28 @@ export function SproutPixelArt({
   size = 46,
   hopY = 0,
   isSleeping = false,
+  isDarkMode = false,
+  stepPhase = 0,
 }: SproutPixelArtProps) {
-  // Determine which frame to draw based on state
+  // Firefly spore orbit time for dark mode
+  const [orbitAngle, setOrbitAngle] = useState(0);
+
+  useEffect(() => {
+    if (!isDarkMode) return;
+    let animId: number;
+    let start = performance.now();
+
+    const loop = (now: number) => {
+      const elapsed = (now - start) * 0.0018;
+      setOrbitAngle(elapsed);
+      animId = requestAnimationFrame(loop);
+    };
+
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, [isDarkMode]);
+
+  // Frame mapping
   const frameKey = useMemo(() => {
     switch (state) {
       case "SLEEP":
@@ -32,19 +54,22 @@ export function SproutPixelArt({
         return "HAPPY";
       case "JUMP":
         return "JUMP";
-      case "INSPECT":
-        return "INSPECT";
+      case "PERCH":
+        return "PERCH";
+      case "CHEER":
+        return "CHEER";
       case "RUN":
         return "RUN_DASH";
       case "FOLLOW":
-        return "WALK_HOP";
+        return stepPhase === 0 ? "WALK_STEP_1" : "WALK_STEP_2";
       case "LOOK_AROUND":
+      case "INSPECT":
         return "LOOK_SIDE";
       case "IDLE":
       default:
         return "IDLE";
     }
-  }, [state]);
+  }, [state, stepPhase]);
 
   const rawGrid = SPROUT_FRAMES[frameKey] || SPROUT_FRAMES.IDLE;
 
@@ -56,10 +81,12 @@ export function SproutPixelArt({
     bodyHighlightPath,
     leavesPath,
     leafHighlightPath,
+    leafTipPath,
     blushPath,
     eyesPath,
     eyeShinePath,
     mouthPath,
+    pawsPath,
   } = useMemo(() => {
     const paths: Record<string, string[]> = {
       O: [],
@@ -68,14 +95,15 @@ export function SproutPixelArt({
       H: [],
       L: [],
       G: [],
+      T: [],
       P: [],
       E: [],
       W: [],
       M: [],
+      K: [],
     };
 
-    const hasDynamicPupils =
-      frameKey !== "SLEEP" && frameKey !== "HAPPY";
+    const hasDynamicPupils = frameKey !== "SLEEP" && frameKey !== "HAPPY";
 
     const pX = hasDynamicPupils ? Math.round(pupilOffset.x) : 0;
     const pY = hasDynamicPupils ? Math.round(pupilOffset.y) : 0;
@@ -89,9 +117,14 @@ export function SproutPixelArt({
         let drawX = c;
         let drawY = r;
 
+        // In dark mode, upper leaf tips glow with leafTip color
+        if (isDarkMode && char === "G" && r <= 4) {
+          paths.T.push(`M${drawX},${drawY}h1v1h-1z`);
+          continue;
+        }
+
         // Apply pupil offset to eyes and eye shines only
         if (hasDynamicPupils && (char === "E" || char === "W")) {
-          // Clamp pupil within eye socket bounds (c between 8 and 20, r between 13 and 18)
           drawX = Math.max(7, Math.min(21, c + pX));
           drawY = Math.max(13, Math.min(18, r + pY));
         }
@@ -109,17 +142,23 @@ export function SproutPixelArt({
       bodyHighlightPath: paths.H.join(" "),
       leavesPath: paths.L.join(" "),
       leafHighlightPath: paths.G.join(" "),
+      leafTipPath: paths.T.join(" "),
       blushPath: paths.P.join(" "),
       eyesPath: paths.E.join(" "),
       eyeShinePath: paths.W.join(" "),
       mouthPath: paths.M.join(" "),
+      pawsPath: paths.K.join(" "),
     };
-  }, [rawGrid, frameKey, pupilOffset]);
+  }, [rawGrid, frameKey, pupilOffset, isDarkMode]);
 
-  // Shadow parameters reacting to height above ground
+  // Ground shadow parameters reacting to hop/jump height
   const jumpHeight = Math.max(0, -hopY);
-  const shadowScale = Math.max(0.4, 1 - jumpHeight / 50);
-  const shadowOpacity = Math.max(0.12, 0.45 - jumpHeight / 90);
+  const shadowScale = Math.max(0.35, 1 - jumpHeight / 48);
+  const shadowOpacity = Math.max(0.1, 0.42 - jumpHeight / 80);
+
+  // Bioluminescent firefly spore coordinates for dark mode
+  const sporeX = Math.round(13 + Math.cos(orbitAngle) * 13);
+  const sporeY = Math.round(9 + Math.sin(orbitAngle * 1.3) * 7);
 
   return (
     <div
@@ -131,7 +170,7 @@ export function SproutPixelArt({
       }}
       aria-hidden="true"
     >
-      {/* 1. Ground Shadow (stays on the ground plane even when Sprout hops/jumps) */}
+      {/* 1. Ground Shadow (anchored to ground plane) */}
       <div
         className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 rounded-full transition-transform duration-75"
         style={{
@@ -175,6 +214,9 @@ export function SproutPixelArt({
           {/* Leaf Highlights */}
           {leafHighlightPath && <path d={leafHighlightPath} fill={palette.leafHighlight} />}
 
+          {/* Dark Mode Luminous Leaf Tips */}
+          {leafTipPath && <path d={leafTipPath} fill={palette.leafTip} />}
+
           {/* Cheeks Blush */}
           {blushPath && <path d={blushPath} fill={palette.blush} />}
 
@@ -187,10 +229,37 @@ export function SproutPixelArt({
           {/* Mouth (if visible) */}
           {mouthPath && <path d={mouthPath} fill={palette.mouth} />}
 
+          {/* Perch Paws resting on card ledge */}
+          {pawsPath && <path d={pawsPath} fill={palette.bodyHighlight} />}
+
           {/* Forest Ink Contour Outline */}
           {outlinePath && <path d={outlinePath} fill={palette.outline} />}
+
+          {/* 3. Dark Mode Bioluminescent Firefly Spore (from reference image) */}
+          {isDarkMode && !isSleeping && (
+            <g className="transition-opacity duration-300">
+              {/* Soft glow halo */}
+              <circle
+                cx={sporeX}
+                cy={sporeY}
+                r="2"
+                fill={palette.sporeColor}
+                opacity="0.35"
+              />
+              {/* Spore core pixel */}
+              <rect
+                x={sporeX}
+                y={sporeY}
+                width="1"
+                height="1"
+                fill="#FFFFFF"
+              />
+            </g>
+          )}
         </svg>
       </div>
     </div>
   );
 }
+
+export default SproutPixelArt;

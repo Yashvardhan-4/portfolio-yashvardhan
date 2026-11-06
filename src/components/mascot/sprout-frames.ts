@@ -7,29 +7,38 @@ export const LIGHT_PALETTE: MascotPalette = {
   outline: "#20352B",
   leaves: "#47785E",
   leafHighlight: "#A9BDA8",
+  leafTip: "#6AA885",
   blush: "#EAA69D",
   shadow: "rgba(32, 53, 43, 0.16)",
   eyes: "#14221B",
   eyeShine: "#FFFFFF",
   mouth: "#20352B",
+  sporeColor: "#47785E",
   particleGlow: "rgba(71, 120, 94, 0.4)",
   ambientGlow: "none",
 };
 
+/**
+ * Dark Theme: Distinctive Magical Bioluminescent Forest Aesthetic
+ * Features luminous pale jade body, radiant emerald-mint leaves with neon tips,
+ * starlight eye reflections, and an ambient firefly spore aura.
+ */
 export const DARK_PALETTE: MascotPalette = {
-  body: "#E8ECE0",
-  bodyShade: "#C8D2BD",
-  bodyHighlight: "#F4F7EE",
-  outline: "#131C17",
-  leaves: "#4E9B70",
-  leafHighlight: "#B9D8C4",
-  blush: "#E09289",
-  shadow: "rgba(0, 0, 0, 0.42)",
-  eyes: "#0B130E",
+  body: "#DCEADC",
+  bodyShade: "#B8CEB8",
+  bodyHighlight: "#EDF6ED",
+  outline: "#0B130E",
+  leaves: "#38B072",
+  leafHighlight: "#57CC99",
+  leafTip: "#80ED99",
+  blush: "#E27D73",
+  shadow: "rgba(0, 0, 0, 0.45)",
+  eyes: "#060B08",
   eyeShine: "#FFFFFF",
-  mouth: "#131C17",
-  particleGlow: "rgba(78, 155, 112, 0.6)",
-  ambientGlow: "0 0 14px rgba(78, 155, 112, 0.28)",
+  mouth: "#0B130E",
+  sporeColor: "#80ED99",
+  particleGlow: "rgba(82, 183, 136, 0.7)",
+  ambientGlow: "0 0 16px rgba(56, 176, 114, 0.42), 0 0 4px rgba(128, 237, 153, 0.6)",
 };
 
 /**
@@ -42,10 +51,12 @@ export const DARK_PALETTE: MascotPalette = {
  * 'H' = Body Highlight
  * 'L' = Leaf Base
  * 'G' = Leaf Highlight
+ * 'T' = Leaf Luminous Tip (Dark mode accent)
  * 'P' = Cheek Blush
  * 'E' = Eye Dark (Default Pupil)
  * 'W' = Eye Shine
  * 'M' = Mouth
+ * 'K' = Perch Front Paws (resting on ledge)
  */
 export const SPROUT_FRAMES = {
   IDLE: [
@@ -135,7 +146,8 @@ export const SPROUT_FRAMES = {
     "..........................",
   ],
 
-  WALK_HOP: [
+  // Walking step 1: Front foot takes a step, slight bounce
+  WALK_STEP_1: [
     "..........................",
     ".............OOOO.........",
     "............OGGGLO........",
@@ -161,6 +173,36 @@ export const SPROUT_FRAMES = {
     "........OOO...............",
     "........OOO...OOO.........",
     "..............OOO.........",
+    "..........................",
+  ],
+
+  // Walking step 2: Rear foot steps forward, weight shifts
+  WALK_STEP_2: [
+    "..........................",
+    "...........OOOO...........",
+    "..........OGGGLO..........",
+    "....OOOO.OGGGLLLO.........",
+    "...OGGLOOGGGLLLLO.........",
+    "..OGGLLLOGGLLLLLO.........",
+    "..OGLLLOOGGLLLLOO.........",
+    "...OOLLOOOGLOOO...........",
+    ".....OOOO..OO.............",
+    "........OOOOOO............",
+    "......OOBBBBBOO...........",
+    ".....OOBBHHHHBBOO.........",
+    "....OOBBHHHHHHBBO.........",
+    "...OOBBHHEEHHHEEBO........",
+    "..OOBBBHWEEOHWEEOBO.......",
+    "..OOBBBHEEEOHEEEOBO.......",
+    ".OOBBBBHEEEOHEEEOBBO......",
+    ".OOBBBBBPPPBBBPPOBBO......",
+    ".OOBBBBBBPPBBBPPBBBBO.....",
+    ".OO SBBBBBBBBBBBBBSBO.....",
+    "..OO SSSSSSSSSSSSSSO......",
+    "...OOOOOOOOOOOOOOOO.......",
+    "..............OOO.........",
+    "........OOO...OOO.........",
+    "........OOO...............",
     "..........................",
   ],
 
@@ -193,6 +235,66 @@ export const SPROUT_FRAMES = {
     "..........................",
   ],
 
+  // PERCH / SIT: Sits cutely on the top edge of a card or ledge with paws resting on border!
+  PERCH: [
+    "..........................",
+    "............OOOO..........",
+    "...........OGGGLO.........",
+    ".....OOOO.OGGGLLLO........",
+    "....OGGLOOGGGLLLLO........",
+    "...OGGLLLOGGLLLLLO........",
+    "...OGLLLOOGGLLLLOO........",
+    "....OOLLOOOGLOOO..........",
+    "......OOOO..OO............",
+    ".........OOOOOO...........",
+    ".......OOBBBBBOO..........",
+    "......OOBBHHHHBBOO........",
+    ".....OOBBHHHHHHBBO........",
+    "....OOBBHHEEHHHEEBO.......",
+    "...OOBBBHWEEOHWEEOBO......",
+    "...OOBBBHEEEOHEEEOBO......",
+    "..OOBBBBHEEEOHEEEOBBO.....",
+    "..OOBBBBBPPPBBBPPOBBO.....",
+    "..OOBBBBBBPPBBBPPBBBBO....",
+    "..OO SBBBBBBBBBBBBBSBO....",
+    "...OO SSSSSSSSSSSSSSO.....",
+    "....OOOOOOOOOOOOOOOO......",
+    "....OOKKKOOOOOOOKKKO......", // Paws peeking over ledge (K)
+    "....OOOOOOOOOOOOOOOO......",
+    "..........................",
+    "..........................",
+  ],
+
+  // CHEER: Excited supportive bounce next to buttons
+  CHEER: [
+    "............OOOO..........",
+    "...........OGGGLO.........",
+    ".....OOOO.OGGGLLLO........",
+    "....OGGLOOGGGLLLLO........",
+    "...OGGLLLOGGLLLLLO........",
+    "...OGLLLOOGGLLLLOO........",
+    "....OOLLOOOGLOOO..........",
+    "......OOOO..OO............",
+    ".........OOOOOO...........",
+    ".......OOBBBBBOO..........",
+    "......OOBBHHHHBBOO........",
+    ".....OOBBHHHHHHBBO........",
+    "....OOBBHHHHHHHHBO........",
+    "...OOBBBHOEOHOEOBOBO......",
+    "...OOBBBBO EBO EBOBO......",
+    "..OOBBBBBPPPBBBPPOBBO.....",
+    "..OOBBBBBPPPBBBPPOBBO.....",
+    "..OOBBBBBBBM MMBBBBBO.....",
+    "..OO SBBBBBBBBBBBBBSBO....",
+    "...OO SSSSSSSSSSSSSSO.....",
+    "....OOOOOOOOOOOOOOOO......",
+    ".....OOO........OOO.......",
+    ".....OOO........OOO.......",
+    "..........................",
+    "..........................",
+    "..........................",
+  ],
+
   JUMP: [
     "............OOOO..........",
     "...........OGGGLO.........",
@@ -218,64 +320,6 @@ export const SPROUT_FRAMES = {
     ".......OOO....OOO.........",
     "..........................",
     "..........................",
-    "..........................",
-    "..........................",
-  ],
-
-  LAND: [
-    "..........................",
-    "..........................",
-    "............OOOO..........",
-    "...........OGGGLO.........",
-    ".....OOOO.OGGGLLLO........",
-    "....OGGLOOGGGLLLLO........",
-    "...OGGLLLOGGLLLLLO........",
-    "....OOLLOOOGLOOO..........",
-    "......OOOO..OO............",
-    "........OOOOOOOO..........",
-    "......OOBBBBBBBOO.........",
-    ".....OOBBHHHHHHBBOO.......",
-    "....OOBBHHHHHHHHBBO.......",
-    "...OOBBHHEEHHHHEEBO.......",
-    "..OOBBBHWEEOHWEEOBO.......",
-    "..OOBBBHEEEOHEEEOBO.......",
-    "..OOBBBBPPPBBBPPOBBO......",
-    "..OOBBBBBPPBBBPPBBBBO.....",
-    "..OO SBBBBBBBBBBBBBSBO....",
-    "...OO SSSSSSSSSSSSSSO.....",
-    "....OOOOOOOOOOOOOOOO......",
-    ".....OOO........OOO.......",
-    ".....OOO........OOO.......",
-    "..........................",
-    "..........................",
-    "..........................",
-  ],
-
-  INSPECT: [
-    "..........................",
-    ".............OOOO.........",
-    "............OGGGLO........",
-    "......OOOO.OGGGLLLO.......",
-    ".....OGGLOOGGGLLLLO.......",
-    "....OGGLLLOGGLLLLLO.......",
-    "....OGLLLOOGGLLLLOO.......",
-    ".....OOLLOOOGLOOO.........",
-    ".......OOOO..OO...........",
-    "..........OOOOOO..........",
-    "........OOBBBBBOO.........",
-    ".......OOBBHHHHBBOO.......",
-    "......OOBBHHHHHHBBO.......",
-    ".....OOBBHHEEHHHEEBO......",
-    "....OOBBBHWEEOHWEEOBO.....",
-    "....OOBBBHEEEOHEEEOBO.....",
-    "...OOBBBBHEEEOHEEEOBBO....",
-    "...OOBBBBBPPPBBBPPOBBO....",
-    "...OOBBBBBBPPBBBPPBBBBO...",
-    "...OO SBBBBBBBBBBBBBSBO...",
-    "....OO SSSSSSSSSSSSSSO....",
-    ".....OOOOOOOOOOOOOOOO.....",
-    "........OOO...OOO.........",
-    "........OOO...OOO.........",
     "..........................",
     "..........................",
   ],

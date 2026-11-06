@@ -4,6 +4,8 @@ export type MascotState =
   | "FOLLOW"
   | "RUN"
   | "INSPECT"
+  | "PERCH"
+  | "CHEER"
   | "JUMP"
   | "HAPPY"
   | "SLEEP"
@@ -18,11 +20,13 @@ export interface MascotPalette {
   outline: string;
   leaves: string;
   leafHighlight: string;
+  leafTip: string;
   blush: string;
   shadow: string;
   eyes: string;
   eyeShine: string;
   mouth: string;
+  sporeColor: string;
   particleGlow: string;
   ambientGlow: string;
 }
@@ -35,23 +39,23 @@ export interface MascotPhysics {
   targetX: number;
   targetY: number;
   groundY: number;
-  jumpY: number; // vertical hop/jump offset (negative is up)
+  jumpY: number;
   facing: FacingDirection;
   hopPhase: number;
   isGrounded: boolean;
   pupilOffset: { x: number; y: number };
 }
 
-export interface InspectTarget {
+export interface CardPerchAnchor {
+  x: number;
+  y: number;
+  edge: "top" | "left" | "right";
   element: HTMLElement;
-  rect: DOMRect;
-  title?: string;
-  type: "project" | "button" | "portrait" | "nav" | "interactive";
 }
 
 export interface FloatingParticle {
   id: number;
-  type: "z" | "exclamation" | "question" | "leaf" | "heart" | "dust";
+  type: "z" | "exclamation" | "question" | "leaf" | "heart" | "dust" | "spore";
   x: number;
   y: number;
   vx: number;
