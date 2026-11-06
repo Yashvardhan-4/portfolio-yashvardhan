@@ -199,6 +199,18 @@ export function SproutPixelArt({
             imageRendering: "pixelated",
           }}
         >
+          <defs>
+            {isDarkMode && (
+              <filter id="sprout-neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="0.4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            )}
+          </defs>
+
           {/* Base Body Shading */}
           {bodyShadePath && <path d={bodyShadePath} fill={palette.bodyShade} />}
 
@@ -215,13 +227,25 @@ export function SproutPixelArt({
           {leafHighlightPath && <path d={leafHighlightPath} fill={palette.leafHighlight} />}
 
           {/* Dark Mode Luminous Leaf Tips */}
-          {leafTipPath && <path d={leafTipPath} fill={palette.leafTip} />}
+          {leafTipPath && (
+            <path
+              d={leafTipPath}
+              fill={palette.leafTip}
+              filter={isDarkMode ? "url(#sprout-neon-glow)" : undefined}
+            />
+          )}
 
           {/* Cheeks Blush */}
           {blushPath && <path d={blushPath} fill={palette.blush} />}
 
-          {/* Dark Eyes */}
-          {eyesPath && <path d={eyesPath} fill={palette.eyes} />}
+          {/* Eyes (Dark Ink in Light, Neon Cyan Glow in Dark) */}
+          {eyesPath && (
+            <path
+              d={eyesPath}
+              fill={palette.eyes}
+              filter={isDarkMode ? "url(#sprout-neon-glow)" : undefined}
+            />
+          )}
 
           {/* Specular White Eye Shine */}
           {eyeShinePath && <path d={eyeShinePath} fill={palette.eyeShine} />}
@@ -230,21 +254,27 @@ export function SproutPixelArt({
           {mouthPath && <path d={mouthPath} fill={palette.mouth} />}
 
           {/* Perch Paws resting on card ledge */}
-          {pawsPath && <path d={pawsPath} fill={palette.bodyHighlight} />}
+          {pawsPath && (
+            <path
+              d={pawsPath}
+              fill={isDarkMode ? palette.leafTip : palette.bodyHighlight}
+            />
+          )}
 
-          {/* Forest Ink Contour Outline */}
+          {/* Forest Ink / Obsidian Contour Outline */}
           {outlinePath && <path d={outlinePath} fill={palette.outline} />}
 
-          {/* 3. Dark Mode Bioluminescent Firefly Spore (from reference image) */}
+          {/* 3. Dark Mode Bioluminescent Firefly Spore */}
           {isDarkMode && !isSleeping && (
             <g className="transition-opacity duration-300">
               {/* Soft glow halo */}
               <circle
                 cx={sporeX}
                 cy={sporeY}
-                r="2"
+                r="2.5"
                 fill={palette.sporeColor}
-                opacity="0.35"
+                opacity="0.45"
+                filter="url(#sprout-neon-glow)"
               />
               {/* Spore core pixel */}
               <rect

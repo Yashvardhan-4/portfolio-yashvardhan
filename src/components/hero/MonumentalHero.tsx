@@ -52,7 +52,7 @@ export function MonumentalHero() {
   const textTranslateY = prefersReducedMotion ? 0 : -Math.min(100, scrollY * 0.22);
 
   return (
-    <div className="relative w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-hidden flex flex-col justify-between transition-colors duration-300">
+    <div className="relative z-20 w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-x-clip overflow-y-visible flex flex-col justify-between transition-colors duration-300">
       {/* 1. ReactBits Background Animation: Threads (Active in Dark Mode for fluid WebGL ribbons on pitch black) */}
       <div
         className={`absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700 ${

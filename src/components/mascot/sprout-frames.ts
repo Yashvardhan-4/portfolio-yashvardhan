@@ -19,26 +19,27 @@ export const LIGHT_PALETTE: MascotPalette = {
 };
 
 /**
- * Dark Theme: Distinctive Magical Bioluminescent Forest Aesthetic
- * Features luminous pale jade body, radiant emerald-mint leaves with neon tips,
- * starlight eye reflections, and an ambient firefly spore aura.
+ * Dark Theme: Distinctive Nocturnal Obsidian Shadow Familiar (Kuro-Sprout)
+ * Sleek midnight-obsidian body, striking glowing electric-cyan eyes with diamond starlight shines,
+ * radiant bioluminescent emerald & cyber-mint foliage horns with glowing aqua tips,
+ * ethereal stardust blush, and an ambient celestial cyan spirit halo.
  */
 export const DARK_PALETTE: MascotPalette = {
-  body: "#DCEADC",
-  bodyShade: "#B8CEB8",
-  bodyHighlight: "#EDF6ED",
-  outline: "#0B130E",
-  leaves: "#38B072",
-  leafHighlight: "#57CC99",
-  leafTip: "#80ED99",
-  blush: "#E27D73",
-  shadow: "rgba(0, 0, 0, 0.45)",
-  eyes: "#060B08",
+  body: "#10141D",
+  bodyShade: "#080B12",
+  bodyHighlight: "#1C2436",
+  outline: "#030508",
+  leaves: "#00D27F",
+  leafHighlight: "#00FFA3",
+  leafTip: "#80FFEA",
+  blush: "rgba(255, 94, 151, 0.45)",
+  shadow: "rgba(0, 0, 0, 0.8)",
+  eyes: "#00F0FF",
   eyeShine: "#FFFFFF",
-  mouth: "#0B130E",
-  sporeColor: "#80ED99",
-  particleGlow: "rgba(82, 183, 136, 0.7)",
-  ambientGlow: "0 0 16px rgba(56, 176, 114, 0.42), 0 0 4px rgba(128, 237, 153, 0.6)",
+  mouth: "#00F0FF",
+  sporeColor: "#00F0FF",
+  particleGlow: "rgba(0, 240, 255, 0.85)",
+  ambientGlow: "0 0 16px rgba(0, 240, 255, 0.5), 0 0 32px rgba(0, 255, 163, 0.22)",
 };
 
 /**
