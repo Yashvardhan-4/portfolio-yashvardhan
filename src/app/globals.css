@@ -30,23 +30,24 @@
 }
 
 [data-theme="light"] {
-  /* Warm Ivory & Ghibli Petrichor Rain Garden Palette */
-  --bg: #F3F3E9;                 /* Warm ivory main background */
-  --bg-secondary: #EAEFE2;       /* Damp moss garden tone */
-  --surface: #E5EBDD;            /* Soft sage secondary surfaces */
-  --surface-hover: #DDE5D5;      /* Sunlit leaf sage hover */
-  --surface-card: #EBF0E4;       /* Soft sage porcelain card */
-  --fg: #20352B;                 /* Forest ink primary text */
-  --fg-muted: #4B6354;           /* Wet sage body copy */
-  --fg-subtle: #768F80;          /* Moss mist monospace labels */
-  --border: #D0DDD0;             /* Moss mist borders and details */
-  --border-subtle: #DEE7DE;      /* Delicate mist hairline */
-  --accent: #47785E;             /* Leaf green interactive accent */
-  --accent-secondary: #B9D8D0;   /* Rainwater subtle visual accent */
-  --accent-muted: rgba(71, 120, 94, 0.12);
-  --accent-glow: rgba(71, 120, 94, 0.22);
-  --accent-nature: #35634A;      /* Deep lush moss */
-  --accent-water: #4A8E82;       /* Rainwater slate green */
+  /* Option 1: Warm Antique Linen, Roasted Espresso & Japanese Moss */
+  --bg: #F5EFEB;                 /* Warm antique linen canvas */
+  --bg-secondary: #EBE4DC;       /* Soft oat secondary */
+  --surface: #E6DED4;            /* Travertine pressed linen surface */
+  --surface-hover: #DCD3C7;      /* Warm linen hover state */
+  --surface-card: #FAF6F0;       /* Washi porcelain card */
+  --fg: #161311;                 /* Roasted espresso primary text */
+  --fg-muted: #544940;           /* Warm walnut umber body copy (6.2:1 AAA) */
+  --fg-subtle: #7A6F65;          /* Muted tobacco monospace labels */
+  --border: #D6CCC0;             /* Pressed fiber hairline border */
+  --border-subtle: #E4DBD0;      /* Delicate linen hairline */
+  --accent: #2A5741;             /* Deep Japanese moss / alpine cedar interactive */
+  --accent-warm: #C89355;        /* Golden honey amber accent */
+  --accent-secondary: #47785E;   /* Cedar leaf green secondary */
+  --accent-muted: rgba(42, 87, 65, 0.10);
+  --accent-glow: rgba(42, 87, 65, 0.20);
+  --accent-nature: #2A5741;      /* Deep Japanese moss */
+  --accent-water: #5B8C78;       /* Petrichor stream tone */
 }
 
 @keyframes shine {

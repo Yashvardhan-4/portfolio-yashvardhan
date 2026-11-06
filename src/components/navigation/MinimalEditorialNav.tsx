@@ -20,7 +20,7 @@ export function MinimalEditorialNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const accentColor = theme === "light" ? "#47785E" : "#A855F7";
+  const accentColor = theme === "light" ? "#2A5741" : "#A855F7";
 
   return (
     <header

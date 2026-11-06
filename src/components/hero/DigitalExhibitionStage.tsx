@@ -174,19 +174,24 @@ export function DigitalExhibitionStage({
 
     // 1. Initialize Portrait Halftone Dots from JSON dataset
     const baseWidth = halftoneData.width;   // 480
-    const baseHeight = halftoneData.height; // 513
-    const rawDots = halftoneData.dots as Array<[number, number, number, number]>;
+    const baseHeight = halftoneData.height; // 620
+    const rawDots = halftoneData.dots as Array<[number, number, number, number, number?, number?, number?]>;
 
-    const portraitDots: PortraitDot[] = rawDots.map(([x0, y0, r0, l], i) => {
-      // Facial feature weighting (protects eyes, nose bridge, lips)
-      const isCoreFeature = x0 > 175 && x0 < 305 && y0 > 185 && y0 < 415;
-      const featureWeight = isCoreFeature ? 0.65 : 1.0;
+    const portraitDots: PortraitDot[] = rawDots.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
+      // Facial feature weighting (protects eyes, nose bridge, lips in 480x620 coordinate space)
+      const isCoreFeature = x0 > 155 && x0 < 325 && y0 > 170 && y0 < 490;
+      const featureWeight = isCoreFeature ? 0.60 : 1.0;
 
-      // Distance from portrait center for outer perimeter fade-out into warm ivory
-      const dxEdge = (x0 - baseWidth * 0.5) / 195;
-      const dyEdge = (y0 - baseHeight * 0.5) / 230;
+      // Distance from portrait center for outer perimeter fade-out into warm linen
+      const dxEdge = (x0 - baseWidth * 0.5) / 205;
+      const dyEdge = (y0 - baseHeight * 0.5) / 285;
       const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
-      const edgeFade = distEdge > 0.82 ? Math.max(0, 1 - (distEdge - 0.82) / 0.26) : 1.0;
+      const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.20) : 1.0;
+
+      // Authentic sampled RGB chromatic values from high-res photograph
+      const r = rRaw !== undefined ? rRaw : 45;
+      const g = gRaw !== undefined ? gRaw : 40;
+      const b = bRaw !== undefined ? bRaw : 35;
 
       // --- DARK THEME MAPPING (Luminous phosphor starlight against #060709) ---
       let color = "rgba(245, 245, 247, 0.95)";
@@ -195,57 +200,49 @@ export function DigitalExhibitionStage({
         color = "rgba(255, 255, 255, 0.98)";
         luminousColor = "rgba(255, 255, 255, 1.0)";
       } else if (l > 0.55) {
-        color = "rgba(226, 232, 240, 0.90)";
+        color = "rgba(235, 238, 245, 0.92)";
         luminousColor = "rgba(245, 240, 255, 1.0)";
       } else if (l > 0.35) {
-        color = "rgba(180, 190, 205, 0.78)";
+        color = "rgba(195, 202, 215, 0.80)";
         luminousColor = "rgba(220, 215, 245, 0.95)";
       } else if (l > 0.18) {
-        color = "rgba(120, 130, 150, 0.65)";
-        luminousColor = "rgba(180, 175, 220, 0.85)";
+        color = "rgba(135, 145, 165, 0.68)";
+        luminousColor = "rgba(190, 180, 230, 0.88)";
       } else {
-        color = "rgba(70, 78, 95, 0.50)";
-        luminousColor = "rgba(130, 125, 170, 0.70)";
+        color = "rgba(80, 88, 105, 0.52)";
+        luminousColor = "rgba(140, 130, 180, 0.75)";
       }
 
-      // --- LIGHT THEME MAPPING (Forest-green Monochromatic Duotone against #F3F3E9) ---
-      // Darkest dots: #20352B (RGB 32, 53, 43) -> Low luminance shadows, contours, eyes, hair
-      // Mid-tone dots: #47785E (RGB 71, 120, 94) -> Cheek modeling, facial volume
-      // Highlight dots: #A9BDA8 (RGB 169, 189, 168) -> Lit skin, forehead, bridge of nose
-      let colorLight = "rgba(32, 53, 43, 0.95)";
-      let luminousColorLight = "rgba(71, 120, 94, 0.98)";
+      // --- LIGHT THEME MAPPING: AUTHENTIC CHROMATIC MICRO-STIPPLE ---
+      // Uses the real sampled skin pigments, roasted espresso hair & beard, and amber highlights!
+      let colorLight = `rgba(${r}, ${g}, ${b}, 0.95)`;
+      let luminousColorLight = "rgba(200, 147, 85, 1.0)"; // Warm golden amber glow
       let radiusMultiplierLight = 1.0;
 
-      if (l < 0.28) {
-        // Deep shadows & facial contours (eyes, pupils, brow lines, mouth seam)
-        const alpha = Math.min(0.96, (0.86 + (0.28 - l) * 0.4) * (isCoreFeature ? 1.0 : edgeFade));
-        colorLight = `rgba(32, 53, 43, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(71, 120, 94, 1.0)";
-        radiusMultiplierLight = 1.30;
-      } else if (l < 0.46) {
-        // Shadow-to-mid tone transition (jawline, eye sockets, temples)
-        const alpha = 0.80 * edgeFade;
-        colorLight = `rgba(42, 72, 58, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(71, 120, 94, 0.96)";
-        radiusMultiplierLight = 1.12;
-      } else if (l < 0.66) {
-        // True midtones (cheeks, facial planes, neck)
-        const alpha = 0.72 * edgeFade;
-        colorLight = `rgba(71, 120, 94, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(42, 72, 58, 0.92)";
-        radiusMultiplierLight = 0.92;
+      if (l < 0.32) {
+        // Deep espresso contours & facial structure (eyes, pupils, brow lines, mouth seam, beard)
+        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : edgeFade));
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(200, 147, 85, 1.0)";
+        radiusMultiplierLight = 1.18;
+      } else if (l < 0.65) {
+        // True midtones (warm golden skin volume, cheek modeling, jawline, temples)
+        const alpha = 0.82 * edgeFade;
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(215, 160, 95, 0.96)";
+        radiusMultiplierLight = 1.02;
       } else if (l < 0.82) {
-        // Soft skin highlights (forehead, cheekbone shine)
-        const alpha = 0.48 * edgeFade;
-        colorLight = `rgba(169, 189, 168, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(71, 120, 94, 0.85)";
-        radiusMultiplierLight = 0.70;
+        // Soft skin highlights (forehead, cheekbone shine, bridge of nose)
+        const alpha = 0.65 * edgeFade;
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(230, 185, 120, 0.90)";
+        radiusMultiplierLight = 0.88;
       } else {
-        // Specular highlights (paper ivory #F3F3E9 shines through)
-        const alpha = 0.28 * edgeFade;
-        colorLight = `rgba(169, 189, 168, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(71, 120, 94, 0.75)";
-        radiusMultiplierLight = 0.52;
+        // Specular highlights (natural linen shines through)
+        const alpha = 0.42 * edgeFade;
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(240, 205, 145, 0.80)";
+        radiusMultiplierLight = 0.72;
       }
 
       // Deterministic angle & speed for smooth scroll-driven dissolve
