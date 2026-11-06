@@ -11,7 +11,6 @@ import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
 export function MonumentalHero() {
   const { theme } = useTheme();
   const isLightMode = theme === "light";
-  const [scrollY, setScrollY] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -34,25 +33,14 @@ export function MonumentalHero() {
     };
     mediaQuery.addEventListener("change", handleMotionChange);
 
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => {
       clearTimeout(mountTimer);
       mediaQuery.removeEventListener("change", handleMotionChange);
-      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  // Compute text fade and translate based on scroll for seamless transition to Projects
-  const textOpacity = prefersReducedMotion ? 1 : Math.max(0, 1 - scrollY / 380);
-  const textTranslateY = prefersReducedMotion ? 0 : -Math.min(100, scrollY * 0.22);
-
   return (
-    <div className="relative z-20 w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-x-clip overflow-y-visible flex flex-col justify-between transition-colors duration-300">
+    <div className="relative w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-hidden flex flex-col justify-between transition-colors duration-300">
       {/* 1. ReactBits Background Animation: Threads (Active in Dark Mode for fluid WebGL ribbons on pitch black) */}
       <div
         className={`absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700 ${
@@ -122,14 +110,7 @@ export function MonumentalHero() {
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 lg:gap-12 xl:gap-16 items-center">
           {/* Left Column (Columns 1–7): Physical Typography, Personal Anchor & Narrative */}
-          <div
-            className="md:col-span-7 flex flex-col justify-center transition-all duration-300 ease-out max-w-full md:max-w-[560px] lg:max-w-[620px]"
-            style={{
-              opacity: textOpacity,
-              transform: `translateY(${textTranslateY}px)`,
-              pointerEvents: textOpacity < 0.1 ? "none" : "auto",
-            }}
-          >
+          <div className="md:col-span-7 flex flex-col justify-center max-w-full md:max-w-[560px] lg:max-w-[620px]">
             {/* Monumental Headline: Refined Editorial Proportions */}
             <div
               ref={headlineAnchorRef}
