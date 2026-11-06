@@ -130,7 +130,7 @@ export function MonumentalHero() {
             <div className="block md:hidden my-6 w-full max-w-[310px] mx-auto">
               <div
                 ref={mobileAnchorRef}
-                className="w-full aspect-[480/620] pointer-events-none"
+                className="w-full aspect-[480/513] pointer-events-none"
                 aria-label="Mobile Portrait Spatial Guide"
               />
             </div>
@@ -186,7 +186,7 @@ export function MonumentalHero() {
 
             <div
               ref={desktopAnchorRef}
-              className="w-full aspect-[480/620] max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10"
+              className="w-full aspect-[480/513] max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10"
               aria-label="Desktop Portrait Spatial Guide"
             />
           </div>

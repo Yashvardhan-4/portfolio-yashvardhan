@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import halftoneData from "@/data/halftoneDots.json";
+import halftoneDataDark from "@/data/halftoneDotsDark.json";
+import halftoneDataLight from "@/data/halftoneDotsLight.json";
 
 export interface DigitalExhibitionStageProps {
   desktopAnchorRef: React.RefObject<HTMLDivElement>;
@@ -172,86 +173,41 @@ export function DigitalExhibitionStage({
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // 1. Initialize Portrait Halftone Dots from JSON dataset
-    const baseWidth = halftoneData.width;   // 480
-    const baseHeight = halftoneData.height; // 620
-    const rawDots = halftoneData.dots as Array<[number, number, number, number, number?, number?, number?]>;
+    // 1A. Initialize Portrait Halftone Dots for DARK MODE (Exact original 4,387 dots dataset)
+    const baseWidthDark = halftoneDataDark.width;   // 480
+    const baseHeightDark = halftoneDataDark.height; // 513
+    const rawDotsDark = halftoneDataDark.dots as Array<[number, number, number, number]>;
 
-    const portraitDots: PortraitDot[] = rawDots.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
-      // Facial feature weighting (protects eyes, nose bridge, lips in 480x620 coordinate space)
-      const isCoreFeature = x0 > 155 && x0 < 325 && y0 > 170 && y0 < 490;
-      const featureWeight = isCoreFeature ? 0.60 : 1.0;
+    const portraitDotsDark: PortraitDot[] = rawDotsDark.map(([x0, y0, r0, l], i) => {
+      // Original facial feature weighting
+      const isCoreFeature = x0 > 175 && x0 < 305 && y0 > 185 && y0 < 415;
+      const featureWeight = isCoreFeature ? 0.65 : 1.0;
 
-      // Distance from portrait center for outer perimeter fade-out into warm linen
-      const dxEdge = (x0 - baseWidth * 0.5) / 205;
-      const dyEdge = (y0 - baseHeight * 0.5) / 285;
-      const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
-      const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.20) : 1.0;
-
-      // Authentic sampled RGB chromatic values from high-res photograph
-      const r = rRaw !== undefined ? rRaw : 45;
-      const g = gRaw !== undefined ? gRaw : 40;
-      const b = bRaw !== undefined ? bRaw : 35;
-
-      // --- DARK THEME MAPPING (Luminous phosphor starlight against #060709) ---
+      // Exact original dark mode phosphor starlight mapping
       let color = "rgba(245, 245, 247, 0.95)";
       let luminousColor = "rgba(255, 255, 255, 1.0)";
       if (l > 0.8) {
         color = "rgba(255, 255, 255, 0.98)";
         luminousColor = "rgba(255, 255, 255, 1.0)";
       } else if (l > 0.55) {
-        color = "rgba(235, 238, 245, 0.92)";
+        color = "rgba(226, 232, 240, 0.90)";
         luminousColor = "rgba(245, 240, 255, 1.0)";
       } else if (l > 0.35) {
-        color = "rgba(195, 202, 215, 0.80)";
+        color = "rgba(180, 190, 205, 0.78)";
         luminousColor = "rgba(220, 215, 245, 0.95)";
       } else if (l > 0.18) {
-        color = "rgba(135, 145, 165, 0.68)";
-        luminousColor = "rgba(190, 180, 230, 0.88)";
+        color = "rgba(120, 130, 150, 0.65)";
+        luminousColor = "rgba(180, 175, 220, 0.85)";
       } else {
-        color = "rgba(80, 88, 105, 0.52)";
-        luminousColor = "rgba(140, 130, 180, 0.75)";
+        color = "rgba(70, 78, 95, 0.50)";
+        luminousColor = "rgba(130, 125, 170, 0.70)";
       }
 
-      // --- LIGHT THEME MAPPING: AUTHENTIC CHROMATIC MICRO-STIPPLE ---
-      // Uses the real sampled skin pigments, roasted espresso hair & beard, and amber highlights!
-      let colorLight = `rgba(${r}, ${g}, ${b}, 0.95)`;
-      let luminousColorLight = "rgba(200, 147, 85, 1.0)"; // Warm golden amber glow
-      let radiusMultiplierLight = 1.0;
-
-      if (l < 0.32) {
-        // Deep espresso contours & facial structure (eyes, pupils, brow lines, mouth seam, beard)
-        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : edgeFade));
-        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(200, 147, 85, 1.0)";
-        radiusMultiplierLight = 1.18;
-      } else if (l < 0.65) {
-        // True midtones (warm golden skin volume, cheek modeling, jawline, temples)
-        const alpha = 0.82 * edgeFade;
-        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(215, 160, 95, 0.96)";
-        radiusMultiplierLight = 1.02;
-      } else if (l < 0.82) {
-        // Soft skin highlights (forehead, cheekbone shine, bridge of nose)
-        const alpha = 0.65 * edgeFade;
-        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(230, 185, 120, 0.90)";
-        radiusMultiplierLight = 0.88;
-      } else {
-        // Specular highlights (natural linen shines through)
-        const alpha = 0.42 * edgeFade;
-        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-        luminousColorLight = "rgba(240, 205, 145, 0.80)";
-        radiusMultiplierLight = 0.72;
-      }
-
-      // Deterministic angle & speed for smooth scroll-driven dissolve
-      const dx = x0 - baseWidth * 0.5;
-      const dy = y0 - baseHeight * 0.45;
+      const dx = x0 - baseWidthDark * 0.5;
+      const dy = y0 - baseHeightDark * 0.45;
       const angle = Math.atan2(dy, dx) + Math.sin(i * 1.7) * 0.45;
       const speed = 80 + (i % 41) * 5.2;
 
-      // Deterministic initial scatter for organic cubic reveal from darkness
       const initialDist = 55 + (i % 27) * 3.5;
       const initialAngle = (i * 0.42) % (Math.PI * 2);
       const initialOffsetX = Math.cos(initialAngle) * initialDist;
@@ -269,6 +225,83 @@ export function DigitalExhibitionStage({
         l,
         color,
         luminousColor,
+        colorLight: color,
+        luminousColorLight: luminousColor,
+        radiusMultiplierLight: 1.0,
+        featureWeight,
+        dissolveAngle: angle,
+        dissolveSpeed: speed,
+        initialOffsetX,
+        initialOffsetY,
+      };
+    });
+
+    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (16,037 high-density chromatic dots)
+    const baseWidthLight = halftoneDataLight.width;   // 480
+    const baseHeightLight = halftoneDataLight.height; // 620
+    const rawDotsLight = halftoneDataLight.dots as Array<[number, number, number, number, number?, number?, number?]>;
+
+    const portraitDotsLight: PortraitDot[] = rawDotsLight.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
+      const isCoreFeature = x0 > 155 && x0 < 325 && y0 > 170 && y0 < 490;
+      const featureWeight = isCoreFeature ? 0.60 : 1.0;
+
+      const dxEdge = (x0 - baseWidthLight * 0.5) / 205;
+      const dyEdge = (y0 - baseHeightLight * 0.5) / 285;
+      const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
+      const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.20) : 1.0;
+
+      const r = rRaw !== undefined ? rRaw : 45;
+      const g = gRaw !== undefined ? gRaw : 40;
+      const b = bRaw !== undefined ? bRaw : 35;
+
+      let colorLight = `rgba(${r}, ${g}, ${b}, 0.95)`;
+      let luminousColorLight = "rgba(200, 147, 85, 1.0)";
+      let radiusMultiplierLight = 1.0;
+
+      if (l < 0.32) {
+        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : edgeFade));
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(200, 147, 85, 1.0)";
+        radiusMultiplierLight = 1.18;
+      } else if (l < 0.65) {
+        const alpha = 0.82 * edgeFade;
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(215, 160, 95, 0.96)";
+        radiusMultiplierLight = 1.02;
+      } else if (l < 0.82) {
+        const alpha = 0.65 * edgeFade;
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(230, 185, 120, 0.90)";
+        radiusMultiplierLight = 0.88;
+      } else {
+        const alpha = 0.42 * edgeFade;
+        colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        luminousColorLight = "rgba(240, 205, 145, 0.80)";
+        radiusMultiplierLight = 0.72;
+      }
+
+      const dx = x0 - baseWidthLight * 0.5;
+      const dy = y0 - baseHeightLight * 0.45;
+      const angle = Math.atan2(dy, dx) + Math.sin(i * 1.7) * 0.45;
+      const speed = 80 + (i % 41) * 5.2;
+
+      const initialDist = 55 + (i % 27) * 3.5;
+      const initialAngle = (i * 0.42) % (Math.PI * 2);
+      const initialOffsetX = Math.cos(initialAngle) * initialDist;
+      const initialOffsetY = Math.sin(initialAngle) * initialDist;
+
+      return {
+        x0,
+        y0,
+        x: x0,
+        y: y0,
+        vx: 0,
+        vy: 0,
+        r0,
+        r: 0,
+        l,
+        color: colorLight,
+        luminousColor: luminousColorLight,
         colorLight,
         luminousColorLight,
         radiusMultiplierLight,
@@ -436,6 +469,11 @@ export function DigitalExhibitionStage({
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
+      const portraitDots = isLight ? portraitDotsLight : portraitDotsDark;
+      const baseWidth = isLight ? baseWidthLight : baseWidthDark;
+      const baseHeight = isLight ? baseHeightLight : baseHeightDark;
+
       // Measure current portrait anchor position in canvas world coordinates
       const isMobile = window.innerWidth < 768;
       const anchorEl = (isMobile ? mobileAnchorRef.current : desktopAnchorRef.current) || desktopAnchorRef.current || mobileAnchorRef.current;
@@ -492,7 +530,6 @@ export function DigitalExhibitionStage({
       // SECTION A: RENDER PORTRAIT HALFTONE DOTS (UNBOUNDED)
       // ----------------------------------------------------
       const numDots = portraitDots.length;
-      const isLight = document.documentElement.getAttribute("data-theme") === "light";
 
       for (let i = 0; i < numDots; i++) {
         const p = portraitDots[i];

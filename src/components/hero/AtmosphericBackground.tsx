@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 interface RainStreak {
   x: number;
@@ -22,6 +22,16 @@ interface WaterRipple {
 
 export function AtmosphericBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    setIsLightMode(document.documentElement.getAttribute("data-theme") === "light");
+    const onThemeChange = () => {
+      setIsLightMode(document.documentElement.getAttribute("data-theme") === "light");
+    };
+    window.addEventListener("themechange", onThemeChange);
+    return () => window.removeEventListener("themechange", onThemeChange);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -141,7 +151,7 @@ export function AtmosphericBackground() {
         ctx.fillStyle = mossGrad;
         ctx.fillRect(0, 0, width, height);
       } else {
-        // Dark Mode: Deep Violet Cosmic Aurora Beacon
+        // Dark Mode: Exact Original Deep Violet Cosmic Aurora Beacon
         const cx1 = width * (0.68 + Math.sin(time * 0.35) * 0.07);
         const cy1 = height * (0.32 + Math.cos(time * 0.28) * 0.07);
         const grad1 = ctx.createRadialGradient(cx1, cy1, 10, cx1, cy1, width * 0.45);
@@ -166,7 +176,6 @@ export function AtmosphericBackground() {
         // Periodic rain droplet ripples
         if (time - lastRippleTime > 3.2) {
           lastRippleTime = time;
-          // Spawn in the lower region or sides
           const rx = width * (0.12 + Math.random() * 0.76);
           const ry = height * (0.45 + Math.random() * 0.48);
           spawnRipple(rx, ry);
@@ -190,7 +199,6 @@ export function AtmosphericBackground() {
           ctx.ellipse(rip.x, rip.y, rip.radius, rip.radius * 0.45, 0, 0, Math.PI * 2);
           ctx.stroke();
 
-          // Outer secondary ripple
           if (rip.radius > 8) {
             ctx.strokeStyle = `rgba(91, 140, 120, ${rip.alpha * 0.38})`;
             ctx.lineWidth = 0.6;
@@ -225,8 +233,7 @@ export function AtmosphericBackground() {
           ctx.fill();
         }
 
-        // Gentle Foliage Silhouettes at Canvas Periphery (conservatory garden depth)
-        // Top-right trailing ivy vine
+        // Gentle Foliage Silhouettes at Canvas Periphery
         ctx.save();
         ctx.fillStyle = "rgba(42, 87, 65, 0.026)";
         ctx.beginPath();
@@ -236,7 +243,6 @@ export function AtmosphericBackground() {
         ctx.closePath();
         ctx.fill();
 
-        // Delicate leaf lobes
         ctx.beginPath();
         ctx.ellipse(width - 160, 135, 26, 11, Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
@@ -244,7 +250,6 @@ export function AtmosphericBackground() {
         ctx.ellipse(width - 120, 180, 22, 9, Math.PI / 3, 0, Math.PI * 2);
         ctx.fill();
 
-        // Bottom-left subtle garden fern silhouette
         ctx.beginPath();
         ctx.moveTo(0, height);
         ctx.bezierCurveTo(60, height - 80, 110, height - 120, 160, height - 130);
@@ -385,13 +390,15 @@ export function AtmosphericBackground() {
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-      {/* 1. Procedural Analog Washi Paper Grain (Tactile physical paper surface, removes plain white glare) */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.032] mix-blend-multiply transition-opacity duration-300"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
+      {/* 1. Procedural Analog Washi Paper Grain (Tactile physical paper surface for Light Mode only, zero dark mode interference) */}
+      {isLightMode && (
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.032] mix-blend-multiply transition-opacity duration-300"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          }}
+        />
+      )}
       {/* 2. Living Canvas */}
       <canvas
         ref={canvasRef}
