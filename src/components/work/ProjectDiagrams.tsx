@@ -7,10 +7,10 @@ import React from "react";
 
 export function ShivkushDiagram() {
   return (
-    <div className="w-full border border-[#1E2536] bg-[#090C12] p-4 sm:p-5">
-      <div className="mb-3 flex items-center justify-between border-b border-[#1E2536] pb-2 font-mono text-[10px] uppercase tracking-wider text-[#94A3B8]">
+    <div className="w-full border border-[var(--border)] bg-[var(--surface-card)] p-4 sm:p-5 rounded-xl">
+      <div className="mb-3 flex items-center justify-between border-b border-[var(--border)] pb-2 font-mono text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">
         <span>ARCHITECTURAL SCHEMATIC // SHIVKUSH PWA</span>
-        <span className="text-[#00F5D4]">SUPABASE RLS & PWA CACHE</span>
+        <span className="text-[#00F5D4]">SUPABASE RLS &amp; PWA CACHE</span>
       </div>
       <svg
         viewBox="0 0 540 270"

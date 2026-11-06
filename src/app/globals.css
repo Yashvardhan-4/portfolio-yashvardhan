@@ -4,23 +4,49 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+[data-theme="dark"] {
   --bg: #060709;
+  --bg-secondary: #08090B;
   --surface: #0E1015;
   --surface-hover: #161922;
+  --surface-card: #0A0D14;
   --fg: #EDEDEF;
   --fg-muted: #8E95A5;
-  --border: #1C2029;
-  --border-subtle: #12151C;
-  --accent: #00D2FF;
-  --accent-secondary: #2B66FF;
-  --accent-muted: rgba(0, 210, 255, 0.12);
-  --accent-glow: rgba(0, 210, 255, 0.28);
+  --fg-subtle: #64748B;
+  --border: #1E2430;
+  --border-subtle: #141822;
+  --accent: #A855F7;
+  --accent-secondary: #C084FC;
+  --accent-muted: rgba(168, 85, 247, 0.12);
+  --accent-glow: rgba(168, 85, 247, 0.28);
+  --accent-nature: #10B981;
+  --accent-water: #38BDF8;
 
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Geist Mono', monospace;
+}
+
+[data-theme="light"] {
+  /* The Ghibli Petrichor & Summer Meadow Palette */
+  --bg: #F5F7F3;                 /* Morning rain mist parchment */
+  --bg-secondary: #EDF1E8;       /* Damp moss garden stone */
+  --surface: #E8ECE2;            /* Riverstone surface */
+  --surface-hover: #DDE4D5;      /* Sunlit leaf stone hover */
+  --surface-card: #FFFFFF;       /* Glazed porcelain card */
+  --fg: #17231C;                 /* Deep chlorophyll pine ink */
+  --fg-muted: #485E50;           /* Wet sage shadow */
+  --fg-subtle: #6F8576;          /* Misty rain monospace */
+  --border: #D2DBC9;             /* Pressed herbarium hairline */
+  --border-subtle: #E2E8DC;      /* Delicate rain border */
+  --accent: #2A724E;             /* Ghibli Waterfall Fern Emerald */
+  --accent-secondary: #3B8296;   /* Pond Ripple Rain Blue */
+  --accent-muted: rgba(42, 114, 78, 0.12);
+  --accent-glow: rgba(42, 114, 78, 0.25);
+  --accent-nature: #226743;      /* Deep lush moss */
+  --accent-water: #337A8C;       /* Rain puddle slate blue */
 }
 
 @keyframes shine {
@@ -80,6 +106,7 @@ html {
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 body {
@@ -88,11 +115,12 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 ::selection {
   background-color: var(--accent);
-  color: #07080B;
+  color: #FFFFFF;
 }
 
 /* Accessible focus visible */

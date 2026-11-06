@@ -13,7 +13,7 @@ export interface HoverHighlighterProps {
 
 export function HoverHighlighter({
   children,
-  color = "#A855F7",
+  color = "var(--accent)",
   opacity = 32,
   height = 36,
   className = "",
@@ -27,7 +27,7 @@ export function HoverHighlighter({
 
   return (
     <span
-      className={`relative inline-block cursor-default font-medium text-[#EDEDEF] ${className}`}
+      className={`relative inline-block cursor-default font-medium text-[var(--fg)] ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

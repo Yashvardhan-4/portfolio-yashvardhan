@@ -42,7 +42,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#08090C] select-none transition-opacity duration-700 ease-out ${
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[var(--bg)] select-none transition-opacity duration-700 ease-out ${
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >

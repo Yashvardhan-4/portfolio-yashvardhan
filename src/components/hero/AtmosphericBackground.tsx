@@ -46,6 +46,12 @@ export function AtmosphericBackground() {
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerleave", handlePointerLeave, { passive: true });
 
+    let isLight = document.documentElement.getAttribute("data-theme") === "light";
+    const handleThemeChange = () => {
+      isLight = document.documentElement.getAttribute("data-theme") === "light";
+    };
+    window.addEventListener("themechange", handleThemeChange);
+
     // 1. Constellation Network Nodes (Algorithmic / Systems Lattice)
     const nodeCount = 48;
     const nodes = Array.from({ length: nodeCount }, (_, i) => ({
@@ -56,7 +62,8 @@ export function AtmosphericBackground() {
       radius: 0.8 + Math.random() * 0.8,
       baseAlpha: 0.14 + Math.random() * 0.22,
       phase: Math.random() * Math.PI * 2,
-      tint: i % 4 === 0 ? "rgba(168, 85, 247," : "rgba(237, 237, 239,",
+      tintDark: i % 4 === 0 ? "rgba(168, 85, 247," : "rgba(237, 237, 239,",
+      tintLight: i % 4 === 0 ? "rgba(42, 114, 78," : "rgba(23, 35, 28,",
     }));
 
     // 2. Harmonic Filament Waves Parameters
@@ -73,18 +80,30 @@ export function AtmosphericBackground() {
       const cx1 = width * (0.68 + Math.sin(time * 0.35) * 0.07);
       const cy1 = height * (0.32 + Math.cos(time * 0.28) * 0.07);
       const grad1 = ctx.createRadialGradient(cx1, cy1, 10, cx1, cy1, width * 0.45);
-      grad1.addColorStop(0, "rgba(168, 85, 247, 0.065)");
-      grad1.addColorStop(0.5, "rgba(126, 34, 206, 0.022)");
-      grad1.addColorStop(1, "rgba(8, 9, 11, 0)");
+      if (isLight) {
+        grad1.addColorStop(0, "rgba(42, 114, 78, 0.055)");
+        grad1.addColorStop(0.5, "rgba(59, 130, 150, 0.022)");
+        grad1.addColorStop(1, "rgba(245, 247, 243, 0)");
+      } else {
+        grad1.addColorStop(0, "rgba(168, 85, 247, 0.065)");
+        grad1.addColorStop(0.5, "rgba(126, 34, 206, 0.022)");
+        grad1.addColorStop(1, "rgba(8, 9, 11, 0)");
+      }
       ctx.fillStyle = grad1;
       ctx.fillRect(0, 0, width, height);
 
       const cx2 = width * (0.22 + Math.cos(time * 0.25) * 0.05);
       const cy2 = height * (0.62 + Math.sin(time * 0.30) * 0.05);
       const grad2 = ctx.createRadialGradient(cx2, cy2, 10, cx2, cy2, width * 0.38);
-      grad2.addColorStop(0, "rgba(99, 102, 241, 0.04)");
-      grad2.addColorStop(0.6, "rgba(79, 70, 229, 0.012)");
-      grad2.addColorStop(1, "rgba(8, 9, 11, 0)");
+      if (isLight) {
+        grad2.addColorStop(0, "rgba(51, 122, 140, 0.04)");
+        grad2.addColorStop(0.6, "rgba(34, 103, 67, 0.015)");
+        grad2.addColorStop(1, "rgba(245, 247, 243, 0)");
+      } else {
+        grad2.addColorStop(0, "rgba(99, 102, 241, 0.04)");
+        grad2.addColorStop(0.6, "rgba(79, 70, 229, 0.012)");
+        grad2.addColorStop(1, "rgba(8, 9, 11, 0)");
+      }
       ctx.fillStyle = grad2;
       ctx.fillRect(0, 0, width, height);
 
@@ -97,12 +116,21 @@ export function AtmosphericBackground() {
           const speed = time * (0.8 + w * 0.35);
 
           ctx.beginPath();
-          ctx.strokeStyle =
-            w === 0
-              ? "rgba(168, 85, 247, 0.035)"
-              : w === 1
-              ? "rgba(192, 132, 252, 0.025)"
-              : "rgba(147, 197, 253, 0.02)";
+          if (isLight) {
+            ctx.strokeStyle =
+              w === 0
+                ? "rgba(42, 114, 78, 0.055)"
+                : w === 1
+                ? "rgba(59, 130, 150, 0.045)"
+                : "rgba(34, 103, 67, 0.035)";
+          } else {
+            ctx.strokeStyle =
+              w === 0
+                ? "rgba(168, 85, 247, 0.035)"
+                : w === 1
+                ? "rgba(192, 132, 252, 0.025)"
+                : "rgba(147, 197, 253, 0.02)";
+          }
           ctx.lineWidth = 1.0;
 
           for (let x = 0; x <= width; x += 12) {
@@ -147,7 +175,9 @@ export function AtmosphericBackground() {
 
             if (distSq < maxDistSq) {
               const alpha = (1 - distSq / maxDistSq) * 0.045;
-              ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`;
+              ctx.strokeStyle = isLight
+                ? `rgba(42, 114, 78, ${alpha * 0.8})`
+                : `rgba(168, 85, 247, ${alpha})`;
               ctx.lineWidth = 0.75;
               ctx.beginPath();
               ctx.moveTo(p1.x, p1.y);
@@ -187,7 +217,7 @@ export function AtmosphericBackground() {
           const shimmer = Math.sin(time * 1.8 + p.phase) * 0.06;
           const currentAlpha = Math.max(0.04, p.baseAlpha + shimmer);
 
-          ctx.fillStyle = `${p.tint} ${currentAlpha})`;
+          ctx.fillStyle = `${isLight ? p.tintLight : p.tintDark} ${currentAlpha})`;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
@@ -204,6 +234,7 @@ export function AtmosphericBackground() {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerleave", handlePointerLeave);
+      window.removeEventListener("themechange", handleThemeChange);
       mediaQuery.removeEventListener("change", handleMotionChange);
     };
   }, []);

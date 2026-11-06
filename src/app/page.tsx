@@ -18,7 +18,7 @@ export default function Home() {
         sparkRadius={32}
         glow={0.55}
       >
-        <main className="min-h-screen bg-[#08090C] text-[#EDEDEF] flex flex-col selection:bg-[#A855F7] selection:text-[#08090C]">
+        <main className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col transition-colors duration-300">
           <MinimalEditorialNav />
           <MonumentalHero />
           <TechStackLoop />

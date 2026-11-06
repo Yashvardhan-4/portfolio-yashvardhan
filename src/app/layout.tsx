@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { profile } from "@/data/profile";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { RainRippleEffect } from "@/components/ui/RainRippleEffect";
 
 const SITE_URL = "https://www.yashvardhanborude.tech";
 
@@ -202,9 +204,28 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('yashvardhan-theme');
+                  if (t === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                  } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
-      <body className="min-h-screen bg-[#0D0E10] text-[#EDE8DE] antialiased selection:bg-[#C5A880] selection:text-[#0D0E10]">
-        {children}
+      <body className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased transition-colors duration-300">
+        <ThemeProvider>
+          <RainRippleEffect />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

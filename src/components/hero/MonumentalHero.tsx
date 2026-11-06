@@ -48,7 +48,7 @@ export function MonumentalHero() {
   const textTranslateY = prefersReducedMotion ? 0 : -Math.min(100, scrollY * 0.22);
 
   return (
-    <div className="relative w-full min-h-[100svh] bg-[#08090B] text-[#EDEDEF] overflow-hidden flex flex-col justify-between selection:bg-[#A855F7] selection:text-[#08090B]">
+    <div className="relative w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-hidden flex flex-col justify-between transition-colors duration-300">
       {/* 1. Living Atmospheric Environment Layer (Mathematical Wave Filaments & Algorithmic Constellation) */}
       <AtmosphericBackground />
 
@@ -63,7 +63,7 @@ export function MonumentalHero() {
 
       {/* Deep perimeter vignette to frame the exhibition stage */}
       <div
-        className="absolute inset-0 pointer-events-none z-[1] bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(8,9,11,0.35)_70%,#08090B_100%)]"
+        className="absolute inset-0 pointer-events-none z-[1] bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--border-subtle)_80%,var(--bg)_100%)] opacity-35"
         aria-hidden="true"
       />
 
@@ -93,7 +93,7 @@ export function MonumentalHero() {
                 className="font-serif italic font-normal text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2 inline-block select-none transform-gpu"
                 style={{
                   background:
-                    "linear-gradient(90deg, #EDEDEF 0%, #EDEDEF 30%, #FFFFFF 48%, #E9D5FF 58%, #EDEDEF 72%, #EDEDEF 100%)",
+                    "linear-gradient(90deg, var(--fg) 0%, var(--fg) 32%, var(--accent) 52%, var(--fg) 70%, var(--fg) 100%)",
                   backgroundSize: "220% auto",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -112,7 +112,7 @@ export function MonumentalHero() {
               {/* Line 2: Confident, Distinctive Sans-Serif Line */}
               <div
                 ref={line2Ref}
-                className="font-display font-semibold text-3xl sm:text-5xl md:text-[2.75rem] lg:text-[3.5rem] xl:text-[4.25rem] leading-[1.02] tracking-[-0.035em] text-[#EDEDEF] block select-none transform-gpu"
+                className="font-display font-semibold text-3xl sm:text-5xl md:text-[2.75rem] lg:text-[3.5rem] xl:text-[4.25rem] leading-[1.02] tracking-[-0.035em] text-[var(--fg)] block select-none transform-gpu"
                 style={{
                   opacity: hasMounted ? 1 : 0,
                   filter: hasMounted ? "blur(0px)" : "blur(14px)",
@@ -136,21 +136,21 @@ export function MonumentalHero() {
             </div>
 
             {/* Non-Redundant Purpose Anchor */}
-            <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[#181D26] flex items-center gap-2.5">
-              <span className="h-2 w-2 rounded-full bg-[#A855F7] animate-pulse" aria-hidden="true" />
-              <span className="font-mono text-xs sm:text-[13px] text-[#EDEDEF] tracking-wider uppercase font-semibold">
+            <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[var(--border)] flex items-center gap-2.5">
+              <span className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" aria-hidden="true" />
+              <span className="font-mono text-xs sm:text-[13px] text-[var(--fg)] tracking-wider uppercase font-semibold">
                 Computer Engineering · Builder
               </span>
             </div>
 
             {/* Punchy, Non-Generic Description */}
-            <p className="mt-3 sm:mt-4 max-w-xl font-sans text-xs sm:text-sm lg:text-base leading-[1.7] text-[#94A3B8] font-normal">
+            <p className="mt-3 sm:mt-4 max-w-xl font-sans text-xs sm:text-sm lg:text-base leading-[1.7] text-[var(--fg-muted)] font-normal">
               I explore technology, experiment with ideas, and build software that turns{" "}
-              <HoverHighlighter color="#A855F7" opacity={25}>
+              <HoverHighlighter opacity={25}>
                 interesting problems
               </HoverHighlighter>{" "}
               into{" "}
-              <HoverHighlighter color="#A855F7" opacity={25}>
+              <HoverHighlighter opacity={25}>
                 useful experiences
               </HoverHighlighter>
               .
@@ -160,18 +160,18 @@ export function MonumentalHero() {
             <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
               <a
                 href="#work"
-                className="group relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#EDEDEF] text-[#08090B] font-sans text-xs sm:text-sm font-semibold tracking-tight transition-all duration-300 hover:bg-white hover:shadow-[0_0_24px_rgba(255,255,255,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A855F7]"
+                className="group relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[var(--fg)] text-[var(--bg)] font-sans text-xs sm:text-sm font-semibold tracking-tight transition-all duration-300 hover:opacity-90 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
               >
                 <span>Explore My Work</span>
-                <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5 text-[#08090B]" />
+                <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5 text-[var(--bg)]" />
               </a>
 
               <a
                 href="#contact"
-                className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full border border-[#202634] bg-[#0E121A]/80 text-xs sm:text-sm font-sans font-medium text-[#EDEDEF] hover:border-[#A855F7]/70 hover:bg-[#141924] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A855F7]"
+                className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs sm:text-sm font-sans font-medium text-[var(--fg)] hover:border-[var(--accent)] hover:bg-[var(--surface-hover)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
               >
                 <span>Get in Touch</span>
-                <ArrowUpRight className="h-3.5 w-3.5 text-[#94A3B8] group-hover:text-[#C084FC] transition-colors" />
+                <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-muted)] group-hover:text-[var(--accent)] transition-colors" />
               </a>
             </div>
           </div>
@@ -180,7 +180,7 @@ export function MonumentalHero() {
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
             {/* Subtle Ambient Radial Glow behind Portrait */}
             <div 
-              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.12)_0%,transparent_70%)] blur-2xl pointer-events-none"
+              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none"
               aria-hidden="true" 
             />
 
@@ -194,41 +194,41 @@ export function MonumentalHero() {
       </section>
 
       {/* Subtle Scroll Affordance Indicator */}
-      <div className="relative z-20 flex flex-col items-center justify-center pt-1 pb-2 text-[#64748B] pointer-events-none select-none">
-        <span className="font-mono text-[9px] uppercase tracking-widest block mb-1 text-[#64748B]/70">
+      <div className="relative z-20 flex flex-col items-center justify-center pt-1 pb-2 text-[var(--fg-subtle)] pointer-events-none select-none">
+        <span className="font-mono text-[9px] uppercase tracking-widest block mb-1 text-[var(--fg-subtle)]/70">
           Scroll to explore
         </span>
-        <div className="w-[1px] h-4 bg-gradient-to-b from-[#A855F7]/80 to-transparent" />
+        <div className="w-[1px] h-4 bg-gradient-to-b from-[var(--accent)]/80 to-transparent" />
       </div>
 
       {/* 5. Architectural Editorial Datum Rail with Refined Labels */}
       <footer className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-2 pb-5 sm:pb-6">
-        <div className="border-t border-[#181D26]/70 pt-3 sm:pt-3.5">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 font-mono text-[10px] sm:text-[11px] tracking-wider text-[#94A3B8]">
+        <div className="border-t border-[var(--border)]/70 pt-3 sm:pt-3.5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 font-mono text-[10px] sm:text-[11px] tracking-wider text-[var(--fg-muted)]">
             {/* Index 01: Based In */}
             <div>
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">BASED IN</span>
-              <span className="text-[#EDEDEF] mt-0.5 block">Pune, India</span>
+              <span className="block text-[9px] sm:text-[10px] text-[var(--fg-subtle)] uppercase tracking-widest">BASED IN</span>
+              <span className="text-[var(--fg)] mt-0.5 block">Pune, India</span>
             </div>
 
             {/* Index 02: Currently Exploring */}
             <div>
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">EXPLORING</span>
-              <span className="text-[#EDEDEF] mt-0.5 block">Software &amp; Systems</span>
+              <span className="block text-[9px] sm:text-[10px] text-[var(--fg-subtle)] uppercase tracking-widest">EXPLORING</span>
+              <span className="text-[var(--fg)] mt-0.5 block">Software &amp; Systems</span>
             </div>
 
             {/* Index 03: Studying */}
             <div>
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">EDUCATION</span>
-              <span className="text-[#EDEDEF] mt-0.5 block">Computer Engineering</span>
+              <span className="block text-[9px] sm:text-[10px] text-[var(--fg-subtle)] uppercase tracking-widest">EDUCATION</span>
+              <span className="text-[var(--fg)] mt-0.5 block">Computer Engineering</span>
             </div>
 
             {/* Index 04: Availability */}
             <div className="flex flex-col sm:items-end">
-              <span className="block text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest">AVAILABILITY</span>
+              <span className="block text-[9px] sm:text-[10px] text-[var(--fg-subtle)] uppercase tracking-widest">AVAILABILITY</span>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" aria-hidden="true" />
-                <span className="text-[#EDEDEF] font-medium">Open to Collaboration</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent-nature)] animate-pulse" aria-hidden="true" />
+                <span className="text-[var(--fg)] font-medium">Open to Collaboration</span>
               </div>
             </div>
           </div>

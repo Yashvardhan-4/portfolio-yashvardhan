@@ -26,6 +26,8 @@ interface PortraitDot {
   l: number;  // Luminance [0..1]
   color: string;
   luminousColor: string;
+  colorLight: string;
+  luminousColorLight: string;
   featureWeight: number;
   dissolveAngle: number;
   dissolveSpeed: number;
@@ -177,22 +179,34 @@ export function DigitalExhibitionStage({
     const portraitDots: PortraitDot[] = rawDots.map(([x0, y0, r0, l], i) => {
       let color = "rgba(245, 245, 247, 0.95)";
       let luminousColor = "rgba(255, 255, 255, 1.0)";
+      let colorLight = "rgba(23, 35, 28, 0.95)";
+      let luminousColorLight = "rgba(42, 114, 78, 1.0)";
 
       if (l > 0.8) {
         color = "rgba(255, 255, 255, 0.98)";
         luminousColor = "rgba(255, 255, 255, 1.0)";
+        colorLight = "rgba(23, 35, 28, 0.98)";
+        luminousColorLight = "rgba(42, 114, 78, 1.0)";
       } else if (l > 0.55) {
         color = "rgba(226, 232, 240, 0.90)";
         luminousColor = "rgba(245, 240, 255, 1.0)";
+        colorLight = "rgba(32, 50, 40, 0.90)";
+        luminousColorLight = "rgba(42, 114, 78, 0.95)";
       } else if (l > 0.35) {
         color = "rgba(180, 190, 205, 0.78)";
         luminousColor = "rgba(220, 215, 245, 0.95)";
+        colorLight = "rgba(50, 75, 60, 0.80)";
+        luminousColorLight = "rgba(59, 130, 150, 0.90)";
       } else if (l > 0.18) {
         color = "rgba(120, 130, 150, 0.65)";
         luminousColor = "rgba(180, 175, 220, 0.85)";
+        colorLight = "rgba(75, 105, 88, 0.65)";
+        luminousColorLight = "rgba(59, 130, 150, 0.80)";
       } else {
         color = "rgba(70, 78, 95, 0.50)";
         luminousColor = "rgba(130, 125, 170, 0.70)";
+        colorLight = "rgba(105, 135, 118, 0.50)";
+        luminousColorLight = "rgba(75, 105, 88, 0.70)";
       }
 
       // Facial feature weighting (protects eyes, nose bridge, lips)
@@ -223,6 +237,8 @@ export function DigitalExhibitionStage({
         l,
         color,
         luminousColor,
+        colorLight,
+        luminousColorLight,
         featureWeight,
         dissolveAngle: angle,
         dissolveSpeed: speed,
@@ -560,11 +576,12 @@ export function DigitalExhibitionStage({
           drawRadius *= (1 + mouseBoost * 0.35); // Subtle dot expansion on cursor proximity
         }
 
-        // Render dot with luminous or monochrome tone
+        // Render dot with luminous or monochrome tone (theme-aware)
+        const isLight = document.documentElement.getAttribute("data-theme") === "light";
         if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2 || mouseBoost > 0.25) {
-          ctx.fillStyle = p.luminousColor;
+          ctx.fillStyle = isLight ? p.luminousColorLight : p.luminousColor;
         } else {
-          ctx.fillStyle = p.color;
+          ctx.fillStyle = isLight ? p.colorLight : p.color;
         }
 
         if (dissolveAlpha < 0.99) {
