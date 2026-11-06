@@ -48,17 +48,33 @@ export function ContactColophon() {
       aria-label="Contact and Channels"
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] overflow-hidden min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between pt-16 sm:pt-20 pb-3 sm:pb-4 transition-colors duration-300"
     >
-      {/* Studio Ghibli Full-Width Twilight Rain Puddle Backdrop (Strictly Light Mode Only) */}
+      {/* Studio Ghibli Full-Width Twilight Rain Puddle Video/Backdrop (Strictly Light Mode Only) */}
       {isLight && (
         <div
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
           aria-hidden="true"
         >
-          {/* Full-width Ghibli Rain Puddle with Concentric Ripples & Stones (Reference 3) */}
+          {/* High-Res Image Poster Background */}
           <div
-            className="absolute inset-0 w-full h-full bg-cover bg-bottom opacity-28 mix-blend-multiply"
+            className="absolute inset-0 w-full h-full bg-cover bg-bottom opacity-30 mix-blend-multiply"
             style={{ backgroundImage: `url('/images/ghibli-rain-puddle-ripples.jpg')` }}
           />
+
+          {/* Seamless Looping Video Layer (Auto-plays when ghibli-rain-puddle.mp4 or .webm is added) */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-multiply"
+            onError={(e) => {
+              (e.currentTarget as HTMLElement).style.display = "none";
+            }}
+          >
+            <source src="/images/ghibli-rain-puddle.webm" type="video/webm" />
+            <source src="/images/ghibli-rain-puddle.mp4" type="video/mp4" />
+          </video>
+
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)] opacity-85" />
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/85 via-transparent to-[var(--bg)]/85" />
         </div>
