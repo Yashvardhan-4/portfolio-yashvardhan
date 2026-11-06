@@ -48,41 +48,30 @@ export function ContactColophon() {
       aria-label="Contact and Channels"
       className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] overflow-hidden min-h-[100dvh] md:h-[100dvh] flex flex-col justify-between pt-16 sm:pt-20 pb-3 sm:pb-4 transition-colors duration-300"
     >
-      {/* Studio Ghibli Full-Width Twilight Rain Puddle Video/Backdrop (Strictly Light Mode Only) */}
+      {/* Studio Ghibli Full-Width Animated Rain Puddle GIF Backdrop (Strictly Light Mode Only) */}
       {isLight && (
         <div
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
           aria-hidden="true"
         >
-          {/* High-Res Image Poster Background */}
+          {/* Animated Rain Puddle GIF with Sharpening Filter & Balanced Opacity */}
           <div
-            className="absolute inset-0 w-full h-full bg-cover bg-bottom opacity-30 mix-blend-multiply"
-            style={{ backgroundImage: `url('/images/ghibli-rain-puddle-ripples.jpg')` }}
+            className="absolute inset-0 w-full h-full bg-cover bg-bottom opacity-20 mix-blend-multiply contrast-[1.12] brightness-[1.02]"
+            style={{
+              backgroundImage: `url('/images/ghibli-rain-puddle-ripples.gif')`,
+              imageRendering: "-webkit-optimize-contrast",
+            }}
           />
 
-          {/* Seamless Looping Video Layer (Auto-plays when ghibli-rain-puddle.mp4 or .webm is added) */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-multiply"
-            onError={(e) => {
-              (e.currentTarget as HTMLElement).style.display = "none";
-            }}
-          >
-            <source src="/images/ghibli-rain-puddle.webm" type="video/webm" />
-            <source src="/images/ghibli-rain-puddle.mp4" type="video/mp4" />
-          </video>
-
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)] opacity-85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/85 via-transparent to-[var(--bg)]/85" />
+          {/* Gentle vignette gradients ensuring ripples are clearly visible without dominating */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)] opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/80 via-transparent to-[var(--bg)]/80" />
         </div>
       )}
 
       {/* Background Architectural Name Wordmark Behind Footer Content */}
       <div
-        className="pointer-events-none select-none absolute inset-x-0 bottom-1 flex justify-center items-end overflow-hidden z-0 opacity-[0.028] sm:opacity-[0.038]"
+        className="pointer-events-none select-none absolute inset-x-0 bottom-1 flex justify-center items-end overflow-hidden z-0 opacity-10 sm:opacity-14 [data-theme='dark']_&:opacity-[0.05] transition-opacity duration-300"
         aria-hidden="true"
       >
         <span className="font-display font-black text-[12vw] sm:text-[10vw] tracking-tight uppercase whitespace-nowrap text-[var(--fg)] leading-none">
@@ -122,7 +111,7 @@ export function ContactColophon() {
 
           {/* All Links in Bottom of Footer in One Single Clean Line */}
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 font-mono text-[11px] text-[var(--fg-muted)]">
-            <p className="order-2 md:order-1 text-[var(--fg-muted)] whitespace-nowrap">
+            <p className="order-2 md:order-1 text-[var(--fg)] font-medium whitespace-nowrap">
               &copy; {new Date().getFullYear()} Yashvardhan Borude
             </p>
 
