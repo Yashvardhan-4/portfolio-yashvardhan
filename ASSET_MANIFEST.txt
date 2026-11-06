@@ -1,0 +1,16 @@
+# ASSET MANIFEST - Yashvardhan Borude Portfolio
+# Zero placeholder policy enforced. All assets are verified local files.
+
+[HERO & PORTRAIT]
+- /images/yashvardhan-cutout.webp : Optimized WebP cutout portrait used for generative halftone dots matrix and exhibition canvas
+- /images/yashvardhan-cutout.png : Fallback PNG high-res portrait
+
+[PROJECT VISUAL SHOWCASE SPREADS]
+- /projects/turboidm.png : TurboIDM High-speed download accelerator desktop app and Chrome MV3 extension interface
+- /projects/inkless.png : Inkless offline-first journal with 120 FPS fluid canvas interface
+- /projects/shivkush.png : ShivKush Nursery bilingual agricultural e-commerce and inventory portal interface
+
+[SITE ICONS & BRANDING]
+- /favicon.ico : Multi-resolution site favicon
+- /favicon.svg : Vector mark for modern browsers
+- /og-image.png : OpenGraph preview banner for social sharing

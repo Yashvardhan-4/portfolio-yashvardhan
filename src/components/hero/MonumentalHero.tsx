@@ -69,61 +69,10 @@ export function MonumentalHero() {
         aria-hidden="true"
       />
 
-      {/* 3. Minimal Editorial Header Navigation with Animated SVG Underlinks */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pt-5 sm:pt-8 pb-3 sm:pb-4">
-        <div className="flex items-center justify-between border-b border-[#181D26]/70 pb-4 sm:pb-5">
-          {/* Personal Wordmark */}
-          <div className="flex items-center gap-3">
-            <a
-              href="#"
-              className="group flex items-baseline gap-2.5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#A855F7]"
-              aria-label="Yashvardhan Borude Home"
-            >
-              <span className="font-display text-sm sm:text-base font-semibold tracking-[-0.01em] text-[#EDEDEF] group-hover:text-white">
-                YASHVARDHAN BORUDE
-              </span>
-            </a>
-          </div>
-
-          {/* Understated Editorial Navigation Links with Organic Animated Underlines */}
-          <nav aria-label="Primary Navigation" className="flex items-center gap-5 sm:gap-8 text-xs font-sans">
-            <a
-              href="#work"
-              className="hidden sm:inline text-[#94A3B8] hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
-            >
-              <AnimatedSVGUnderline strokeColor="#A855F7">Work</AnimatedSVGUnderline>
-            </a>
-            <a
-              href="#about"
-              className="hidden sm:inline text-[#94A3B8] hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
-            >
-              <AnimatedSVGUnderline strokeColor="#A855F7">About</AnimatedSVGUnderline>
-            </a>
-            <a
-              href="#contact"
-              className="hidden md:inline text-[#94A3B8] hover:text-[#EDEDEF] transition-colors focus-visible:outline-none focus-visible:text-[#C084FC]"
-            >
-              <AnimatedSVGUnderline strokeColor="#A855F7">Contact</AnimatedSVGUnderline>
-            </a>
-
-            {/* Subtle Contact Action */}
-            <a
-              href="mailto:yashvardhanborude7@gmail.com"
-              className="group inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full border border-[#202634] bg-[#0E121A]/80 text-[10px] sm:text-[11px] font-mono tracking-wider text-[#EDEDEF] hover:border-[#A855F7]/70 hover:text-[#F3E8FF] transition-all duration-300"
-              aria-label="Initiate email communication with Yashvardhan Borude"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7] animate-pulse" aria-hidden="true" />
-              <span>CONNECT</span>
-              <ArrowUpRight className="h-3 w-3 text-[#94A3B8] group-hover:text-[#C084FC] transition-colors" />
-            </a>
-          </nav>
-        </div>
-      </header>
-
-      {/* 4. Centerstage: Asymmetric Two-Column Editorial Exhibition */}
+      {/* Centerstage: Asymmetric Two-Column Editorial Exhibition */}
       <section
         aria-label="Hero Introduction"
-        className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto py-6 sm:py-10 lg:py-12"
+        className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 my-auto pt-24 sm:pt-28 pb-8 sm:pb-12"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 lg:gap-12 xl:gap-16 items-center">
           {/* Left Column (Columns 1–7): Physical Typography, Personal Anchor & Narrative */}

@@ -1,241 +1,199 @@
 "use client";
 
 import React from "react";
+import { GraduationCap, Award, Terminal, ArrowUpRight } from "lucide-react";
 import { CountUp } from "@/components/ui/CountUp";
-import { GlyphEmber } from "@/components/ui/GlyphEmber";
-import { InterferenceRibbons } from "@/components/ui/InterferenceRibbons";
-import { ArrowUpRight, GraduationCap, Trophy, Code2, Award, CheckCircle2 } from "lucide-react";
 
 export function AboutPhilosophy() {
   return (
     <section
       id="about"
-      aria-label="Education and Achievements"
-      className="relative w-full border-t border-[#1E2430]/70 bg-[#08090C] py-20 sm:py-28 overflow-hidden scroll-mt-24"
+      aria-label="Education, Certifications, and Achievements"
+      className="relative w-full border-t border-[#1E2430] bg-[#08090C] py-20 sm:py-28 overflow-hidden scroll-mt-20"
     >
-      {/* Harmonic Laser Filament Weave in Background */}
-      <InterferenceRibbons
-        strandCount={38}
-        ribbonCount={2}
-        baseColor="#3B0764"
-        accentColor="#A855F7"
-        highlightColor="#38BDF8"
-        speed={0.7}
-        twist={1.4}
-        amplitude={60}
-        frequency={0.0028}
-        opacity={0.3}
-      />
-
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
         {/* Section Header */}
-        <div className="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#1E2430]/70 pb-8">
-          <div>
-            <span className="font-mono text-xs uppercase tracking-widest text-[#A855F7] font-semibold">
-              02 / Education &amp; Achievements
-            </span>
-            <h2 className="mt-2 font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#EDEDEF] tracking-tight">
+        <div className="mb-14 sm:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end border-b border-[#1E2430] pb-8">
+          <div className="lg:col-span-7">
+            <span className="font-mono text-xs text-[#A855F7] tracking-widest uppercase font-semibold block">
               Education &amp; Achievements
+            </span>
+            <h2 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-6xl font-normal text-[#EDEDEF] tracking-tight leading-[0.98]">
+              Academic Foundation &amp; Proof.
             </h2>
           </div>
 
-          <div className="flex flex-col items-start md:items-end gap-2">
-            <GlyphEmber
-              text="Builder"
-              fontSize={44}
-              fontWeight={800}
-              color="#EDEDEF"
-              emberColors={["#FFFFFF", "#E2E8F0", "#C084FC", "#A855F7", "#E879F9"]}
-              burnStart={0.46}
-              interactive={true}
-              className="drop-shadow-[0_0_20px_rgba(168,85,247,0.35)]"
-            />
-            <p className="max-w-md font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed text-left md:text-right">
-              A solid academic foundation in computer engineering combined with active problem solving and competitive coding.
+          <div className="lg:col-span-5 flex flex-col justify-end">
+            <p className="font-sans text-sm sm:text-base leading-relaxed text-[#8E95A5] max-w-prose">
+              A solid computer engineering foundation paired with active algorithmic problem solving, national certifications, and competitive programming.
             </p>
           </div>
         </div>
 
-        {/* Reorganized Credentials: Two Distinct, Spacious Bento Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          {/* Card 1: Education & Academic Degree */}
-          <div className="relative rounded-2xl border border-[#1E2430] bg-[#0E1015]/80 p-6 sm:p-8 backdrop-blur-xl flex flex-col justify-between space-y-6 shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:border-[#A855F7]/40 transition-colors duration-300">
+        {/* Architectural Exposed Hairline Ledger Grid */}
+        <div className="relative grid grid-cols-1 md:grid-cols-12 bg-[#1E2430] gap-px border border-[#1E2430]">
+          {/* Column 1: Academic Degree */}
+          <div className="md:col-span-4 bg-[#08090C] p-8 sm:p-10 flex flex-col justify-between space-y-8 relative group hover:bg-[#0A0D14] transition-colors duration-300">
+            <span
+              className="absolute -top-2.5 -left-2.5 font-mono text-xs text-[#A855F7] select-none pointer-events-none"
+              aria-hidden="true"
+            >
+              +
+            </span>
+
             <div>
               <div className="flex items-center justify-between border-b border-[#1E2430] pb-4">
                 <div className="flex items-center gap-2">
-                  <GraduationCap className="h-5 w-5 text-[#A855F7]" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-[#A855F7] font-semibold">
-                    01 // Academic Education
+                  <GraduationCap className="h-4 w-4 text-[#A855F7]" />
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-[#A855F7] font-semibold">
+                    Academic Degree
                   </span>
                 </div>
-                <span className="font-mono text-[11px] text-[#10B981] bg-[#10B981]/10 px-2.5 py-0.5 rounded-full border border-[#10B981]/30">
-                  First Class with Distinction
+                <span className="font-mono text-[10px] text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/30">
+                  Distinction
                 </span>
               </div>
 
-              {/* Main Degree Info */}
-              <div className="mt-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
-                <div>
-                  <h3 className="font-serif text-2xl sm:text-3xl text-[#EDEDEF]">
-                    B.E. Computer Engineering
-                  </h3>
-                  <p className="mt-1 font-mono text-xs text-[#94A3B8]">
-                    Savitribai Phule Pune University (PCCOE)
-                  </p>
-                </div>
-
-                <div className="flex items-baseline gap-1 text-right shrink-0">
-                  <span className="tabular-nums font-mono text-3xl sm:text-4xl font-bold tracking-tight text-[#EDEDEF]">
-                    <CountUp to={8.86} decimals={2} duration={2} />
-                  </span>
-                  <span className="font-mono text-sm text-[#94A3B8]">/ 10.0 CGPA</span>
-                </div>
+              <div className="mt-6">
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#EDEDEF] leading-snug">
+                  B.E. Computer Engineering
+                </h3>
+                <p className="mt-1 font-mono text-xs text-[#8E95A5]">
+                  Savitribai Phule Pune University (PCCOE)
+                </p>
               </div>
 
-              <p className="mt-4 font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-                Focused on core computer science fundamentals: data structures, algorithms, operating systems, database design, and computer networks.
+              {/* CGPA Callout */}
+              <div className="mt-6 flex items-baseline gap-2 border-y border-[#1E2430] py-4">
+                <span className="tabular-nums font-mono text-4xl font-bold tracking-tight text-[#EDEDEF]">
+                  <CountUp to={8.86} decimals={2} duration={2} />
+                </span>
+                <span className="font-mono text-xs text-[#8E95A5]">/ 10.0 CGPA</span>
+              </div>
+
+              <p className="mt-5 font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                Core coursework in data structures, algorithms, operating systems, computer networks, database management, and object-oriented design.
               </p>
             </div>
 
-            {/* Sub-Card: IIT Madras NPTEL Certification */}
-            <div className="rounded-xl border border-[#1E2430] bg-[#08090C]/80 p-4 sm:p-5 mt-4">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Award className="h-4 w-4 text-[#38BDF8]" />
-                  <span className="font-mono text-xs font-semibold text-[#EDEDEF]">
-                    IIT Madras — Graph Theory Certification
-                  </span>
-                </div>
-                <span className="font-mono text-xs text-[#38BDF8] shrink-0 font-bold">
-                  77 / 100
-                </span>
-              </div>
-              <p className="mt-2 font-mono text-[11px] text-[#A855F7]">
-                Elite + Silver Medal • NPTEL IIT Madras
-              </p>
-              <p className="mt-1 font-sans text-xs text-[#94A3B8] leading-relaxed">
-                Ranked in the top percentile nationally across algorithmic graph theory, network algorithms, and data modeling.
-              </p>
+            <div className="font-mono text-[11px] text-[#64748B] pt-4 border-t border-[#1E2430]">
+              Pune, India &bull; Class of 2026
             </div>
           </div>
 
-          {/* Card 2: Problem Solving & Competitions */}
-          <div className="relative rounded-2xl border border-[#1E2430] bg-[#0E1015]/80 p-6 sm:p-8 backdrop-blur-xl flex flex-col justify-between space-y-6 shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:border-[#38BDF8]/40 transition-colors duration-300">
+          {/* Column 2: National Certification */}
+          <div className="md:col-span-4 bg-[#08090C] p-8 sm:p-10 flex flex-col justify-between space-y-8 relative group hover:bg-[#0A0D14] transition-colors duration-300">
+            <span
+              className="absolute -top-2.5 -left-2.5 font-mono text-xs text-[#A855F7] select-none pointer-events-none hidden md:block"
+              aria-hidden="true"
+            >
+              +
+            </span>
+
             <div>
               <div className="flex items-center justify-between border-b border-[#1E2430] pb-4">
                 <div className="flex items-center gap-2">
-                  <Code2 className="h-5 w-5 text-[#38BDF8]" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-[#38BDF8] font-semibold">
-                    02 // Problem Solving
+                  <Award className="h-4 w-4 text-[#A855F7]" />
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-[#A855F7] font-semibold">
+                    National Certification
                   </span>
                 </div>
-                <span className="font-mono text-[11px] text-[#C084FC] bg-[#C084FC]/10 px-2.5 py-0.5 rounded-full border border-[#C084FC]/30">
-                  Active Competitor
+                <span className="font-mono text-[10px] text-[#C084FC] bg-[#A855F7]/10 px-2 py-0.5 rounded border border-[#A855F7]/30">
+                  Top 1% Elite
                 </span>
               </div>
 
-              {/* Main Problem Solving Metric */}
-              <div className="mt-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
-                <div>
-                  <h3 className="font-serif text-2xl sm:text-3xl text-[#EDEDEF]">
-                    Competitive Programming
-                  </h3>
-                  <p className="mt-1 font-mono text-xs text-[#94A3B8]">
-                    Daily practice across algorithmic platforms
-                  </p>
-                </div>
-
-                <div className="flex items-baseline gap-1 text-right shrink-0">
-                  <span className="tabular-nums font-mono text-3xl sm:text-4xl font-bold tracking-tight text-[#EDEDEF]">
-                    <CountUp to={515} suffix="+" duration={2.2} />
-                  </span>
-                  <span className="font-mono text-sm text-[#94A3B8]">Solved</span>
-                </div>
+              <div className="mt-6">
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#EDEDEF] leading-snug">
+                  NPTEL IIT Madras
+                </h3>
+                <p className="mt-1 font-mono text-xs text-[#8E95A5]">
+                  Graph Theory &amp; Algorithms
+                </p>
               </div>
 
-              {/* Platform Badges with Direct Profile Links */}
-              <div className="mt-5 grid grid-cols-2 gap-2.5">
-                <a
-                  href="https://leetcode.com/u/yashvardhan_4/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between p-3 rounded-xl border border-[#1E2430] bg-[#08090C]/80 hover:border-[#FFA116] transition-all"
-                >
-                  <div>
-                    <span className="block font-mono text-xs font-semibold text-[#EDEDEF] group-hover:text-[#FFA116] transition-colors">
-                      LeetCode
-                    </span>
-                    <span className="font-mono text-[11px] text-[#94A3B8]">315+ Solved</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-[#64748B] group-hover:text-[#FFA116] transition-colors" />
-                </a>
-
-                <a
-                  href="https://codeforces.com/profile/yashvardhanborude7"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between p-3 rounded-xl border border-[#1E2430] bg-[#08090C]/80 hover:border-[#38BDF8] transition-all"
-                >
-                  <div>
-                    <span className="block font-mono text-xs font-semibold text-[#EDEDEF] group-hover:text-[#38BDF8] transition-colors">
-                      Codeforces
-                    </span>
-                    <span className="font-mono text-[11px] text-[#94A3B8]">Pupil (1227 Peak)</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-[#64748B] group-hover:text-[#38BDF8] transition-colors" />
-                </a>
-
-                <a
-                  href="https://www.codechef.com/users/cheer_swan_02"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between p-3 rounded-xl border border-[#1E2430] bg-[#08090C]/80 hover:border-[#A855F7] transition-all"
-                >
-                  <div>
-                    <span className="block font-mono text-xs font-semibold text-[#EDEDEF] group-hover:text-[#A855F7] transition-colors">
-                      CodeChef
-                    </span>
-                    <span className="font-mono text-[11px] text-[#94A3B8]">2-Star (1434 Peak)</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-[#64748B] group-hover:text-[#A855F7] transition-colors" />
-                </a>
-
-                <a
-                  href="https://hackerrank.com/profile/yashvardhanboru9"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between p-3 rounded-xl border border-[#1E2430] bg-[#08090C]/80 hover:border-[#00EA64] transition-all"
-                >
-                  <div>
-                    <span className="block font-mono text-xs font-semibold text-[#EDEDEF] group-hover:text-[#00EA64] transition-colors">
-                      HackerRank
-                    </span>
-                    <span className="font-mono text-[11px] text-[#94A3B8]">5-Star in C++</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-[#64748B] group-hover:text-[#00EA64] transition-colors" />
-                </a>
+              {/* Score Callout */}
+              <div className="mt-6 flex items-baseline gap-2 border-y border-[#1E2430] py-4">
+                <span className="tabular-nums font-mono text-4xl font-bold tracking-tight text-[#EDEDEF]">
+                  <CountUp to={77} decimals={0} duration={2} />
+                </span>
+                <span className="font-mono text-xs text-[#8E95A5]">/ 100 Score &bull; Silver Medal</span>
               </div>
+
+              <p className="mt-5 font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                12-week advanced academic curriculum covering network flows (Ford-Fulkerson, Edmonds-Karp), shortest path trees, cycle detection, and graph coloring algorithms.
+              </p>
             </div>
 
-            {/* Sub-Card: Smart India Hackathon & Google BigCode */}
-            <div className="rounded-xl border border-[#1E2430] bg-[#08090C]/80 p-4 sm:p-5 mt-4">
-              <div className="flex items-center justify-between gap-2">
+            <div className="font-mono text-[11px] text-[#64748B] pt-4 border-t border-[#1E2430]">
+              Verified Certificate &bull; Jan–Apr 2025
+            </div>
+          </div>
+
+          {/* Column 3: Competitive Coding Mastery */}
+          <div className="md:col-span-4 bg-[#08090C] p-8 sm:p-10 flex flex-col justify-between space-y-8 relative group hover:bg-[#0A0D14] transition-colors duration-300">
+            <span
+              className="absolute -top-2.5 -left-2.5 font-mono text-xs text-[#A855F7] select-none pointer-events-none hidden md:block"
+              aria-hidden="true"
+            >
+              +
+            </span>
+
+            <div>
+              <div className="flex items-center justify-between border-b border-[#1E2430] pb-4">
                 <div className="flex items-center gap-2">
-                  <Trophy className="h-4 w-4 text-[#F59E0B]" />
-                  <span className="font-mono text-xs font-semibold text-[#EDEDEF]">
-                    Smart India Hackathon 2024
+                  <Terminal className="h-4 w-4 text-[#A855F7]" />
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-[#A855F7] font-semibold">
+                    Problem Solving
                   </span>
                 </div>
-                <span className="font-mono text-xs text-[#F59E0B] shrink-0 font-bold">
-                  National Finalist
+                <span className="font-mono text-[10px] text-[#38BDF8] bg-[#38BDF8]/10 px-2 py-0.5 rounded border border-[#38BDF8]/30">
+                  Active Practice
                 </span>
               </div>
-              <p className="mt-2 font-mono text-[11px] text-[#94A3B8]">
-                Ministry of Education &amp; Google BigCode
+
+              <div className="mt-6">
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#EDEDEF] leading-snug">
+                  Competitive Coding
+                </h3>
+                <p className="mt-1 font-mono text-xs text-[#8E95A5]">
+                  LeetCode &amp; Codeforces
+                </p>
+              </div>
+
+              {/* Solved Count Callout */}
+              <div className="mt-6 flex items-baseline gap-2 border-y border-[#1E2430] py-4">
+                <span className="tabular-nums font-mono text-4xl font-bold tracking-tight text-[#EDEDEF]">
+                  <CountUp to={315} decimals={0} duration={2} />
+                </span>
+                <span className="font-mono text-xs text-[#8E95A5]">+ Problems Solved</span>
+              </div>
+
+              <p className="mt-5 font-sans text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                Active problem solving with focus on dynamic programming, graph algorithms, binary search, and asymptotic time/space optimization.
               </p>
-              <p className="mt-1 font-sans text-xs text-[#94A3B8] leading-relaxed">
-                Selected among thousands of engineering participants nationwide, along with a Global Top 1,500 ranking in Google BigCode.
-              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[#1E2430] flex items-center gap-4">
+              <a
+                href="https://leetcode.com/u/yashvardhan_4/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-xs text-[#FFA116] hover:underline inline-flex items-center gap-1"
+              >
+                <span>LeetCode</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+              <span className="text-[#1E2430]">&bull;</span>
+              <a
+                href="https://codeforces.com/profile/yashvardhanborude7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-xs text-[#38BDF8] hover:underline inline-flex items-center gap-1"
+              >
+                <span>Codeforces</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
             </div>
           </div>
         </div>
