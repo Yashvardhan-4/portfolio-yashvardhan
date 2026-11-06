@@ -20,8 +20,6 @@ interface PortraitDot {
   y0: number; // Base anchor Y [0..513]
   x: number;  // Current world X on canvas
   y: number;  // Current world Y on canvas
-  vx: number;
-  vy: number;
   r0: number; // Base radius
   r: number;
   l: number;  // Luminance [0..1]
@@ -31,10 +29,10 @@ interface PortraitDot {
   luminousColorLight: string;
   radiusMultiplierLight: number;
   featureWeight: number;
-  dissolveAngle: number;
-  dissolveSpeed: number;
   fallDistance: number;
-  shatterDelay: number;
+  releaseThreshold: number;
+  fallCurveExponent: number;
+  lateralDrift: number;
   initialOffsetX: number;
   initialOffsetY: number;
 }
@@ -206,12 +204,14 @@ export function DigitalExhibitionStage({
         luminousColor = "rgba(130, 125, 170, 0.70)";
       }
 
-      const dx = x0 - baseWidthDark * 0.5;
-      const dy = y0 - baseHeightDark * 0.45;
-      const angle = Math.atan2(dy, dx) + Math.sin(i * 1.7) * 0.45;
-      const speed = 75 + (i % 37) * 4.5;
-      const fallDistance = 650 + (i % 47) * 12.0;
-      const shatterDelay = isCoreFeature ? 0.16 + (i % 13) * 0.012 : (i % 9) * 0.016;
+      // Direct scroll destruction & downward fall parameters: all dots fall directly downward
+      const yRatio = y0 / baseHeightDark;
+      const densityDelay = (1.0 - l) * 0.08;
+      const stochasticDelay = ((i * 73) % 100) * 0.0012;
+      const releaseThreshold = 0.02 + yRatio * 0.12 + densityDelay + stochasticDelay;
+      const fallDistance = 850 + (i % 47) * 14.0;
+      const fallCurveExponent = 1.72 + (i % 5) * 0.04;
+      const lateralDrift = 1.2 + (i % 4) * 0.5;
 
       const initialDist = 55 + (i % 27) * 3.5;
       const initialAngle = (i * 0.42) % (Math.PI * 2);
@@ -223,8 +223,6 @@ export function DigitalExhibitionStage({
         y0,
         x: x0,
         y: y0,
-        vx: 0,
-        vy: 0,
         r0,
         r: 0,
         l,
@@ -234,10 +232,10 @@ export function DigitalExhibitionStage({
         luminousColorLight: luminousColor,
         radiusMultiplierLight: 1.0,
         featureWeight,
-        dissolveAngle: angle,
-        dissolveSpeed: speed,
         fallDistance,
-        shatterDelay,
+        releaseThreshold,
+        fallCurveExponent,
+        lateralDrift,
         initialOffsetX,
         initialOffsetY,
       };
@@ -287,12 +285,14 @@ export function DigitalExhibitionStage({
         radiusMultiplierLight = 0.72;
       }
 
-      const dx = x0 - baseWidthLight * 0.5;
-      const dy = y0 - baseHeightLight * 0.45;
-      const angle = Math.atan2(dy, dx) + Math.sin(i * 1.7) * 0.45;
-      const speed = 75 + (i % 37) * 4.5;
-      const fallDistance = 650 + (i % 47) * 12.0;
-      const shatterDelay = isCoreFeature ? 0.16 + (i % 13) * 0.012 : (i % 9) * 0.016;
+      // Direct scroll destruction & downward fall parameters: all dots fall directly downward
+      const yRatio = y0 / baseHeightLight;
+      const densityDelay = (1.0 - l) * 0.08;
+      const stochasticDelay = ((i * 73) % 100) * 0.0012;
+      const releaseThreshold = 0.02 + yRatio * 0.12 + densityDelay + stochasticDelay;
+      const fallDistance = 850 + (i % 47) * 14.0;
+      const fallCurveExponent = 1.72 + (i % 5) * 0.04;
+      const lateralDrift = 1.2 + (i % 4) * 0.5;
 
       const initialDist = 55 + (i % 27) * 3.5;
       const initialAngle = (i * 0.42) % (Math.PI * 2);
@@ -304,8 +304,6 @@ export function DigitalExhibitionStage({
         y0,
         x: x0,
         y: y0,
-        vx: 0,
-        vy: 0,
         r0,
         r: 0,
         l,
@@ -315,10 +313,10 @@ export function DigitalExhibitionStage({
         luminousColorLight,
         radiusMultiplierLight,
         featureWeight,
-        dissolveAngle: angle,
-        dissolveSpeed: speed,
         fallDistance,
-        shatterDelay,
+        releaseThreshold,
+        fallCurveExponent,
+        lateralDrift,
         initialOffsetX,
         initialOffsetY,
       };
@@ -457,8 +455,9 @@ export function DigitalExhibitionStage({
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerleave", handlePointerLeave, { passive: true });
 
-    // Scroll state tracking for unbounded particle dissolve
-    let currentScrollY = window.scrollY;
+    // Scroll state tracking with critically damped filter for buttery-smooth 60/120fps synchronization
+    let currentScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+    let smoothScrollY = typeof window !== "undefined" ? window.scrollY : 0;
     const handleScroll = () => {
       currentScrollY = window.scrollY;
     };
@@ -511,21 +510,31 @@ export function DigitalExhibitionStage({
         : Math.min(1.0, Math.max(0.0, elapsed / 1300));
       const revealEase = 1 - Math.pow(1 - revealProgress, 3);
 
-      // 2. Real-time scroll shatter & gravitational waterfall progress [0..1]
-      // Measures scroll displacement directly from window.scrollY for instant synchronization
-      const scrollYNow = window.scrollY || document.documentElement.scrollTop || currentScrollY || 0;
-      const scrollShatterProgress = prefersReducedMotion
-        ? 0
-        : Math.min(1.0, Math.max(0.0, (scrollYNow - 25) / 520));
-      const shatterActive = scrollShatterProgress > 0.001;
+      // 2. Real-time scroll destruction & downward waterfall progress [0..1]
+      // Follows scroll with critically damped filter: zero lag, zero overshoot, zero frame breakdown
+      const targetScrollY = window.scrollY || document.documentElement.scrollTop || currentScrollY || 0;
+      if (prefersReducedMotion) {
+        smoothScrollY = targetScrollY;
+      } else {
+        smoothScrollY += (targetScrollY - smoothScrollY) * 0.35;
+        if (Math.abs(smoothScrollY - targetScrollY) < 0.25) {
+          smoothScrollY = targetScrollY;
+        }
+      }
 
-      // 3. Periodic scanning wave (travels vertically through the actual dots)
+      // Destruction progress [0..1] mapped across the first 480px of scroll
+      const scrollDestroyProgress = prefersReducedMotion
+        ? 0
+        : Math.min(1.0, Math.max(0.0, (smoothScrollY - 15) / 480));
+      const isDestroyActive = scrollDestroyProgress > 0.001;
+
+      // 3. Periodic scanning wave (travels vertically through the actual dots when face is intact)
       const cycleTime = elapsed % scanPeriod;
       const isScanning =
         !prefersReducedMotion &&
         cycleTime < scanDuration &&
         revealProgress >= 0.95 &&
-        scrollShatterProgress < 0.25;
+        scrollDestroyProgress < 0.08;
       const scanProgress = isScanning ? cycleTime / scanDuration : -1;
       // scanY in world canvas coordinates, traversing anchor top to anchor bottom
       const scanY = isScanning
@@ -540,14 +549,14 @@ export function DigitalExhibitionStage({
       }
 
       // ----------------------------------------------------
-      // SECTION A0: OCCLUSION BACKDROP (Keeps threads strictly BEHIND the portrait; dissolves on shatter)
+      // SECTION A0: OCCLUSION BACKDROP (Keeps threads strictly BEHIND the portrait; dissolves on destruction)
       // ----------------------------------------------------
-      if (revealProgress > 0.15 && scrollShatterProgress < 0.95) {
+      if (revealProgress > 0.15 && scrollDestroyProgress < 0.96) {
         const pCenterX = anchorX + anchorW * 0.50;
         const pCenterY = anchorY + anchorH * 0.48;
         const pRadiusX = anchorW * 0.52;
         const pRadiusY = anchorH * 0.55;
-        const maskAlpha = Math.min(1.0, revealEase) * Math.max(0.0, 1.0 - Math.pow(scrollShatterProgress, 1.35));
+        const maskAlpha = Math.min(1.0, revealEase) * Math.max(0.0, 1.0 - Math.pow(scrollDestroyProgress, 1.25));
 
         if (maskAlpha > 0.01) {
           ctx.save();
@@ -585,7 +594,7 @@ export function DigitalExhibitionStage({
       }
 
       // ----------------------------------------------------
-      // SECTION A: RENDER PORTRAIT HALFTONE DOTS (UNBOUNDED)
+      // SECTION A: RENDER PORTRAIT HALFTONE DOTS (DESTROY & FALL DOWN)
       // ----------------------------------------------------
       const numDots = portraitDots.length;
 
@@ -605,89 +614,73 @@ export function DigitalExhibitionStage({
           continue;
         }
 
-        let targetX = baseX;
-        let targetY = baseY;
+        let currentX = baseX;
+        let currentY = baseY;
 
-        // Initial organic convergence from soft scatter
+        // Initial organic convergence from soft scatter on page load
         if (revealProgress < 1.0) {
           const scatterRemaining = 1.0 - revealEase;
-          targetX = baseX + p.initialOffsetX * portraitScale * scatterRemaining * 1.5;
-          targetY = baseY + p.initialOffsetY * portraitScale * scatterRemaining * 1.5;
+          currentX += p.initialOffsetX * portraitScale * scatterRemaining * 1.5;
+          currentY += p.initialOffsetY * portraitScale * scatterRemaining * 1.5;
         }
 
-        // Magnetic cursor interaction (active only when near equilibrium and not shattered)
+        // Magnetic cursor interaction & ambient breath (active ONLY when intact at top)
         let mouseBoost = 0;
-        if (mouse.active && !isMobile && revealProgress > 0.8 && scrollShatterProgress < 0.25) {
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const distSq = dx * dx + dy * dy;
-          // Refined, intimate interaction radius (tightened from 125 to 45px to eliminate massive circular halo)
-          const interactionRadius = 45;
-          const interactionRadiusSq = interactionRadius * interactionRadius;
+        if (scrollDestroyProgress < 0.04) {
+          if (mouse.active && !isMobile && revealProgress > 0.8) {
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const distSq = dx * dx + dy * dy;
+            const interactionRadius = 45;
+            const interactionRadiusSq = interactionRadius * interactionRadius;
 
-          if (distSq < interactionRadiusSq && distSq > 0.01) {
-            const dist = Math.sqrt(distSq);
-            const q = dist / interactionRadius;
-            const factor = Math.cos(q * Math.PI * 0.5);
-            mouseBoost = factor * factor;
-            // Feature weight prevents excessive distortion on facial features while maintaining responsive tactile flow
-            const force = mouseBoost * 4.5 * p.featureWeight;
-            targetX += (dx / dist) * force;
-            targetY += (dy / dist) * force;
-          }
-        } else if (revealProgress >= 1.0 && scrollShatterProgress < 0.05) {
-          // Subtle idle ambient harmonic breath
-          const ambient = Math.sin(time * 0.9 + (p.x0 + p.y0) * 0.012) * 0.35;
-          targetX += ambient * 0.4;
-          targetY += ambient * 0.3;
-        }
-
-        // ----------------------------------------------------
-        // SCROLL-DRIVEN GRAVITATIONAL SHATTER & WATERFALL FALL
-        // ----------------------------------------------------
-        let dotProgress = 0;
-        if (shatterActive) {
-          // Individual dot thresholding: outer silhouette breaks immediately; core features hold longer
-          dotProgress = Math.min(
-            1.0,
-            Math.max(0.0, (scrollShatterProgress - p.shatterDelay) / (1.0 - p.shatterDelay))
-          );
-
-          if (dotProgress > 0.001) {
-            // A. Radial explosive shatter impulse
-            const shatterEase = Math.pow(dotProgress, 0.85);
-            const shatterX = Math.cos(p.dissolveAngle) * p.dissolveSpeed * portraitScale * shatterEase * 2.2;
-            const shatterY = (Math.sin(p.dissolveAngle) * 0.45 - 0.15) * p.dissolveSpeed * portraitScale * shatterEase * 0.8;
-
-            // B. Downward Gravitational Waterfall Acceleration
-            const gravityEase = Math.pow(dotProgress, 1.72);
-            const gravityY = gravityEase * p.fallDistance;
-
-            // C. Aerodynamic air flutter / turbulence
-            const flutter = Math.sin(time * 2.6 + (p.x0 + p.y0) * 0.06) * (10 + (i % 16)) * dotProgress;
-
-            targetX += shatterX + flutter;
-            targetY += shatterY + gravityY;
+            if (distSq < interactionRadiusSq && distSq > 0.01) {
+              const dist = Math.sqrt(distSq);
+              const q = dist / interactionRadius;
+              const factor = Math.cos(q * Math.PI * 0.5);
+              mouseBoost = factor * factor;
+              const force = mouseBoost * 4.5 * p.featureWeight;
+              currentX += (dx / dist) * force;
+              currentY += (dy / dist) * force;
+            }
+          } else if (revealProgress >= 1.0) {
+            // Subtle idle ambient harmonic breath
+            const ambient = Math.sin(time * 0.9 + (p.x0 + p.y0) * 0.012) * 0.35;
+            currentX += ambient * 0.4;
+            currentY += ambient * 0.3;
           }
         }
 
-        // Damped harmonic spring physics integration
-        // Responsive elasticity: particles fly down with gravity and spring back instantly on scroll-up
-        const springK = shatterActive ? 0.14 : 0.11;
-        const friction = shatterActive ? 0.72 : 0.76;
-        const ax = (targetX - p.x) * springK;
-        const ay = (targetY - p.y) * springK;
+        // ----------------------------------------------------
+        // DIRECT SCROLL-SYNCHRONIZED DESTRUCTION & DOWNWARD FALL
+        // ----------------------------------------------------
+        let dotFallProgress = 0;
+        let isFalling = false;
 
-        p.vx = (p.vx + ax) * friction;
-        p.vy = (p.vy + ay) * friction;
+        if (isDestroyActive && scrollDestroyProgress > p.releaseThreshold) {
+          // Normalize this dot's downward fall progress [0..1]
+          dotFallProgress = (scrollDestroyProgress - p.releaseThreshold) / (1.0 - p.releaseThreshold);
+          isFalling = true;
 
-        p.x += p.vx;
-        p.y += p.vy;
+          // Pure downward gravitational fall (NO radial shatter, strictly downward)
+          const fallEase = Math.pow(dotFallProgress, p.fallCurveExponent);
+          const fallY = fallEase * p.fallDistance;
+
+          // Microscopic natural vertical column air drift (strictly at most ±2.2px, zero sideways blast)
+          const driftX = Math.sin(p.y0 * 0.07 + i * 1.25) * p.lateralDrift * dotFallProgress;
+
+          currentX += driftX;
+          currentY += fallY;
+        }
+
+        // Exact instantaneous coordinate assignment: ZERO velocity lag, ZERO physics breakdown
+        p.x = currentX;
+        p.y = currentY;
 
         // Scanning wave illumination calculation (strictly through the dots, NO rectangular box)
         let isLitByScan = false;
         let scanBoost = 0;
-        if (isScanning) {
+        if (isScanning && !isFalling) {
           const distToScan = Math.abs(p.y - scanY);
           if (distToScan < scanBandWidth) {
             isLitByScan = true;
@@ -698,7 +691,7 @@ export function DigitalExhibitionStage({
 
         // Spark impulse illumination response from physical typography shockwave
         let sparkBoost = 0;
-        if (portraitSparkImpulse > 0.01) {
+        if (portraitSparkImpulse > 0.01 && !isFalling) {
           const relX = p.x0 / baseWidth;
           if (relX < 0.45) {
             sparkBoost = (1 - relX / 0.45) * portraitSparkImpulse * 0.6;
@@ -708,8 +701,8 @@ export function DigitalExhibitionStage({
         // Particle scale and alpha
         const revealScale = Math.min(1.0, revealEase * 1.15);
         // Alpha decay: particles stay visible for the vast majority of their fall down the screen!
-        const fallAlpha = shatterActive
-          ? Math.max(0.0, 1.0 - Math.pow(dotProgress, 2.2))
+        const fallAlpha = isFalling
+          ? Math.max(0.0, 1.0 - Math.pow(dotFallProgress, 2.5))
           : 1.0;
 
         if (fallAlpha <= 0.005) continue;
@@ -717,21 +710,21 @@ export function DigitalExhibitionStage({
         const baseDotRadius = isLight ? p.r0 * p.radiusMultiplierLight : p.r0;
         let drawRadius = Math.max(
           0.2,
-          baseDotRadius * portraitScale * revealScale * (1 - dotProgress * 0.42)
+          baseDotRadius * portraitScale * revealScale * (1 - dotFallProgress * 0.35)
         );
 
         if (isLitByScan) {
-          drawRadius *= (1 + scanBoost * 0.38); // Dots expand subtly during light wave
+          drawRadius *= (1 + scanBoost * 0.38);
         }
         if (sparkBoost > 0) {
           drawRadius *= (1 + sparkBoost * 0.3);
         }
         if (mouseBoost > 0.15) {
-          drawRadius *= (1 + mouseBoost * 0.18); // Subtle dot expansion on immediate cursor proximity
+          drawRadius *= (1 + mouseBoost * 0.18);
         }
 
-        // Falling stardust sparkle: dots sparkle with luminous starlight as they tumble down
-        const isFallingSparkle = shatterActive && dotProgress > 0.06 && (i % 11 === 0 || p.l > 0.55);
+        // Falling stardust sparkle: dots sparkle with luminous starlight as they cascade down
+        const isFallingSparkle = isFalling && dotFallProgress > 0.04 && (i % 9 === 0 || p.l > 0.55);
 
         // Render dot with luminous or monochrome tone (theme-aware)
         if ((isLitByScan && scanBoost > 0.15) || sparkBoost > 0.2 || mouseBoost > 0.65 || isFallingSparkle) {
