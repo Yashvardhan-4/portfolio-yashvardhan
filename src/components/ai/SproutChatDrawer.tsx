@@ -364,6 +364,29 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                     {message.actions && message.actions.length > 0 && (
                       <div className="mt-3 pt-2.5 border-t border-[var(--border)] flex flex-wrap gap-1.5">
                         {message.actions.map((act) => {
+                          const isResumeAction = act.href === "/resume.pdf" || act.label.toLowerCase().includes("resume");
+                          if (isResumeAction) {
+                            return (
+                              <button
+                                key={act.label}
+                                type="button"
+                                onClick={() => {
+                                  onClose();
+                                  if (typeof window !== "undefined") {
+                                    window.dispatchEvent(new CustomEvent("open-resume-modal"));
+                                  }
+                                }}
+                                className={`inline-flex items-center gap-1 text-[11px] font-mono px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
+                                  isDarkMode
+                                    ? "bg-[#161E2E] hover:bg-cyan-900/40 border-[#26354E] hover:border-cyan-400 text-cyan-300"
+                                    : "bg-[#F3F5EE] hover:bg-[#E3E8DC] border-[#CFD6C4] hover:border-[#3E6B52] text-[#2C4A37]"
+                                }`}
+                              >
+                                <span>{act.label}</span>
+                              </button>
+                            );
+                          }
+
                           const isAnchor = act.href.startsWith("http") || act.href.startsWith("mailto");
                           if (isAnchor) {
                             return (

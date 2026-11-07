@@ -33,6 +33,10 @@
 - src/components/ai/SproutChatDrawer.tsx : Slide-over glassmorphic drawer with quick starter chips, token streaming, and inline clickable action chips
 - src/components/ai/SproutAICompanion.tsx : Master controller orchestrating drawer visibility, keyboard shortcuts (⌘K/Esc), and custom event bus
 
+[HIRING VELOCITY & CREDENTIAL ARCHITECTURE]
+- src/components/ui/ResumeModal.tsx : ATS-optimized, high-density in-browser resume viewer with Print/PDF formatting and 1-click ATS plaintext export
+- src/components/ui/TactileToast.tsx : Tactile micro-toast notification feedback for clipboard copies and state changes
+
 [STUDIO GHIBLI NATURE ATMOSPHERE (LIGHT MODE EXCLUSIVE)]
 - /images/ghibli-countryside-summer.jpg : Kazuo Oga-inspired summer rolling hills and azure sky (used for Hero landscape and AboutPhilosophy herbarium watermark)
 - /images/ghibli-mossy-waterfall.jpg : Enchanted mossy forest waterfall and grotto (used for SelectedWork ambient backdrop)

@@ -202,6 +202,19 @@ export function MonumentalHero() {
                 <span>Get in Touch</span>
                 <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-muted)] group-hover:text-[var(--accent)] transition-colors" />
               </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("open-resume-modal"));
+                  }
+                }}
+                className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs sm:text-sm font-sans font-medium text-[var(--fg)] hover:border-[var(--accent)] hover:bg-[var(--surface-hover)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
+              >
+                <span>Curriculum Vitae</span>
+                <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-muted)] group-hover:text-[var(--accent)] transition-colors" />
+              </button>
             </div>
           </div>
 
@@ -255,10 +268,19 @@ export function MonumentalHero() {
             {/* Index 04: Availability */}
             <div className="flex flex-col sm:items-end">
               <span className="block text-[9px] sm:text-[10px] text-[var(--fg-subtle)] uppercase tracking-widest">AVAILABILITY</span>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent-nature)] animate-pulse" aria-hidden="true" />
-                <span className="text-[var(--fg)] font-medium">Open to Collaboration</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("open-resume-modal"));
+                  }
+                }}
+                className="flex items-center gap-1.5 mt-0.5 text-left sm:text-right hover:opacity-80 transition-opacity cursor-pointer group"
+                title="Click to view credentials & curriculum vitae"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                <span className="text-[var(--fg)] font-medium group-hover:underline">Summer 2026 Internships</span>
+              </button>
             </div>
           </div>
         </div>

@@ -151,6 +151,19 @@ export function DigitalExhibitionStage({
     let canvasHeight = (canvas.height = window.innerHeight);
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+    let isInView = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasInView = isInView;
+        isInView = entry.isIntersecting;
+        if (!wasInView && isInView && !animationFrameId) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     const resizeCanvas = () => {
       if (!canvas) return;
       const parent = canvas.parentElement;
@@ -924,12 +937,18 @@ export function DigitalExhibitionStage({
         }
       }
 
+      if (!isInView) {
+        animationFrameId = 0;
+        return;
+      }
+
       animationFrameId = requestAnimationFrame(render);
     };
 
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
       clearTimeout(autoTriggerTimer);
       window.removeEventListener("resize", resizeCanvas);

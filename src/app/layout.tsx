@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { RainRippleEffect } from "@/components/ui/RainRippleEffect";
 import { SproutMascot } from "@/components/mascot/SproutMascot";
 import { SproutAICompanion } from "@/components/ai/SproutAICompanion";
+import { ResumeModal } from "@/components/ui/ResumeModal";
+import { TactileToast } from "@/components/ui/TactileToast";
 
 const SITE_URL = "https://www.yashvardhanborude.tech";
 
@@ -228,6 +230,8 @@ export default function RootLayout({
           <RainRippleEffect />
           <SproutMascot />
           <SproutAICompanion />
+          <ResumeModal />
+          <TactileToast />
           {children}
         </ThemeProvider>
       </body>
