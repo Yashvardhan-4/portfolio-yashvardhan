@@ -211,15 +211,15 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       aria-modal="true"
       aria-label="Yashvardhan Portfolio Genesis"
       onMouseMove={handleMouseMove}
-      className={`fixed inset-0 z-[99999] overflow-hidden select-none transition-all duration-700 ${
+      className={`fixed inset-0 z-[99999] overflow-hidden select-none transition-opacity duration-700 ${
         isDissolving ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100"
       }`}
       style={{
         backgroundColor:
           phase === "PORTAL_EXPANDING"
-            ? selectedRealm === "dark"
-              ? "#05060A"
-              : "#FAF8F5"
+            ? selectedRealm === "light"
+              ? "#FAF8F5"
+              : "#05060A"
             : "#050508",
       }}
     >
@@ -286,9 +286,10 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
         )}
 
         {/* ─────────────────────────────────────────────────────────────
-            STAGE 2: WATER-SMOOTH DIAGONAL DUALITY CHAMBER
+            STAGE 2 & 3: CONTINUOUS WATER-SMOOTH DUALITY & UNFURL CHAMBER
+            (Zero black flash: clicked realm unfurls across the screen)
             ───────────────────────────────────────────────────────────── */}
-        {phase === "DUALITY" && (
+        {(phase === "DUALITY" || phase === "PORTAL_EXPANDING") && (
           <motion.div
             key="stage-duality"
             initial={{ opacity: 0 }}
@@ -300,11 +301,25 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
             {/* =========================================================
                 LEFT / BOTTOM REALM: OBSIDIAN DARK (PURPLE THEME)
                 ========================================================= */}
-            <div
+            <motion.div
               onClick={(e) => triggerRealmSelection("dark", e.clientX, e.clientY)}
-              className="absolute inset-0 cursor-pointer overflow-hidden transition-all duration-300"
+              initial={false}
+              animate={{
+                clipPath:
+                  phase === "PORTAL_EXPANDING"
+                    ? selectedRealm === "dark"
+                      ? "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+                      : `polygon(0 0, ${topCut}% 0, ${bottomCut}% 100%, 0 100%)`
+                    : `polygon(0 0, ${topCut}% 0, ${bottomCut}% 100%, 0 100%)`,
+                opacity: phase === "PORTAL_EXPANDING" && selectedRealm === "light" ? 0 : 1,
+                zIndex: selectedRealm === "dark" ? 40 : 20,
+              }}
+              transition={{
+                duration: phase === "PORTAL_EXPANDING" ? 0.7 : 0.25,
+                ease: [0.19, 1, 0.22, 1],
+              }}
+              className="absolute inset-0 cursor-pointer overflow-hidden"
               style={{
-                clipPath: `polygon(0 0, ${topCut}% 0, ${bottomCut}% 100%, 0 100%)`,
                 backgroundColor: "#05060A",
               }}
             >
@@ -326,56 +341,108 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
               {/* Ambient Radial Stardust Glow */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(168,85,247,0.22),transparent_65%)] pointer-events-none" />
 
+              {/* Royal Purple Radiant Bloom when Selected */}
+              {phase === "PORTAL_EXPANDING" && selectedRealm === "dark" && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: isDissolving ? 0 : 0.5, scale: 1.15 }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.45),transparent_70%)] pointer-events-none"
+                />
+              )}
+
               {/* Content Canvas */}
-              <div className="absolute inset-y-0 left-0 w-full sm:w-[50vw] flex flex-col justify-between p-8 sm:p-16 z-10 pointer-events-none">
+              <div
+                className={`absolute inset-0 flex flex-col justify-between p-8 sm:p-16 pointer-events-none transition-all duration-500 ${
+                  phase === "PORTAL_EXPANDING" && selectedRealm === "dark"
+                    ? "items-center text-center z-20"
+                    : "items-start text-left z-10"
+                }`}
+              >
                 <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-purple-400">
                   <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#C084FC]" />
                   <span>OBSIDIAN · DARK</span>
                 </div>
 
-                <div className="space-y-4 max-w-lg">
+                <div
+                  className={`space-y-4 max-w-lg flex flex-col ${
+                    phase === "PORTAL_EXPANDING" && selectedRealm === "dark"
+                      ? "items-center"
+                      : "items-start"
+                  }`}
+                >
                   <motion.h2
                     animate={{
-                      scale: hoveredSide === "dark" ? 1.04 : 1,
-                      x: hoveredSide === "dark" ? 6 : 0,
+                      scale:
+                        phase === "PORTAL_EXPANDING" && selectedRealm === "dark"
+                          ? isDissolving
+                            ? 1.15
+                            : 1.08
+                          : hoveredSide === "dark"
+                          ? 1.04
+                          : 1,
+                      x:
+                        phase === "PORTAL_EXPANDING" && selectedRealm === "dark"
+                          ? 0
+                          : hoveredSide === "dark"
+                          ? 6
+                          : 0,
                     }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
                     className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-semibold tracking-[-0.04em] text-white leading-none"
                   >
-                    DARK
+                    {phase === "PORTAL_EXPANDING" && selectedRealm === "dark"
+                      ? "OBSIDIAN"
+                      : "DARK"}
                   </motion.h2>
                   <p className="font-sans text-xs sm:text-sm text-purple-200/70 font-light leading-relaxed max-w-sm">
                     Midnight void, luminous violet ribbons, and deep architectural focus.
                   </p>
 
-                  <div className="pt-2">
-                    <span
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
-                        hoveredSide === "dark"
-                          ? "bg-purple-600 text-white shadow-[0_0_30px_rgba(168,85,247,0.7)]"
-                          : "border border-purple-500/30 text-purple-300 bg-purple-950/40"
-                      }`}
-                    >
-                      <span>Choose Obsidian</span>
-                      <span>↵</span>
-                    </span>
-                  </div>
+                  {phase !== "PORTAL_EXPANDING" && (
+                    <div className="pt-2">
+                      <span
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
+                          hoveredSide === "dark"
+                            ? "bg-purple-600 text-white shadow-[0_0_30px_rgba(168,85,247,0.7)]"
+                            : "border border-purple-500/30 text-purple-300 bg-purple-950/40"
+                        }`}
+                      >
+                        <span>Choose Obsidian</span>
+                        <span>↵</span>
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="text-[11px] font-mono tracking-widest text-purple-400/50">
                   ✦ ARCHITECTURAL RUNTIME
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* =========================================================
                 RIGHT / TOP REALM: PETRICHOR LIGHT
                 ========================================================= */}
-            <div
+            <motion.div
               onClick={(e) => triggerRealmSelection("light", e.clientX, e.clientY)}
-              className="absolute inset-0 cursor-pointer overflow-hidden transition-all duration-300"
+              initial={false}
+              animate={{
+                clipPath:
+                  phase === "PORTAL_EXPANDING"
+                    ? selectedRealm === "light"
+                      ? "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+                      : `polygon(${topCut}% 0, 100% 0, 100% 100%, ${bottomCut}% 100%)`
+                    : `polygon(${topCut}% 0, 100% 0, 100% 100%, ${bottomCut}% 100%)`,
+                opacity: phase === "PORTAL_EXPANDING" && selectedRealm === "dark" ? 0 : 1,
+                zIndex: selectedRealm === "light" ? 40 : 20,
+              }}
+              transition={{
+                duration: phase === "PORTAL_EXPANDING" ? 0.7 : 0.25,
+                ease: [0.19, 1, 0.22, 1],
+              }}
+              className="absolute inset-0 cursor-pointer overflow-hidden"
               style={{
-                clipPath: `polygon(${topCut}% 0, 100% 0, 100% 100%, ${bottomCut}% 100%)`,
                 backgroundColor: "#FAF8F5",
               }}
             >
@@ -386,145 +453,108 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
               />
               <div className="absolute inset-0 bg-gradient-to-bl from-amber-100/60 via-transparent to-transparent pointer-events-none" />
 
+              {/* Golden Amber / Summer Sun Radiant Bloom when Selected */}
+              {phase === "PORTAL_EXPANDING" && selectedRealm === "light" && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: isDissolving ? 0 : 0.45, scale: 1.15 }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.45),transparent_70%)] pointer-events-none"
+                />
+              )}
+
               {/* Content Canvas */}
-              <div className="absolute inset-y-0 right-0 w-full sm:w-[50vw] flex flex-col justify-between items-end p-8 sm:p-16 text-right z-10 pointer-events-none">
+              <div
+                className={`absolute inset-0 flex flex-col justify-between p-8 sm:p-16 pointer-events-none transition-all duration-500 ${
+                  phase === "PORTAL_EXPANDING" && selectedRealm === "light"
+                    ? "items-center text-center z-20"
+                    : "items-end text-right z-10"
+                }`}
+              >
                 <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-[#2D5A42]">
                   <span>PETRICHOR · LIGHT</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shadow-[0_0_8px_#059669]" />
                 </div>
 
-                <div className="space-y-4 max-w-lg flex flex-col items-end">
+                <div
+                  className={`space-y-4 max-w-lg flex flex-col ${
+                    phase === "PORTAL_EXPANDING" && selectedRealm === "light"
+                      ? "items-center"
+                      : "items-end"
+                  }`}
+                >
                   <motion.h2
                     animate={{
-                      scale: hoveredSide === "light" ? 1.04 : 1,
-                      x: hoveredSide === "light" ? -6 : 0,
+                      scale:
+                        phase === "PORTAL_EXPANDING" && selectedRealm === "light"
+                          ? isDissolving
+                            ? 1.15
+                            : 1.08
+                          : hoveredSide === "light"
+                          ? 1.04
+                          : 1,
+                      x:
+                        phase === "PORTAL_EXPANDING" && selectedRealm === "light"
+                          ? 0
+                          : hoveredSide === "light"
+                          ? -6
+                          : 0,
                     }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
                     className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-semibold tracking-[-0.04em] text-[#17241C] leading-none"
                   >
-                    LIGHT
+                    {phase === "PORTAL_EXPANDING" && selectedRealm === "light"
+                      ? "PETRICHOR"
+                      : "LIGHT"}
                   </motion.h2>
                   <p className="font-sans text-xs sm:text-sm text-[#48564D] font-light leading-relaxed max-w-sm">
                     Morning sun, summer raindrops on living leaves, and warm tactile linen.
                   </p>
 
-                  <div className="pt-2">
-                    <span
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
-                        hoveredSide === "light"
-                          ? "bg-[#2D5A42] text-white shadow-[0_4px_24px_rgba(45,90,66,0.4)]"
-                          : "border border-[#2D5A42]/30 text-[#2D5A42] bg-[#EDF2EB]"
-                      }`}
-                    >
-                      <span>Choose Petrichor</span>
-                      <span>↵</span>
-                    </span>
-                  </div>
+                  {phase !== "PORTAL_EXPANDING" && (
+                    <div className="pt-2">
+                      <span
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
+                          hoveredSide === "light"
+                            ? "bg-[#2D5A42] text-white shadow-[0_4px_24px_rgba(45,90,66,0.4)]"
+                            : "border border-[#2D5A42]/30 text-[#2D5A42] bg-[#EDF2EB]"
+                        }`}
+                      >
+                        <span>Choose Petrichor</span>
+                        <span>↵</span>
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="text-[11px] font-mono tracking-widest text-[#566B5D]">
                   🌿 LIVING CONSERVATORY
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Dynamic Center Duality Pill Indicator */}
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50 flex flex-col items-center gap-2"
-              style={{
-                left: `${(topCut + bottomCut) / 2}%`,
-              }}
-            >
-              <div className="flex items-center gap-3 px-5 py-2.5 rounded-full backdrop-blur-2xl border border-white/20 bg-black/60 text-white shadow-2xl">
-                <span className="text-[11px] font-mono tracking-widest uppercase text-purple-300">
-                  ✦ OBSIDIAN
-                </span>
-                <span className="text-xs font-mono text-white/40">|</span>
-                <span className="text-[11px] font-mono tracking-widest uppercase text-[#FAF8F5]">
-                  PETRICHOR ✦
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ─────────────────────────────────────────────────────────────
-            STAGE 3: EXPANDING PORTAL & CINEMATIC SLOW DISSOLVE
-            (Occupies screen smoothly, then slowly dissolves without sudden pop)
-            ───────────────────────────────────────────────────────────── */}
-        {phase === "PORTAL_EXPANDING" && (
-          <motion.div
-            key="stage-portal"
-            initial={{
-              clipPath: `circle(0% at ${clickPos.x}% ${clickPos.y}%)`,
-              opacity: 1,
-              scale: 1,
-              filter: "blur(0px)",
-            }}
-            animate={
-              isDissolving
-                ? {
-                    clipPath: `circle(170% at ${clickPos.x}% ${clickPos.y}%)`,
-                    opacity: 0,
-                    scale: 1.04,
-                    filter: "blur(12px)",
-                  }
-                : {
-                    clipPath: `circle(170% at ${clickPos.x}% ${clickPos.y}%)`,
-                    opacity: 1,
-                    scale: 1,
-                    filter: "blur(0px)",
-                  }
-            }
-            transition={
-              isDissolving
-                ? {
-                    duration: 0.8,
-                    ease: [0.16, 1, 0.3, 1], // Gentle, water-smooth exit dissolution
-                  }
-                : {
-                    duration: 0.72,
-                    ease: [0.19, 1, 0.22, 1], // Expo-out expansion
-                  }
-            }
-            className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none overflow-hidden"
-            style={{
-              backgroundColor: selectedRealm === "dark" ? "#06080D" : "#FAF8F5",
-            }}
-          >
-            {/* Ambient Shockwave Halo */}
-            <div
-              className={`absolute inset-0 opacity-40 ${
-                selectedRealm === "dark"
-                  ? "bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.45),transparent_70%)]"
-                  : "bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.35),transparent_70%)]"
-              }`}
-            />
-
-            {/* Seamless Petrichor Summer Sky Overlay for Light Mode */}
-            {selectedRealm === "light" && (
-              <div
-                className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-multiply pointer-events-none"
-                style={{ backgroundImage: `url('/images/ghibli-countryside-summer.jpg')` }}
-              />
+            {phase !== "PORTAL_EXPANDING" && (
+              <motion.div
+                initial={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50 flex flex-col items-center gap-2"
+                style={{
+                  left: `${(topCut + bottomCut) / 2}%`,
+                }}
+              >
+                <div className="flex items-center gap-3 px-5 py-2.5 rounded-full backdrop-blur-2xl border border-white/20 bg-black/60 text-white shadow-2xl">
+                  <span className="text-[11px] font-mono tracking-widest uppercase text-purple-300">
+                    ✦ OBSIDIAN
+                  </span>
+                  <span className="text-xs font-mono text-white/40">|</span>
+                  <span className="text-[11px] font-mono tracking-widest uppercase text-[#FAF8F5]">
+                    PETRICHOR ✦
+                  </span>
+                </div>
+              </motion.div>
             )}
-
-            {/* Radiant Realm Unfurl Emblem */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={
-                isDissolving
-                  ? { scale: 1.15, opacity: 0, filter: "blur(6px)" }
-                  : { scale: 1.05, opacity: 1, filter: "blur(0px)" }
-              }
-              transition={{ duration: isDissolving ? 0.6 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-center font-display text-4xl sm:text-6xl font-semibold tracking-tight z-10"
-              style={{
-                color: selectedRealm === "dark" ? "#F3E8FF" : "#17241C",
-              }}
-            >
-              {selectedRealm === "dark" ? "OBSIDIAN" : "PETRICHOR"}
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

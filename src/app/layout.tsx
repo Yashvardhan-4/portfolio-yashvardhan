@@ -216,8 +216,12 @@ export default function RootLayout({
                   var t = localStorage.getItem('yashvardhan-theme');
                   if (t === 'light') {
                     document.documentElement.setAttribute('data-theme', 'light');
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
                   } else {
                     document.documentElement.setAttribute('data-theme', 'dark');
+                    document.documentElement.classList.remove('light');
+                    document.documentElement.classList.add('dark');
                   }
                 } catch (e) {}
               })();
