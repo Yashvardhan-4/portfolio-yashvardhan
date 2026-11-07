@@ -7,6 +7,7 @@ import { SproutMascot } from "@/components/mascot/SproutMascot";
 import { SproutAICompanion } from "@/components/ai/SproutAICompanion";
 import { ResumeModal } from "@/components/ui/ResumeModal";
 import { TactileToast } from "@/components/ui/TactileToast";
+import { DevToolsProtection } from "@/components/security/DevToolsProtection";
 
 const SITE_URL = "https://www.yashvardhanborude.tech";
 
@@ -231,6 +232,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased transition-colors duration-300">
         <ThemeProvider>
+          <DevToolsProtection />
           <RainRippleEffect />
           <SproutMascot />
           <SproutAICompanion />
