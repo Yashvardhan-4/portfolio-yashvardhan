@@ -171,17 +171,18 @@ export function MonumentalHero() {
                       frontImage="/images/lanyard-front.png"
                       backImage="/images/lanyard-back.png"
                       strapImage="/images/lanyard-strap.png"
-                      cardColor="#FAF8F3"
-                      finish="holographic"
+                      cardColor="#FAF8F5"
+                      finish="glossy"
                       metal="silver"
-                      strapColor="#2A5741"
-                      strapWidth={0.7}
+                      strapColor="#1B382B"
+                      strapWidth={0.65}
                       size={0.65}
-                      strapLength={0.46}
+                      strapLength={0.44}
                       elasticity={0.55}
                       damping={0.45}
                       gravity={1.1}
-                      breeze={0.4}
+                      breeze={0.35}
+                      anchor="center"
                     />
                   </div>
                 )}
@@ -256,31 +257,36 @@ export function MonumentalHero() {
               ref={desktopAnchorRef}
               className="w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10 aspect-[480/513]"
               aria-label="Desktop Portrait Spatial Guide"
-            >
-              {hasMounted && isLightMode && (
-                <div className="absolute inset-0 pointer-events-auto">
-                  <Lanyard
-                    frontImage="/images/lanyard-front.png"
-                    backImage="/images/lanyard-back.png"
-                    strapImage="/images/lanyard-strap.png"
-                    cardColor="#FAF8F3"
-                    finish="holographic"
-                    metal="silver"
-                    strapColor="#2A5741"
-                    strapWidth={0.7}
-                    size={0.65}
-                    strapLength={0.46}
-                    elasticity={0.55}
-                    damping={0.45}
-                    gravity={1.1}
-                    breeze={0.4}
-                  />
-                </div>
-              )}
-            </div>
+            />
           </div>
         </div>
       </section>
+
+      {/* Light Mode 3D Physics Lanyard: Anchored at the absolute top ceiling of the screen (top-0), bleeding with unrestricted full-viewport physics */}
+      {hasMounted && isLightMode && (
+        <div
+          className="hidden md:block absolute top-0 right-0 w-[55vw] lg:w-[50vw] xl:w-[46vw] h-[100svh] min-h-[720px] z-40 pointer-events-auto overflow-visible select-none"
+          aria-label="Interactive 3D Engineering ID Lanyard"
+        >
+          <Lanyard
+            frontImage="/images/lanyard-front.png"
+            backImage="/images/lanyard-back.png"
+            strapImage="/images/lanyard-strap.png"
+            cardColor="#FAF8F5"
+            finish="glossy"
+            metal="silver"
+            strapColor="#1B382B"
+            strapWidth={0.65}
+            size={0.62}
+            strapLength={0.42}
+            elasticity={0.55}
+            damping={0.45}
+            gravity={1.1}
+            breeze={0.35}
+            anchor="center"
+          />
+        </div>
+      )}
 
       {/* Subtle Scroll Affordance Indicator */}
       <div className="relative z-20 flex flex-col items-center justify-center pt-1 pb-2 text-[var(--fg-subtle)] pointer-events-none select-none">
