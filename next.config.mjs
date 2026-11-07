@@ -14,7 +14,7 @@ const nextConfig = {
           },
           {
             key: "X-Frame-Options",
-            value: "DENY",
+            value: "SAMEORIGIN",
           },
           {
             key: "X-XSS-Protection",
@@ -55,6 +55,20 @@ const nextConfig = {
             value: "public, max-age=86400, stale-while-revalidate=43200",
           },
         ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/cv",
+        destination: "/Resume/Yashvardhan_Borude_Resume.pdf",
+        permanent: false,
+      },
+      {
+        source: "/resume",
+        destination: "/Resume/Yashvardhan_Borude_Resume.pdf",
+        permanent: false,
       },
     ];
   },
