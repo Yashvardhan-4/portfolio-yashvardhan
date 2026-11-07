@@ -240,24 +240,20 @@ export function DigitalExhibitionStage({
       };
     });
 
-    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Grounded neck and collar line, height = 472)
+    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Exact V-shaped collar line matching Dark Mode, height = 513)
     const baseWidthLight = halftoneDataLight.width;   // 480
-    const baseHeightLight = halftoneDataLight.height; // 472 (grounded collar line)
+    const baseHeightLight = halftoneDataLight.height; // 513
     const rawDotsLight = halftoneDataLight.dots as Array<[number, number, number, number, number?, number?, number?]>;
 
     const portraitDotsLight: PortraitDot[] = rawDotsLight.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
-      // Core features include forehead, eyes, nose, moustache, lips, chin, beard, and full neck
-      const isCoreFeature = x0 > 135 && x0 < 345 && y0 > 120 && y0 < 435;
+      // Core features include forehead, eyes, nose, moustache, lips, chin, beard, and full V-collar
+      const isCoreFeature = x0 > 135 && x0 < 345 && y0 > 120 && y0 < 475.5;
       const featureWeight = isCoreFeature ? 0.60 : 1.0;
 
-      const dxEdge = (x0 - baseWidthLight * 0.5) / 165;
-      const dyEdge = (y0 - baseHeightLight * 0.5) / 225;
+      const dxEdge = (x0 - baseWidthLight * 0.5) / 180;
+      const dyEdge = (y0 - baseHeightLight * 0.5) / 250;
       const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
-      const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.18) : 1.0;
-
-      // Soft vertical bottom fade strictly at the base of the collar (Y > 440 to 472)
-      const bottomFade = y0 > 440 ? Math.max(0.15, 1 - (y0 - 440) / 32) : 1.0;
-      const combinedFade = edgeFade * bottomFade;
+      const edgeFade = distEdge > 0.88 ? Math.max(0, 1 - (distEdge - 0.88) / 0.15) : 1.0;
 
       const r = rRaw !== undefined ? rRaw : 45;
       const g = gRaw !== undefined ? gRaw : 40;
@@ -268,22 +264,22 @@ export function DigitalExhibitionStage({
       let radiusMultiplierLight = 1.0;
 
       if (l < 0.32) {
-        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : combinedFade));
+        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : edgeFade));
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(200, 147, 85, 1.0)";
         radiusMultiplierLight = 1.18;
       } else if (l < 0.65) {
-        const alpha = 0.82 * combinedFade;
+        const alpha = 0.82 * edgeFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(215, 160, 95, 0.96)";
         radiusMultiplierLight = 1.02;
       } else if (l < 0.82) {
-        const alpha = 0.65 * combinedFade;
+        const alpha = 0.65 * edgeFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(230, 185, 120, 0.90)";
         radiusMultiplierLight = 0.88;
       } else {
-        const alpha = 0.42 * combinedFade;
+        const alpha = 0.42 * edgeFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(240, 205, 145, 0.80)";
         radiusMultiplierLight = 0.72;
@@ -560,11 +556,14 @@ export function DigitalExhibitionStage({
       }
 
       // ----------------------------------------------------
-      // SECTION A: RENDER PORTRAIT HALFTONE DOTS (NORMAL)
+      // SECTION A: RENDER PORTRAIT HALFTONE DOTS (DARK MODE ONLY)
       // ----------------------------------------------------
-      const numDots = portraitDots.length;
+      // In Light Mode, the interactive 3D physics <Lanyard /> component handles the portrait.
+      // Dark Mode retains its original phosphor starlight halftone dots and ribbons.
+      if (!isLight) {
+        const numDots = portraitDots.length;
 
-      for (let i = 0; i < numDots; i++) {
+        for (let i = 0; i < numDots; i++) {
         const p = portraitDots[i];
 
         // Compute baseline anchor position in world canvas coordinates
@@ -631,7 +630,7 @@ export function DigitalExhibitionStage({
         let isLitByScan = false;
         let scanBoost = 0;
         if (isScanning) {
-          const isWithinVisiblePortrait = !isLight || p.y0 <= 472;
+          const isWithinVisiblePortrait = !isLight || p.y0 <= 475.5;
           const distToScan = Math.abs(p.y - scanY);
           if (distToScan < scanBandWidth && isWithinVisiblePortrait) {
             isLitByScan = true;
@@ -675,6 +674,7 @@ export function DigitalExhibitionStage({
         ctx.arc(p.x, p.y, drawRadius, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
 
       // ----------------------------------------------------
       // SECTION B: PHYSICAL TYPOGRAPHY ANIMATION CHOREOGRAPHY

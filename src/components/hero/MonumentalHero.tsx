@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import Threads from "@/components/ui/Threads";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
 import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
+
+const Lanyard = dynamic(() => import("@/components/ui/Lanyard"), { ssr: false });
 
 export function MonumentalHero() {
   const { theme } = useTheme();
@@ -155,15 +158,34 @@ export function MonumentalHero() {
               </div>
             </div>
 
-            {/* Mobile Halftone Portrait Anchor (Positions portrait on mobile screens < 768px) */}
-            <div className="block md:hidden my-6 w-full max-w-[310px] mx-auto">
+            {/* Mobile Portrait Anchor */}
+            <div className="block md:hidden my-6 w-full max-w-[320px] mx-auto">
               <div
                 ref={mobileAnchorRef}
-                className={`w-full pointer-events-none ${
-                  isLightMode ? "aspect-[480/472]" : "aspect-[480/513]"
-                }`}
+                className="w-full pointer-events-none aspect-[480/513] relative"
                 aria-label="Mobile Portrait Spatial Guide"
-              />
+              >
+                {hasMounted && isLightMode && (
+                  <div className="absolute inset-0 pointer-events-auto">
+                    <Lanyard
+                      frontImage="/images/lanyard-front.png"
+                      backImage="/images/lanyard-back.png"
+                      strapImage="/images/lanyard-strap.png"
+                      cardColor="#FAF8F3"
+                      finish="holographic"
+                      metal="silver"
+                      strapColor="#2A5741"
+                      strapWidth={0.7}
+                      size={0.65}
+                      strapLength={0.46}
+                      elasticity={0.55}
+                      damping={0.45}
+                      gravity={1.1}
+                      breeze={0.4}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Non-Redundant Purpose Anchor */}
@@ -232,11 +254,30 @@ export function MonumentalHero() {
 
             <div
               ref={desktopAnchorRef}
-              className={`w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10 ${
-                isLightMode ? "aspect-[480/472]" : "aspect-[480/513]"
-              }`}
+              className="w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10 aspect-[480/513]"
               aria-label="Desktop Portrait Spatial Guide"
-            />
+            >
+              {hasMounted && isLightMode && (
+                <div className="absolute inset-0 pointer-events-auto">
+                  <Lanyard
+                    frontImage="/images/lanyard-front.png"
+                    backImage="/images/lanyard-back.png"
+                    strapImage="/images/lanyard-strap.png"
+                    cardColor="#FAF8F3"
+                    finish="holographic"
+                    metal="silver"
+                    strapColor="#2A5741"
+                    strapWidth={0.7}
+                    size={0.65}
+                    strapLength={0.46}
+                    elasticity={0.55}
+                    damping={0.45}
+                    gravity={1.1}
+                    breeze={0.4}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
