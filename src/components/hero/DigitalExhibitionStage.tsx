@@ -240,19 +240,19 @@ export function DigitalExhibitionStage({
       };
     });
 
-    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (16,037 high-density chromatic dots)
+    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Cropped strictly to head & neck, matching dark mode)
     const baseWidthLight = halftoneDataLight.width;   // 480
-    const baseHeightLight = halftoneDataLight.height; // 620
+    const baseHeightLight = halftoneDataLight.height; // 513 (matched to dark mode)
     const rawDotsLight = halftoneDataLight.dots as Array<[number, number, number, number, number?, number?, number?]>;
 
     const portraitDotsLight: PortraitDot[] = rawDotsLight.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
-      const isCoreFeature = x0 > 155 && x0 < 325 && y0 > 170 && y0 < 490;
+      const isCoreFeature = x0 > 165 && x0 < 315 && y0 > 170 && y0 < 430;
       const featureWeight = isCoreFeature ? 0.60 : 1.0;
 
-      const dxEdge = (x0 - baseWidthLight * 0.5) / 205;
-      const dyEdge = (y0 - baseHeightLight * 0.5) / 285;
+      const dxEdge = (x0 - baseWidthLight * 0.5) / 160;
+      const dyEdge = (y0 - baseHeightLight * 0.5) / 225;
       const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
-      const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.20) : 1.0;
+      const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.18) : 1.0;
 
       const r = rRaw !== undefined ? rRaw : 45;
       const g = gRaw !== undefined ? gRaw : 40;

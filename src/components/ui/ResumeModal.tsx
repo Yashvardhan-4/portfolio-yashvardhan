@@ -119,6 +119,7 @@ Tools & Systems: Git, GitHub, Linux, Bash, Docker (Basics), Postman, Figma, Verc
         className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6"
       >
         <div
+          data-lenis-prevent
           onClick={(e) => e.stopPropagation()}
           className={`relative w-full max-w-5xl h-[94vh] sm:h-[92vh] flex flex-col rounded-2xl border transition-all duration-300 shadow-2xl overflow-hidden ${
             isDarkMode

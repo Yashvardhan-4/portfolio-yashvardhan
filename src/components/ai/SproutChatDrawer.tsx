@@ -587,6 +587,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
 
         {/* Conversation Body: Editorial Canvas */}
         <div
+          data-lenis-prevent
           tabIndex={0}
           aria-label="Conversation messages"
           className="flex-1 overflow-y-auto px-4 py-4 space-y-4 focus:outline-none"
