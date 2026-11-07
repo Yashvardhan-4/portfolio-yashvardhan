@@ -26,6 +26,13 @@
 - Theme Adaptation : Light (Warm Ivory/Ghibli Petrichor) & Dark (Obsidian Matrix/Bioluminescent Garden)
 - A11y & Performance : Hardware-gated on fine pointers only, disabled on touch screens, reduced-motion fallback, pointer-events: none (zero click obstruction)
 
+[GROUNDED AI / RAG COMPANION: SPROUT INTELLIGENCE]
+- src/data/ai-knowledge.ts : Grounded verified knowledge corpus with structured chunks (Shivkush PWA, PralayVeer, PCCOE CGPA 8.86, NPTEL Elite+Silver, LeetCode 500+) and semantic chunk matcher
+- src/app/api/chat/route.ts : Streaming route handler supporting Google Gemini 2.5 Flash with fallback to offline semantic stream
+- src/components/ai/SproutAITrigger.tsx : 3D floating mascot AI orb button with orbital spinning rings, ambient bioluminescent glow, and ⌘K trigger
+- src/components/ai/SproutChatDrawer.tsx : Slide-over glassmorphic drawer with quick starter chips, token streaming, and inline clickable action chips
+- src/components/ai/SproutAICompanion.tsx : Master controller orchestrating drawer visibility, keyboard shortcuts (⌘K/Esc), and custom event bus
+
 [STUDIO GHIBLI NATURE ATMOSPHERE (LIGHT MODE EXCLUSIVE)]
 - /images/ghibli-countryside-summer.jpg : Kazuo Oga-inspired summer rolling hills and azure sky (used for Hero landscape and AboutPhilosophy herbarium watermark)
 - /images/ghibli-mossy-waterfall.jpg : Enchanted mossy forest waterfall and grotto (used for SelectedWork ambient backdrop)

@@ -4,6 +4,7 @@ import { profile } from "@/data/profile";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { RainRippleEffect } from "@/components/ui/RainRippleEffect";
 import { SproutMascot } from "@/components/mascot/SproutMascot";
+import { SproutAICompanion } from "@/components/ai/SproutAICompanion";
 
 const SITE_URL = "https://www.yashvardhanborude.tech";
 
@@ -226,6 +227,7 @@ export default function RootLayout({
         <ThemeProvider>
           <RainRippleEffect />
           <SproutMascot />
+          <SproutAICompanion />
           {children}
         </ThemeProvider>
       </body>

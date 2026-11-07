@@ -68,6 +68,18 @@ export function MinimalEditorialNav() {
           >
             <AnimatedSVGUnderline strokeColor={accentColor}>Contact</AnimatedSVGUnderline>
           </a>
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(new CustomEvent("open-sprout-ai"));
+              }
+            }}
+            className="hover:text-[var(--fg)] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)] flex items-center gap-1.5 cursor-pointer text-xs font-mono tracking-wider"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <AnimatedSVGUnderline strokeColor={accentColor}>Sprout AI</AnimatedSVGUnderline>
+          </button>
         </nav>
 
         {/* Right: Theme Switcher & Direct Let's Talk CTA */}
@@ -165,6 +177,22 @@ export function MinimalEditorialNav() {
               <span>Contact</span>
               <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-subtle)]" />
             </a>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("open-sprout-ai"));
+                }
+              }}
+              className="text-[var(--fg-muted)] hover:text-[var(--fg)] py-1 flex items-center justify-between text-left cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Sprout AI Companion</span>
+              </span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-[var(--border)]">AI</span>
+            </button>
             <a
               href="mailto:yashvardhanborude7@gmail.com"
               onClick={() => setMobileMenuOpen(false)}

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/genai": "^3.0.0",
     "@types/matter-js": "^0.20.2",
     "@types/three": "^0.186.0",
     "clsx": "^2.1.1",
