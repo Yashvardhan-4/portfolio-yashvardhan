@@ -90,7 +90,7 @@ export function ContactColophon() {
         {/* Bottom Section: Availability Telemetry & All Links in Single Line */}
         <div className="mt-3 sm:mt-4 space-y-2.5">
           {/* Availability Status & Location Telemetry Bar */}
-          <div className="max-w-5xl mx-auto pb-3 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] text-[var(--fg-muted)] border-b border-[var(--border)]/70">
+          <div className="max-w-4xl mx-auto pb-3 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] text-[var(--fg-muted)] border-b border-[var(--border)]/70">
             <div className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
               <span className="text-[var(--fg)]">Open to Software Engineering Roles &amp; Select Projects</span>
@@ -111,7 +111,7 @@ export function ContactColophon() {
           </div>
 
           {/* All Links in Bottom of Footer in One Single Clean Line */}
-          <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 font-mono text-[11px] text-[var(--fg-muted)]">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 font-mono text-[11px] text-[var(--fg-muted)]">
             <p className="order-2 md:order-1 text-[var(--fg)] font-medium whitespace-nowrap">
               &copy; {new Date().getFullYear()} Yashvardhan Borude
             </p>

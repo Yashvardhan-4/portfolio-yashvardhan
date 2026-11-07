@@ -40,5 +40,10 @@
 [STUDIO GHIBLI NATURE ATMOSPHERE (LIGHT MODE EXCLUSIVE)]
 - /images/ghibli-countryside-summer.jpg : Kazuo Oga-inspired summer rolling hills and azure sky (used for Hero landscape and AboutPhilosophy herbarium watermark)
 - /images/ghibli-mossy-waterfall.jpg : Enchanted mossy forest waterfall and grotto (used for SelectedWork ambient backdrop)
+- /images/ghibli-mossy-waterfall.gif : Enchanted mossy forest waterfall looping animation (used for Light Mode Contact Card aperture)
 - /images/ghibli-rain-puddle-ripples.jpg : Tranquil rain puddle with concentric ripples (used for ContactColophon twilight water reflection)
+- /images/ghibli-rain-puddle-ripples.gif : Animated rain puddle ripples (used for ContactColophon footer backdrop)
 - Isolation Policy : Strictly rendered when [data-theme='light']; 100% disabled/transparent in Dark Mode to preserve cybernetic terminal aesthetic.
+
+[OBSIDIAN ROYAL PURPLE ATMOSPHERE (DARK MODE)]
+- /images/obsidian-purple-aesthetic.gif : High-resolution Giphy purple aesthetic pixelart loop (360x480, 100 frames, #2B0956 obsidian palette) used for Dark Mode Contact Card aperture.
