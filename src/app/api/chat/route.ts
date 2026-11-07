@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import { AI_KNOWLEDGE_CHUNKS, matchKnowledgeChunk } from "@/data/ai-knowledge";
+import { AI_KNOWLEDGE_CHUNKS, classifyIntentAndSynthesize } from "@/data/ai-knowledge";
 
 export const runtime = "nodejs";
 
-const SYSTEM_INSTRUCTION = `You are Sprout AI, the official intelligent portfolio assistant for Yashvardhan Borude.
+const SYSTEM_INSTRUCTION = `You are Sprout AI, the official intelligent portfolio companion for Yashvardhan Borude.
 You are concise, humble, articulate, and technically sharp.
 
 STRICT OPERATIONAL RULES:
@@ -16,7 +16,7 @@ STRICT OPERATIONAL RULES:
    - Commercial Project: Shivkush Hi-Tech Nursery (Next.js, Three.js, Supabase PostgreSQL with RLS, offline PWA with service workers).
    - Hackathon: PralayVeer (SIH 2024 Finalist, accessible low-bandwidth disaster response).
    - Other Projects: Early-Stage Startup Valuation Predictor (ML), Algorithmic Graph Theory & Benchmark Engine (C++20).
-3. TONE: Warm, engineering-focused, concise (2-4 sentences or short bullet points), editorial. No exaggerated buzzwords.
+3. TONE: Warm, engineering-focused, concise (2-4 sentences or structured bullet points), editorial. Never use exaggerated corporate buzzwords.
 4. ACTION ORIENTED: Encourage the user to explore the live case studies, view his code, or download his resume.
 
 KNOWLEDGE BASE:
@@ -32,15 +32,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "A message string is required." }, { status: 400 });
     }
 
-    const matched = matchKnowledgeChunk(message);
-    const actions = matched?.chunk?.actions || [
-      { label: "View Projects", href: "/#work" },
-      { label: "Get in Touch", href: "/#contact" },
-    ];
+    // 1. High-Precision Semantic Intent Synthesis
+    const semanticResult = classifyIntentAndSynthesize(message);
+    const { content: fallbackContent, reasoningSteps, actions } = semanticResult;
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // 1. Live Gemini API Streaming Mode if GEMINI_API_KEY is available
+    // 2. Live Gemini 2.5 Flash Streaming Mode if GEMINI_API_KEY is available
     if (apiKey) {
       try {
         const ai = new GoogleGenAI({ apiKey });
@@ -77,12 +75,17 @@ export async function POST(req: NextRequest) {
         const readable = new ReadableStream({
           async start(controller) {
             try {
+              // Send reasoning trace header first
+              const reasoningPayload = `__REASONING__${JSON.stringify(reasoningSteps)}\n\n`;
+              controller.enqueue(encoder.encode(reasoningPayload));
+
               for await (const chunk of responseStream) {
                 const text = chunk.text;
                 if (text) {
                   controller.enqueue(encoder.encode(text));
                 }
               }
+
               // Append action metadata delimiter
               const metadataPayload = `\n\n__METADATA__${JSON.stringify({ actions })}`;
               controller.enqueue(encoder.encode(metadataPayload));
@@ -102,29 +105,37 @@ export async function POST(req: NextRequest) {
           },
         });
       } catch (geminiError) {
-        console.warn("Gemini API connection fallback to offline grounded knowledge:", geminiError);
-        // Fall through to offline grounded stream
+        console.warn("Gemini API connection fallback to semantic reasoning engine:", geminiError);
+        // Fall through to deterministic semantic stream
       }
     }
 
-    // 2. High-Performance Zero-Config Offline Stream Mode
-    // Simulates natural token streaming from verified knowledge base
-    const chunk = matched?.chunk || AI_KNOWLEDGE_CHUNKS[0];
-    const textToStream = `${chunk.fullContent}`;
-
+    // 3. High-Precision Zero-Latency Semantic Streaming Mode
+    // Natural token streaming with live reasoning trace and exact question answers
     const encoder = new TextEncoder();
-    const words = textToStream.split(" ");
+    const words = fallbackContent.split(" ");
 
     const readable = new ReadableStream({
       async start(controller) {
+        // First emit reasoning trace
+        const reasoningPayload = `__REASONING__${JSON.stringify(reasoningSteps)}\n\n`;
+        controller.enqueue(encoder.encode(reasoningPayload));
+
+        // Stream synthesized semantic content word by word
         for (let i = 0; i < words.length; i++) {
-          const word = (i === 0 ? "" : " ") + words[i];
-          controller.enqueue(encoder.encode(word));
-          // Micro-cadence simulation
-          await new Promise((r) => setTimeout(r, 14));
+          const chunk = (i === 0 ? "" : " ") + words[i];
+          controller.enqueue(encoder.encode(chunk));
+
+          // Natural typographic stream pacing
+          if (words[i].endsWith(".") || words[i].endsWith(":") || words[i].includes("\n")) {
+            await new Promise((resolve) => setTimeout(resolve, 35));
+          } else {
+            await new Promise((resolve) => setTimeout(resolve, 14));
+          }
         }
 
-        const metadataPayload = `\n\n__METADATA__${JSON.stringify({ actions: chunk.actions || actions })}`;
+        // Emit actions metadata payload
+        const metadataPayload = `\n\n__METADATA__${JSON.stringify({ actions })}`;
         controller.enqueue(encoder.encode(metadataPayload));
         controller.close();
       },
@@ -138,9 +149,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Chat API route error:", error);
+    console.error("Sprout AI Chat Error:", error);
     return NextResponse.json(
-      { error: "Failed to generate AI response. Please try again." },
+      { error: "An unexpected error occurred while communicating with Sprout AI." },
       { status: 500 }
     );
   }
