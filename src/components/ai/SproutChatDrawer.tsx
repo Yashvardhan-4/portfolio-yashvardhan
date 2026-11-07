@@ -12,6 +12,13 @@ export interface ChatMessage {
   id: string;
   role: "user" | "model";
   content: string;
+  telemetry?: {
+    vectors: number;
+    cosTheta: number;
+    latencyMs: number;
+    topDoc?: string;
+    securityWarning?: string;
+  };
   actions?: Array<{
     label: string;
     href: string;
@@ -142,7 +149,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
         const errorData = await response.json().catch(() => ({}));
         const rateLimitMsg =
           errorData.error ||
-          "Sprout is catching its breath! Please wait a minute before asking another question.";
+          "🌱 Sprout is catching its breath! Please wait a minute before asking another question.";
 
         setMessages((prev) =>
           prev.map((msg) =>
@@ -166,6 +173,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
       const decoder = new TextDecoder("utf-8");
       let accumulatedRaw = "";
       let parsedActions: ChatMessage["actions"] = undefined;
+      let parsedTelemetry: ChatMessage["telemetry"] = undefined;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -176,14 +184,29 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
 
         let displayContent = accumulatedRaw;
 
-        // Quietly strip reasoning trace delimiters without displaying ugly raw tags
+        // Parse Vector RAG Telemetry if present
+        if (displayContent.includes("__RAG_TELEMETRY__")) {
+          const splitTelemetry = displayContent.split("__RAG_TELEMETRY__")[1];
+          const endIdx = splitTelemetry.indexOf("\n\n");
+          if (endIdx !== -1) {
+            const telemetryJson = splitTelemetry.substring(0, endIdx);
+            try {
+              parsedTelemetry = JSON.parse(telemetryJson);
+            } catch {}
+            displayContent = splitTelemetry.substring(endIdx + 2);
+          } else {
+            // Wait for full telemetry header
+            displayContent = "";
+          }
+        }
+
+        // Backward compatibility for reasoning tag if any
         if (displayContent.includes("__REASONING__")) {
           const splitReasoning = displayContent.split("__REASONING__")[1];
           const endBracketIdx = splitReasoning.indexOf("]\n\n");
           if (endBracketIdx !== -1) {
             displayContent = splitReasoning.substring(endBracketIdx + 3);
           } else {
-            // Still streaming reasoning headers; hold display until user content begins
             displayContent = "";
           }
         }
@@ -204,6 +227,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               ? {
                   ...msg,
                   content: displayContent,
+                  telemetry: parsedTelemetry || msg.telemetry,
                   actions: parsedActions || msg.actions,
                 }
               : msg
@@ -218,7 +242,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
             ? {
                 ...msg,
                 content:
-                  "Oops, Sprout got a little tangled up! You can browse Yashvardhan's projects directly or view his verified resume.",
+                  "🌱 *[Sprout shrugs politely]*\n\nOops, my synaptic roots got slightly tangled! You can browse Yashvardhan's projects directly or inspect his verified resume.",
                 actions: [
                   { label: "View Projects", href: "/#work" },
                   { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
@@ -425,16 +449,18 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                   Sprout
                 </span>
                 <span
-                  className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
-                  title="Online and grounded in verified portfolio data"
-                />
+                  className="text-[9.5px] font-mono px-1.5 py-0.5 rounded border uppercase font-semibold bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
+                  title="In-Memory Vector RAG Engine active"
+                >
+                  Vector RAG
+                </span>
               </div>
               <span
                 className={`text-[11px] mt-0.5 tracking-normal ${
                   isDarkMode ? "text-[#9BA89F]" : "text-[#627768]"
                 }`}
               >
-                Your guide to my work
+                Grounded portfolio companion
               </span>
             </div>
           </div>
@@ -530,20 +556,30 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                     />
                   </div>
                   <div className="space-y-1.5 flex-1">
-                    <p
-                      className={`text-xs font-mono tracking-tight font-medium ${
-                        isDarkMode ? "text-emerald-400" : "text-emerald-700"
-                      }`}
-                    >
-                      Psst... looking for something? I can show you what Yashvardhan has been building.
-                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p
+                        className={`text-xs font-mono tracking-tight font-semibold ${
+                          isDarkMode ? "text-emerald-400" : "text-emerald-700"
+                        }`}
+                      >
+                        Sprout · Vector RAG Companion
+                      </p>
+                      <span
+                        className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded border uppercase tracking-wider font-semibold ${
+                          isDarkMode
+                            ? "bg-[#1B2620] border-emerald-500/30 text-emerald-400"
+                            : "bg-[#E5EBDD] border-emerald-700/30 text-emerald-800"
+                        }`}
+                      >
+                        Cosine θ Rank
+                      </span>
+                    </div>
                     <p
                       className={`text-[13px] leading-relaxed ${
                         isDarkMode ? "text-[#C4CEC8]" : "text-[#3D4C42]"
                       }`}
                     >
-                      Hey, I&apos;m Sprout! I&apos;m Yashvardhan&apos;s little portfolio companion. Curious about his
-                      projects, skills, achievements or the things he&apos;s building? Ask me anything.
+                      Hey, I&apos;m Sprout! I&apos;m Yashvardhan&apos;s tiny, delightfully opinionated portfolio companion. Grounded strictly in his verified engineering archives via an in-memory Vector RAG index. Ask me about his projects, academic metrics, or C++ algorithms!
                     </p>
                   </div>
                 </div>
@@ -598,7 +634,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                 >
                   {/* Message Bubble */}
                   <div
-                    className={`relative max-w-[88%] sm:max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed transition-all group ${
+                    className={`relative max-w-[92%] sm:max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed transition-all group ${
                       isUser
                         ? isDarkMode
                           ? "bg-[#1C2621] border border-[#2A3B31] text-[#ECEEE7] rounded-tr-sm"
@@ -648,11 +684,44 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                               isDarkMode ? "text-[#9BA89F]" : "text-[#627768]"
                             }`}
                           >
-                            Sprout is thinking...
+                            Sprout is querying vector index...
                           </span>
                         </div>
                       )}
                     </div>
+
+                    {/* Vector RAG Telemetry Pill */}
+                    {!isUser && message.telemetry && (
+                      <div
+                        className={`mt-2.5 pt-1.5 flex items-center justify-between text-[10.5px] font-mono border-t border-inherit ${
+                          message.telemetry.securityWarning
+                            ? "text-amber-500 font-medium"
+                            : isDarkMode
+                            ? "text-emerald-400/90"
+                            : "text-emerald-700/90"
+                        }`}
+                      >
+                        {message.telemetry.securityWarning ? (
+                          <span className="flex items-center gap-1.5">
+                            <span>🛡️</span>
+                            <span>Anti-Jailbreak Guard Active · Injection Deflected</span>
+                          </span>
+                        ) : (
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="inline-flex items-center gap-1 font-semibold">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                              <span>Vector RAG</span>
+                            </span>
+                            <span className="opacity-40">|</span>
+                            <span>{message.telemetry.vectors} chunks retrieved</span>
+                            <span className="opacity-40">|</span>
+                            <span>cos θ {message.telemetry.cosTheta}</span>
+                            <span className="opacity-40">|</span>
+                            <span className="tabular-nums">{message.telemetry.latencyMs}ms</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {/* Interactive Contextual Action Pills */}
                     {!isUser && message.actions && message.actions.length > 0 && (
@@ -728,7 +797,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={isStreaming}
-              placeholder="Ask Sprout about Yashvardhan..."
+              placeholder="Ask Sprout about Yashvardhan's work..."
               aria-label="Ask Sprout a question"
               className="flex-1 bg-transparent px-3 py-2 text-[13px] outline-none resize-none leading-relaxed placeholder:text-neutral-400 disabled:opacity-60 max-h-24"
               style={{ minHeight: "38px" }}

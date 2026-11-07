@@ -18,7 +18,6 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
   const { setTheme } = useTheme();
 
   const [phase, setPhase] = useState<PreloaderPhase>("CALIBRATION");
-  const [percent, setPercent] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [selectedRealm, setSelectedRealm] = useState<"dark" | "light">("dark");
   const [clickPos, setClickPos] = useState({ x: 50, y: 50 });
@@ -41,7 +40,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     });
   }, [smoothSplit]);
 
-  // Phase 1: Framer Bouncing Dots + Fluid Typography Reveal (3.4 seconds)
+  // Phase 1: Framer Bouncing Dots + Fluid Typography Reveal (~3.2 seconds)
   useEffect(() => {
     setMounted(true);
 
@@ -56,33 +55,11 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       } catch {}
     }
 
-    const duration = 3400;
-    const start = performance.now();
+    const timer = setTimeout(() => {
+      setPhase("DUALITY");
+    }, 3400);
 
-    const updateProgress = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(1, elapsed / duration);
-
-      // Smooth cubic ease-in-out curve
-      const eased =
-        progress < 0.5
-          ? 4 * progress * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-      setPercent(Math.round(eased * 100));
-
-      if (progress < 1) {
-        requestAnimationFrame(updateProgress);
-      } else {
-        setPercent(100);
-        setTimeout(() => {
-          setPhase("DUALITY");
-        }, 380);
-      }
-    };
-
-    const animId = requestAnimationFrame(updateProgress);
-    return () => cancelAnimationFrame(animId);
+    return () => clearTimeout(timer);
   }, [onComplete]);
 
   // Mouse move on Duality stage -> water-like spring response
@@ -164,109 +141,67 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       aria-modal="true"
       aria-label="Yashvardhan Portfolio Genesis"
       onMouseMove={handleMouseMove}
-      className={`fixed inset-0 z-[99999] overflow-hidden select-none bg-[#090B0E] transition-opacity duration-700 ${
+      className={`fixed inset-0 z-[99999] overflow-hidden select-none bg-[#050508] transition-opacity duration-700 ${
         isDissolving ? "pointer-events-none" : "pointer-events-auto"
       }`}
     >
       <AnimatePresence mode="wait">
         {/* ─────────────────────────────────────────────────────────────
-            STAGE 1: DUAL-HARMONY BRAND PRELOADER WITH FRAMER BOUNCING DOTS
-            (0.0s – 3.4s)
+            STAGE 1: BRAND HARMONY PRELOADER (PURE MONUMENTAL TYPOGRAPHY
+            + FRAMER BOUNCING DOTS · ZERO COUNTDOWN CLUTTER)
             ───────────────────────────────────────────────────────────── */}
         {phase === "CALIBRATION" && (
           <motion.div
             key="stage-calibration"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
+            exit={{ opacity: 0, scale: 1.04 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-12 z-20"
           >
-            {/* Dual Harmony Ambient Gradient Backdrop: Blending Obsidian Purple & Petrichor Cedar */}
+            {/* Minimalist Obsidian Starlight Atmosphere */}
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0B0914] via-[#0E1117] to-[#16201B] opacity-95" />
-              {/* Subtle Starlight Violet & Royal Purple Nebula (Obsidian Brand) */}
-              <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-600/15 blur-[110px]" />
-              <div className="absolute bottom-1/4 left-1/3 w-96 h-96 rounded-full bg-violet-500/12 blur-[100px]" />
-              {/* Subtle Sunlit Meadow Amber & Forest Pine Glow (Petrichor Brand) */}
-              <div className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-amber-400/12 blur-[100px]" />
-              <div className="absolute bottom-1/3 right-1/3 w-96 h-96 rounded-full bg-emerald-600/12 blur-[110px]" />
+              <div className="absolute inset-0 bg-[#050508]" />
+              {/* Centered Obsidian Royal Purple Ambient Aura */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.12)_0%,rgba(124,58,237,0.05)_45%,transparent_70%)] blur-[70px]" />
             </div>
 
-            {/* Monumental Name Typography: Letter-by-letter Staggered Wave */}
+            {/* Monumental Name Typography: Pure White, Zero Shadow, Refined Optical Kerning */}
             <div className="relative z-10 flex flex-col items-center">
-              <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-3 overflow-hidden py-2">
-                {NAME_LETTERS.map((letter, index) => {
-                  const isFirstHalf = index < 5;
-                  return (
-                    <motion.span
-                      key={`${letter}-${index}`}
-                      initial={{ opacity: 0, y: 35, filter: "blur(10px)", scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
-                      transition={{
-                        duration: 0.85,
-                        delay: 0.12 + index * 0.05,
-                        ease: [0.19, 1, 0.22, 1],
-                      }}
-                      className="font-display font-semibold text-4xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none inline-block"
-                      style={{
-                        color: isFirstHalf ? "#F3E8FF" : "#FAF8F5",
-                        textShadow: isFirstHalf
-                          ? "0 0 35px rgba(168, 85, 247, 0.45)"
-                          : "0 0 35px rgba(251, 191, 36, 0.35)",
-                      }}
-                    >
-                      {letter}
-                    </motion.span>
-                  );
-                })}
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1.5 md:gap-2.5 overflow-hidden py-3">
+                {NAME_LETTERS.map((letter, index) => (
+                  <motion.span
+                    key={`${letter}-${index}`}
+                    initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.1 + index * 0.045,
+                      ease: [0.19, 1, 0.22, 1],
+                    }}
+                    className="font-display font-medium text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[-0.03em] select-none inline-block text-white antialiased leading-none"
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
               </div>
 
-              {/* Exact Framer BouncingDots Physics Loader */}
+              {/* Exact Framer BouncingDots Physics Loader in Unified Brand Purple Palette */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-4 sm:mt-6 mb-2"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-6 sm:mt-8 flex flex-col items-center"
               >
                 <BouncingDotsLoader
                   dotCount={4}
                   dotSize={22}
-                  bounceHeight={48}
+                  bounceHeight={46}
                   animationDuration={1.35}
                   dotSpacing={16}
                   showRipple={true}
                   showShadow={true}
                 />
-              </motion.div>
-
-              {/* Water-like Liquid Brand Progress Bar & Percentage */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="mt-4 w-64 sm:w-80 flex flex-col items-center gap-3"
-              >
-                {/* Dual-Brand Gradient Progress Track (Obsidian Purple to Petrichor Cedar/Amber) */}
-                <div className="relative w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
-                  <motion.div
-                    className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-[#A855F7] via-[#8B5CF6] via-[#10B981] to-[#F59E0B]"
-                    style={{ width: `${percent}%` }}
-                    transition={{ ease: "easeOut" }}
-                  />
-                  {/* Glowing Leading Bead */}
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2 -ml-1 w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_#FFFFFF]"
-                    style={{ left: `${percent}%` }}
-                  />
-                </div>
-
-                {/* Elegant Minimalist Percentage Counter */}
-                <div className="flex items-center justify-between w-full font-mono text-[11px] tracking-[0.25em] text-white/40 tabular-nums">
-                  <span className="text-purple-400/90 font-medium">OBSIDIAN</span>
-                  <span className="text-white font-semibold">{String(percent).padStart(2, "0")}%</span>
-                  <span className="text-amber-300/90 font-medium">PETRICHOR</span>
-                </div>
               </motion.div>
             </div>
           </motion.div>
@@ -427,7 +362,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
                   ✦ OBSIDIAN
                 </span>
                 <span className="text-xs font-mono text-white/40">|</span>
-                <span className="text-[11px] font-mono tracking-widest uppercase text-amber-200">
+                <span className="text-[11px] font-mono tracking-widest uppercase text-[#FAF8F5]">
                   PETRICHOR ✦
                 </span>
               </div>

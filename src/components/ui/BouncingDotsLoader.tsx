@@ -13,35 +13,35 @@ interface BouncingDotsLoaderProps {
   className?: string;
 }
 
-// Exact brand color sequence: Obsidian Royal Purple -> Soft Lavender -> Cedar Moss -> Golden Honey
+// Unified Brand Harmonic Palette: Starlight Pearl -> Lavender -> Royal Purple -> Deep Amethyst
 const BRAND_DOT_PALETTES = [
+  {
+    start: "#FFFFFF",
+    end: "#DDD6FE",
+    glow: "rgba(221, 214, 254, 0.75)",
+    ripple: "rgba(192, 132, 252, 0.35)",
+    shadow: "rgba(168, 85, 247, 0.3)",
+  },
   {
     start: "#C084FC",
     end: "#A855F7",
-    glow: "rgba(168, 85, 247, 0.8)",
-    ripple: "rgba(168, 85, 247, 0.35)",
-    shadow: "rgba(168, 85, 247, 0.4)",
+    glow: "rgba(168, 85, 247, 0.85)",
+    ripple: "rgba(168, 85, 247, 0.4)",
+    shadow: "rgba(168, 85, 247, 0.45)",
   },
   {
     start: "#A855F7",
     end: "#7C3AED",
-    glow: "rgba(124, 58, 237, 0.8)",
-    ripple: "rgba(124, 58, 237, 0.35)",
-    shadow: "rgba(124, 58, 237, 0.4)",
+    glow: "rgba(124, 58, 237, 0.85)",
+    ripple: "rgba(124, 58, 237, 0.4)",
+    shadow: "rgba(124, 58, 237, 0.45)",
   },
   {
-    start: "#34D399",
-    end: "#2A5741",
-    glow: "rgba(42, 87, 65, 0.8)",
-    ripple: "rgba(42, 87, 65, 0.35)",
-    shadow: "rgba(42, 87, 65, 0.4)",
-  },
-  {
-    start: "#FBBF24",
-    end: "#D97706",
-    glow: "rgba(217, 119, 6, 0.8)",
-    ripple: "rgba(217, 119, 6, 0.35)",
-    shadow: "rgba(217, 119, 6, 0.4)",
+    start: "#7C3AED",
+    end: "#6B21A8",
+    glow: "rgba(107, 33, 168, 0.8)",
+    ripple: "rgba(107, 33, 168, 0.35)",
+    shadow: "rgba(107, 33, 168, 0.4)",
   },
 ];
 
