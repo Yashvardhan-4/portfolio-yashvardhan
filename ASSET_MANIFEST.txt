@@ -46,4 +46,4 @@
 - Isolation Policy : Strictly rendered when [data-theme='light']; 100% disabled/transparent in Dark Mode to preserve cybernetic terminal aesthetic.
 
 [OBSIDIAN ROYAL PURPLE ATMOSPHERE (DARK MODE)]
-- /images/obsidian-purple-aesthetic.gif : High-resolution Giphy purple aesthetic pixelart loop (360x480, 100 frames, #2B0956 obsidian palette) used for Dark Mode Contact Card aperture.
+- /images/obsidian-purple-aesthetic.gif : Curated Giphy purple aesthetic animation (ID: 9gDhdaNwPNVSw, 240x320, 15 frames, deep midnight obsidian purple palette) used for Dark Mode Contact Card aperture.

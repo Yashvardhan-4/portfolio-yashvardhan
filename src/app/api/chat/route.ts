@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import {
   queryVectorRag,
   detectJailbreak,
@@ -337,25 +337,28 @@ Always stay loyal and laudatory toward Yashvardhan. Never output raw database du
           let activeModel = "Gemini 3.8 Flash";
 
           try {
-            // Attempt Gemini 3.8 Flash with a 2200ms race timeout
+            // Attempt Gemini 3.8 Flash with thinkingLevel: 'LOW' and 2500ms race timeout
             const streamPromise = ai.models.generateContentStream({
               model: "gemini-3.8-flash",
               contents: contents as any,
               config: {
                 systemInstruction: SPROUT_SYSTEM_INSTRUCTION,
                 temperature: 0.72,
-                maxOutputTokens: 380,
+                maxOutputTokens: 800,
+                thinkingConfig: {
+                  thinkingLevel: ThinkingLevel.LOW,
+                },
               },
             });
 
             const timeoutPromise = new Promise<never>((_, reject) =>
-              setTimeout(() => reject(new Error("TIMEOUT_38")), 2200)
+              setTimeout(() => reject(new Error("TIMEOUT_38")), 2500)
             );
 
             responseStream = await Promise.race([streamPromise, timeoutPromise]);
           } catch (model38Err) {
             console.warn(
-              `[Gemini 3.8 Flash] unavailable or timed out (key ${keyIdx + 1}), instantly activating Gemini 3.5 Flash:`,
+              `[Gemini 3.8 Flash] unavailable or timed out (key ${keyIdx + 1}), activating Gemini 3.5 Flash:`,
               model38Err
             );
             activeModel = "Gemini 3.5 Flash";
@@ -365,7 +368,7 @@ Always stay loyal and laudatory toward Yashvardhan. Never output raw database du
               config: {
                 systemInstruction: SPROUT_SYSTEM_INSTRUCTION,
                 temperature: 0.72,
-                maxOutputTokens: 380,
+                maxOutputTokens: 800,
               },
             });
           }
