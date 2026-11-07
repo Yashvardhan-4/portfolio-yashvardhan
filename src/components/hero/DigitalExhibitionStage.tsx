@@ -240,22 +240,23 @@ export function DigitalExhibitionStage({
       };
     });
 
-    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Cropped strictly to head & neck, height = 360)
+    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Cropped strictly to full neck, height = 445)
     const baseWidthLight = halftoneDataLight.width;   // 480
-    const baseHeightLight = halftoneDataLight.height; // 360 (cropped strictly to neck)
+    const baseHeightLight = halftoneDataLight.height; // 445 (cropped strictly to full neck)
     const rawDotsLight = halftoneDataLight.dots as Array<[number, number, number, number, number?, number?, number?]>;
 
     const portraitDotsLight: PortraitDot[] = rawDotsLight.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
-      const isCoreFeature = x0 > 165 && x0 < 315 && y0 > 170 && y0 < 340;
+      // Core features include forehead, eyes, nose, moustache, lips, chin, beard, and central neck
+      const isCoreFeature = x0 > 135 && x0 < 345 && y0 > 120 && y0 < 415;
       const featureWeight = isCoreFeature ? 0.60 : 1.0;
 
       const dxEdge = (x0 - baseWidthLight * 0.5) / 160;
-      const dyEdge = (y0 - baseHeightLight * 0.5) / 175;
+      const dyEdge = (y0 - baseHeightLight * 0.5) / 215;
       const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
       const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.18) : 1.0;
 
-      // Soft vertical bottom fade for neck so it dissolves seamlessly without harsh cutoffs
-      const bottomFade = y0 > 325 ? Math.max(0, 1 - (y0 - 325) / 35) : 1.0;
+      // Soft vertical bottom fade strictly at the base of the neck (Y > 415 to 445)
+      const bottomFade = y0 > 415 ? Math.max(0.15, 1 - (y0 - 415) / 32) : 1.0;
       const combinedFade = edgeFade * bottomFade;
 
       const r = rRaw !== undefined ? rRaw : 45;
@@ -270,22 +271,22 @@ export function DigitalExhibitionStage({
         const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : combinedFade));
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(200, 147, 85, 1.0)";
-        radiusMultiplierLight = 1.18 * Math.max(0.2, bottomFade);
+        radiusMultiplierLight = 1.18;
       } else if (l < 0.65) {
         const alpha = 0.82 * combinedFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(215, 160, 95, 0.96)";
-        radiusMultiplierLight = 1.02 * Math.max(0.2, bottomFade);
+        radiusMultiplierLight = 1.02;
       } else if (l < 0.82) {
         const alpha = 0.65 * combinedFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(230, 185, 120, 0.90)";
-        radiusMultiplierLight = 0.88 * Math.max(0.2, bottomFade);
+        radiusMultiplierLight = 0.88;
       } else {
         const alpha = 0.42 * combinedFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(240, 205, 145, 0.80)";
-        radiusMultiplierLight = 0.72 * Math.max(0.2, bottomFade);
+        radiusMultiplierLight = 0.72;
       }
 
       const initialDist = 55 + (i % 27) * 3.5;
@@ -630,7 +631,7 @@ export function DigitalExhibitionStage({
         let isLitByScan = false;
         let scanBoost = 0;
         if (isScanning) {
-          const isWithinVisiblePortrait = !isLight || p.y0 <= 360;
+          const isWithinVisiblePortrait = !isLight || p.y0 <= 445;
           const distToScan = Math.abs(p.y - scanY);
           if (distToScan < scanBandWidth && isWithinVisiblePortrait) {
             isLitByScan = true;

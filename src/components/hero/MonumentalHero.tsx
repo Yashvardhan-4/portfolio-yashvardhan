@@ -160,7 +160,7 @@ export function MonumentalHero() {
               <div
                 ref={mobileAnchorRef}
                 className={`w-full pointer-events-none ${
-                  isLightMode ? "aspect-[480/360]" : "aspect-[480/513]"
+                  isLightMode ? "aspect-[480/445]" : "aspect-[480/513]"
                 }`}
                 aria-label="Mobile Portrait Spatial Guide"
               />
@@ -233,7 +233,7 @@ export function MonumentalHero() {
             <div
               ref={desktopAnchorRef}
               className={`w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10 ${
-                isLightMode ? "aspect-[480/360]" : "aspect-[480/513]"
+                isLightMode ? "aspect-[480/445]" : "aspect-[480/513]"
               }`}
               aria-label="Desktop Portrait Spatial Guide"
             />
