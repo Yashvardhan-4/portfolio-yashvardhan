@@ -211,7 +211,7 @@ export async function POST(req: NextRequest) {
 ${contextDocuments || "No closely matching document found (Cosine similarity below semantic threshold)."}
 </retrieved_rag_context>
 
-Instructions: Ground your response strictly in the retrieved context above using Sprout's cute sarcastic persona. If the query is completely unrelated to Yashvardhan's work, deliver a witty plant roast and redirect them.`;
+Instructions: Ground your response strictly in the retrieved context above using Sprout's cute sarcastic persona. If the user asks whether they should hire Yashvardhan, if he is hirable, or about his availability, enthusiastically and wittily advocate for him using his verified stats, 8.86 CGPA, Shivkush PWA delivery, and 500+ CP problems. If the query is completely unrelated to Yashvardhan's work or software engineering (e.g. baking, unrelated trivia), deliver a polite, witty plant redirection.`;
 
         const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
 

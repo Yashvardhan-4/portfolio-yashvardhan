@@ -41,7 +41,10 @@ export const AI_KNOWLEDGE_CHUNKS: KnowledgeChunk[] = [
     id: "project-shivkush",
     category: "projects",
     title: "Shivkush Nursery Management System",
-    keywords: ["shivkush", "nursery", "pwa", "ecommerce", "commercial", "agriculture", "plants", "supabase", "freelance", "contract"],
+    keywords: [
+      "shivkush", "nursery", "pwa", "ecommerce", "commercial", "agriculture",
+      "plants", "supabase", "freelance", "contract", "offline", "hi-tech", "tell me about shivkush", "shivkush nursery"
+    ],
     summary: "Production bilingual agricultural commerce engine with offline PWA caching & PostgreSQL RLS.",
     fullContent:
       "Shivkush Nursery Management System is a solo commercial software contract engineered by Yashvardhan for an agricultural plant nursery in Ahilyanagar, India (Dec 2025 – May 2026). It solves low-bandwidth 2G/3G connectivity constraints for rural farmers using an offline-first Service Worker architecture (`sw.js` with `CACHE_NAME = 'shivkush-v1'`). Key technical achievements include:\n- Bilingual catalog (English / Marathi) with zero-account-barrier ordering.\n- Supabase PostgreSQL database secured with granular Row-Level Security (RLS) policies allowing public inserts while restricting administrative management.\n- Interactive 3D WebGL plant visualization using Three.js and lightweight 2D canvas particle systems.\n- 1-tap direct WhatsApp routing for customer order fulfillment.",
@@ -147,6 +150,41 @@ export const AI_KNOWLEDGE_CHUNKS: KnowledgeChunk[] = [
       { label: "Send Email", href: "mailto:yashvardhanborude7@gmail.com" },
       { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
       { label: "Download Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+    ],
+  },
+  {
+    id: "recruitment-why-hire",
+    category: "contact",
+    title: "Why Hire Yashvardhan — Recruiter & Hiring Guide",
+    keywords: [
+      "hire", "hirable", "hireable", "why hire", "should hire", "should i hire", "is he hirable",
+      "recruit", "recruiting", "recruiter", "interview", "candidate", "internship", "intern",
+      "role", "job", "full time", "strengths", "fit", "work ethic", "worth hiring"
+    ],
+    summary: "Proven production shipping track record, 8.86 CGPA, NPTEL Elite+Silver in Graph Theory, and 500+ CP problems.",
+    fullContent:
+      "Why Yashvardhan is an exceptional addition to your engineering team:\n- **Solo Production Track Record:** Delivered the commercial Shivkush Nursery PWA from scratch—including bilingual offline service workers, Supabase PostgreSQL with Row-Level Security (RLS), and 3D WebGL visualizations.\n- **Academic & Theoretical Rigor:** 8.86 / 10.0 CGPA at PCCOE Pune; NPTEL Elite + Silver in Algorithmic Graph Theory (Score 77/100, IIT Madras/Kharagpur).\n- **Algorithmic Muscle:** 500+ competitive programming problems solved across LeetCode, Codeforces (Pupil 1227), and CodeChef.\n- **Autonomous & Fast-Adapting:** Bridges modern Next.js/TypeScript frontend engineering with resilient distributed backend architectures.\n- **Availability:** Actively seeking Summer & Fall 2026 Software Engineering Internships.",
+    actions: [
+      { label: "View PDF Resume ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+      { label: "Email Yashvardhan", href: "mailto:yashvardhanborude7@gmail.com" },
+      { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
+    ],
+  },
+  {
+    id: "sprout-companion-identity",
+    category: "about",
+    title: "Sprout AI Companion & Vector RAG Architecture",
+    keywords: [
+      "who are you", "are you ai", "what are you", "sprout", "bot", "assistant", "ai",
+      "companion", "vector rag", "rag", "how do you work", "architecture", "what can you do"
+    ],
+    summary: "Sprout is Yashvardhan's custom portfolio AI companion, driven by an in-memory Vector RAG engine.",
+    fullContent:
+      "I am Sprout, Yashvardhan's custom AI portfolio companion and a live demonstration of his systems engineering craft. Here is how I work:\n- **In-Memory Vector RAG Pipeline:** I parse questions into normalized sub-word and n-gram vectors, computing cosine similarity over Yashvardhan's project chunks in under 2ms.\n- **Multi-Layer Security:** Equipped with an automated scanner that deflects prompt injections, instruction overrides, and roleplay exploits.\n- **Dual-Generation Engine:** Seamlessly connects to Google Gemini 2.5 Flash neural streaming when online, or runs local grounded synthesis when offline.\n- **Ask Me Anything:** I'm here to walk you through his projects, academic credentials, competitive programming records, or interview availability!",
+    actions: [
+      { label: "Explore Projects", href: "/#work" },
+      { label: "View Verified Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+      { label: "Contact Yashvardhan", href: "/#contact" },
     ],
   },
 ];
