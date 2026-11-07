@@ -179,6 +179,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
 
     setClickPos({ x: xPct, y: yPct });
     setSelectedRealm(choice);
+    setTheme(choice);
     setPhase("PORTAL_EXPANDING");
     setIsDissolving(false);
 
@@ -186,21 +187,16 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       sessionStorage.setItem("yashvardhan_preloader_seen_v2", "true");
     } catch {}
 
-    // 1. Synchronize theme halfway through the portal expansion (400ms)
-    setTimeout(() => {
-      setTheme(choice);
-    }, 400);
-
-    // 2. Once portal occupies full screen (720ms), trigger slow cinematic dissolve
+    // 1. Once portal occupies full screen (650ms), trigger slow cinematic dissolve
     setTimeout(() => {
       setIsDissolving(true);
-    }, 720);
+    }, 650);
 
-    // 3. Complete transition smoothly after the 800ms dissolve veil (1550ms total)
+    // 2. Complete transition smoothly after the 700ms dissolve veil (1350ms total)
     setTimeout(() => {
       setPhase("COMPLETE");
       onComplete?.();
-    }, 1550);
+    }, 1350);
   };
 
   if (!mounted || phase === "COMPLETE") return null;
@@ -215,11 +211,19 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       aria-modal="true"
       aria-label="Yashvardhan Portfolio Genesis"
       onMouseMove={handleMouseMove}
-      className={`fixed inset-0 z-[99999] overflow-hidden select-none bg-[#050508] transition-opacity duration-700 ${
-        isDissolving ? "pointer-events-none" : "pointer-events-auto"
+      className={`fixed inset-0 z-[99999] overflow-hidden select-none transition-all duration-700 ${
+        isDissolving ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100"
       }`}
+      style={{
+        backgroundColor:
+          phase === "PORTAL_EXPANDING"
+            ? selectedRealm === "dark"
+              ? "#05060A"
+              : "#FAF8F5"
+            : "#050508",
+      }}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {/* ─────────────────────────────────────────────────────────────
             STAGE 1: BRAND HARMONY PRELOADER (PURE MONUMENTAL TYPOGRAPHY
             + FRAMER BOUNCING DOTS · ZERO COUNTDOWN CLUTTER)
@@ -493,9 +497,17 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
               className={`absolute inset-0 opacity-40 ${
                 selectedRealm === "dark"
                   ? "bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.45),transparent_70%)]"
-                  : "bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5),transparent_70%)]"
+                  : "bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.35),transparent_70%)]"
               }`}
             />
+
+            {/* Seamless Petrichor Summer Sky Overlay for Light Mode */}
+            {selectedRealm === "light" && (
+              <div
+                className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-multiply pointer-events-none"
+                style={{ backgroundImage: `url('/images/ghibli-countryside-summer.jpg')` }}
+              />
+            )}
 
             {/* Radiant Realm Unfurl Emblem */}
             <motion.div
@@ -506,7 +518,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
                   : { scale: 1.05, opacity: 1, filter: "blur(0px)" }
               }
               transition={{ duration: isDissolving ? 0.6 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-center font-display text-4xl sm:text-6xl font-semibold tracking-tight"
+              className="text-center font-display text-4xl sm:text-6xl font-semibold tracking-tight z-10"
               style={{
                 color: selectedRealm === "dark" ? "#F3E8FF" : "#17241C",
               }}

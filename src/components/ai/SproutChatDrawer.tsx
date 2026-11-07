@@ -17,6 +17,7 @@ export interface ChatMessage {
     cosTheta: number;
     latencyMs: number;
     topDoc?: string;
+    model?: string;
     securityWarning?: string;
   };
   actions?: Array<{
@@ -787,7 +788,11 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                                   isDarkMode ? "bg-purple-400" : "bg-emerald-500"
                                 }`}
                               />
-                              <span>Vector RAG</span>
+                              <span>
+                                {message.telemetry.model
+                                  ? `RAG · ${message.telemetry.model}`
+                                  : "Vector RAG"}
+                              </span>
                             </span>
                             <span className="opacity-40">|</span>
                             <span>{message.telemetry.vectors} chunks retrieved</span>

@@ -189,7 +189,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GEMINI_API_KEY?.trim();
 
-    // 5. Live Gemini 2.5 Flash Neural RAG Streaming Mode (if API key is present)
+    // 5. Live Gemini 3.8 / 3.5 Flash Neural RAG Streaming Mode (if API key is present)
     if (apiKey && apiKey.length > 10) {
       try {
         const ai = new GoogleGenAI({ apiKey });
@@ -231,15 +231,38 @@ Instructions: Ground your response strictly in the retrieved context above using
           parts: [{ text: userPromptWithContext }],
         });
 
-        const responseStream = await ai.models.generateContentStream({
-          model: "gemini-2.5-flash",
-          contents: contents as any,
-          config: {
-            systemInstruction: SPROUT_SYSTEM_INSTRUCTION,
-            temperature: 0.65,
-            maxOutputTokens: 600,
-          },
-        });
+        // Multi-tier Gemini 3 Generation: Primary gemini-3.8-flash with 2.5s race timeout, auto-fallback to gemini-3.5-flash-lite
+        let responseStream: any;
+        let activeModel = "Gemini 3.8 Flash";
+        try {
+          const streamPromise = ai.models.generateContentStream({
+            model: "gemini-3.8-flash",
+            contents: contents as any,
+            config: {
+              systemInstruction: SPROUT_SYSTEM_INSTRUCTION,
+              temperature: 0.7,
+              maxOutputTokens: 600,
+            },
+          });
+
+          const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("TIMEOUT_38")), 2500)
+          );
+
+          responseStream = await Promise.race([streamPromise, timeoutPromise]);
+        } catch (modelErr) {
+          console.warn("gemini-3.8-flash unavailable or timed out, activating gemini-3.5-flash-lite:", modelErr);
+          activeModel = "Gemini 3.5 Flash";
+          responseStream = await ai.models.generateContentStream({
+            model: "gemini-3.5-flash-lite",
+            contents: contents as any,
+            config: {
+              systemInstruction: SPROUT_SYSTEM_INSTRUCTION,
+              temperature: 0.7,
+              maxOutputTokens: 600,
+            },
+          });
+        }
 
         // Determine relevant action links from top retrieved chunks
         const actionMap = new Map<string, { label: string; href: string; isExternal?: boolean }>();
@@ -258,13 +281,18 @@ Instructions: Ground your response strictly in the retrieved context above using
           ];
         }
 
+        const liveTelemetry = {
+          ...telemetry,
+          model: activeModel,
+        };
+
         const encoder = new TextEncoder();
         const readable = new ReadableStream({
           async start(controller) {
             try {
               // Send telemetry header first
               controller.enqueue(
-                encoder.encode(`__RAG_TELEMETRY__${JSON.stringify(telemetry)}\n\n`)
+                encoder.encode(`__RAG_TELEMETRY__${JSON.stringify(liveTelemetry)}\n\n`)
               );
 
               for await (const chunk of responseStream) {
