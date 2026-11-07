@@ -192,11 +192,11 @@ export function SproutMascot() {
 
       setMascotState("JUMP");
       jumpVelocityRef.current = -13;
-      spawnParticle("exclamation", 0, -22, isDarkMode ? "#00F0FF" : "#EAA69D");
+      spawnParticle("exclamation", 0, -22, isDarkMode ? "#C084FC" : "#EAA69D");
 
       setTimeout(() => {
         setMascotState("HAPPY");
-        spawnParticle("leaf", 0, -22, isDarkMode ? "#00FFA3" : "#47785E");
+        spawnParticle("leaf", 0, -22, isDarkMode ? "#A855F7" : "#47785E");
         setTimeout(() => {
           if (!isParkedRef.current && !isWalkingRef.current) {
             setMascotState("IDLE");
@@ -213,7 +213,7 @@ export function SproutMascot() {
       isWalkingRef.current = false;
       setMascotState("HAPPY");
       jumpVelocityRef.current = -10;
-      spawnParticle("leaf", 0, -22, isDarkMode ? "#00FFA3" : "#47785E");
+      spawnParticle("leaf", 0, -22, isDarkMode ? "#A855F7" : "#47785E");
       setTimeout(() => {
         if (!isParkedRef.current) setMascotState("IDLE");
       }, 600);
@@ -229,7 +229,7 @@ export function SproutMascot() {
     const housePos = getHousePosition();
     targetRef.current = housePos;
     isWalkingRef.current = true;
-    spawnParticle("question", 0, -20, isDarkMode ? "#00F0FF" : "#A9BDA8");
+    spawnParticle("question", 0, -20, isDarkMode ? "#C084FC" : "#A9BDA8");
   }, [getHousePosition, isDarkMode, spawnParticle]);
 
   // Main interaction listeners: mouse tracking, card perching, button cheering, clicks
@@ -250,7 +250,7 @@ export function SproutMascot() {
         isSleepingRef.current = false;
         setMascotState("WAKE_UP");
         jumpVelocityRef.current = -9;
-        spawnParticle("exclamation", 0, -20, isDarkMode ? "#00F0FF" : "#EAA69D");
+        spawnParticle("exclamation", 0, -20, isDarkMode ? "#C084FC" : "#EAA69D");
         setTimeout(() => {
           setMascotState("IDLE");
         }, 500);
@@ -334,7 +334,7 @@ export function SproutMascot() {
       } else {
         setMascotState("JUMP");
         jumpVelocityRef.current = -14;
-        spawnParticle("exclamation", 0, -22, isDarkMode ? "#00F0FF" : "#EAA69D");
+        spawnParticle("exclamation", 0, -22, isDarkMode ? "#C084FC" : "#EAA69D");
 
         setTimeout(() => {
           setMascotState("HAPPY");
@@ -429,12 +429,12 @@ export function SproutMascot() {
 
         setTimeout(() => {
           setMascotState("PERCH");
-          spawnParticle("question", 0, -22, isDarkMode ? "#00F0FF" : "#A9BDA8");
+          spawnParticle("question", 0, -22, isDarkMode ? "#C084FC" : "#A9BDA8");
         }, 350);
       } else {
         setMascotState("HAPPY");
         jumpVelocityRef.current = -12;
-        spawnParticle("leaf", 0, -22, isDarkMode ? "#00FFA3" : "#47785E");
+        spawnParticle("leaf", 0, -22, isDarkMode ? "#A855F7" : "#47785E");
         activePerchRef.current = null;
         setTimeout(() => {
           if (!isParkedRef.current) setMascotState("IDLE");
@@ -485,7 +485,7 @@ export function SproutMascot() {
     isSleepingRef.current = true;
 
     const interval = setInterval(() => {
-      spawnParticle("z", 4, -20, isDarkMode ? "#00F0FF" : "#47785E");
+      spawnParticle("z", 4, -20, isDarkMode ? "#C084FC" : "#47785E");
     }, 2400);
 
     return () => clearInterval(interval);
@@ -604,7 +604,7 @@ export function SproutMascot() {
           targetRef.current = hp;
 
           setMascotState("SLEEP");
-          spawnParticle("z", 4, -20, isDarkMode ? "#00F0FF" : "#47785E");
+          spawnParticle("z", 4, -20, isDarkMode ? "#C084FC" : "#47785E");
           return;
         }
 
@@ -653,7 +653,7 @@ export function SproutMascot() {
               style={{
                 backgroundColor: isParked
                   ? isDarkMode
-                    ? "#00F0FF"
+                    ? "#C084FC"
                     : "#47785E"
                   : isReturningHome
                   ? "#F59E0B"
@@ -688,7 +688,7 @@ export function SproutMascot() {
           aria-pressed={isParked}
           className={`relative w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60 active:scale-95 cursor-pointer pointer-events-auto border ${
             isDarkMode
-              ? "bg-[#10141D]/90 border-[#1E2638] hover:border-[#00F0FF]/50 shadow-[0_4px_16px_rgba(0,0,0,0.6)] hover:shadow-[0_0_16px_rgba(0,240,255,0.25)]"
+              ? "bg-[#10141D]/90 border-[#1E2638] hover:border-[#A855F7]/50 shadow-[0_4px_16px_rgba(0,0,0,0.6)] hover:shadow-[0_0_16px_rgba(168,85,247,0.25)]"
               : "bg-[#FAFBF7]/90 border-[#DFE2D2] hover:border-[#47785E]/50 shadow-sm hover:shadow-md"
           } backdrop-blur-md`}
         >
@@ -710,7 +710,7 @@ export function SproutMascot() {
               stroke={
                 isDarkMode
                   ? isParked
-                    ? "#00FFA3"
+                    ? "#C084FC"
                     : "#243247"
                   : isParked
                   ? "#47785E"
@@ -719,7 +719,7 @@ export function SproutMascot() {
               fill={
                 isDarkMode
                   ? isParked
-                    ? "rgba(0, 240, 255, 0.08)"
+                    ? "rgba(168, 85, 247, 0.08)"
                     : "rgba(16, 20, 29, 0.6)"
                   : isParked
                   ? "rgba(71, 120, 94, 0.08)"
@@ -729,7 +729,7 @@ export function SproutMascot() {
             {/* Base Foundation */}
             <path
               d="M2 20h20"
-              stroke={isDarkMode ? "#00F0FF" : "#47785E"}
+              stroke={isDarkMode ? "#A855F7" : "#47785E"}
               strokeWidth="2"
             />
             {/* Doorway / Entrance Arch */}
@@ -738,7 +738,7 @@ export function SproutMascot() {
               stroke={
                 isDarkMode
                   ? isParked
-                    ? "#00F0FF"
+                    ? "#C084FC"
                     : "#32435F"
                   : isParked
                   ? "#47785E"
@@ -747,7 +747,7 @@ export function SproutMascot() {
               fill={
                 isDarkMode
                   ? isParked
-                    ? "rgba(0, 240, 255, 0.18)"
+                    ? "rgba(168, 85, 247, 0.18)"
                     : "rgba(8, 11, 18, 0.7)"
                   : isParked
                   ? "rgba(71, 120, 94, 0.18)"
@@ -757,12 +757,12 @@ export function SproutMascot() {
             {/* Interior Plant / Sprout Symbol */}
             <path
               d="M12 11c0-2 1.5-3 3-3-1 2-2 3-3 3z"
-              fill={isDarkMode ? "#00FFA3" : "#47785E"}
+              fill={isDarkMode ? "#A855F7" : "#47785E"}
               stroke="none"
             />
             <path
               d="M12 11c0-1.8-1.2-2.8-2.5-2.8.8 1.8 1.8 2.8 2.5 2.8z"
-              fill={isDarkMode ? "#80FFEA" : "#6AA885"}
+              fill={isDarkMode ? "#C084FC" : "#6AA885"}
               stroke="none"
             />
           </svg>
@@ -774,7 +774,7 @@ export function SproutMascot() {
             } ${
               isParked
                 ? isDarkMode
-                  ? "bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]"
+                  ? "bg-[#A855F7] shadow-[0_0_6px_#A855F7]"
                   : "bg-[#47785E]"
                 : isReturningHome
                 ? "bg-amber-400 animate-ping"
@@ -808,9 +808,9 @@ export function SproutMascot() {
                     style={{
                       left: `calc(50% + ${p.x}px)`,
                       top: `${p.y}px`,
-                      color: p.color || (isDarkMode ? "#00F0FF" : "#47785E"),
+                      color: p.color || (isDarkMode ? "#C084FC" : "#47785E"),
                       textShadow: isDarkMode
-                        ? "0 0 8px rgba(0, 240, 255, 0.7)"
+                        ? "0 0 8px rgba(192, 132, 252, 0.7)"
                         : "0 1px 2px rgba(0,0,0,0.5)",
                     }}
                   >
@@ -826,8 +826,8 @@ export function SproutMascot() {
                     className="absolute left-1/2 -translate-x-1/2 font-mono font-black text-sm animate-sprout-pop"
                     style={{
                       top: `${p.y}px`,
-                      color: p.color || (isDarkMode ? "#00F0FF" : "#EAA69D"),
-                      textShadow: isDarkMode ? "0 0 8px rgba(0, 240, 255, 0.7)" : undefined,
+                      color: p.color || (isDarkMode ? "#C084FC" : "#EAA69D"),
+                      textShadow: isDarkMode ? "0 0 8px rgba(192, 132, 252, 0.7)" : undefined,
                     }}
                   >
                     !

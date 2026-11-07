@@ -218,20 +218,46 @@ export function classifyIntentAndSynthesize(query: string): SemanticResponse {
     q.includes("education") ||
     q.includes("degree") ||
     q.includes("btech") ||
-    q.includes("academics") ||
+    q.includes("academic") ||
+    q.includes("achievement") ||
     q.includes("semester")
   ) {
     return {
       content:
-        "Yashvardhan is pursuing his **B.Tech in Computer Engineering** at **Pimpri Chinchwad College of Engineering (PCCOE)**, Pune (Class of 2028):\n\n• **Academic Performance**: Cumulative **CGPA of 8.86 / 10.0** (recorded till Semester 4).\n• **Current Standing**: 3rd Year (Semester 5).\n• **Core Coursework**: Data Structures & Algorithms, Database Management Systems (PostgreSQL), Operating Systems & Linux Concurrency, Computer Networks, Object-Oriented Programming (C++), and Machine Learning Foundations.",
+        "Yashvardhan is pursuing his **B.Tech in Computer Engineering** at **Pimpri Chinchwad College of Engineering (PCCOE)**, Pune (Class of 2028):\n\n• **Academic Standing**: Cumulative **CGPA of 8.86 / 10.0** (recorded till Semester 4).\n• **NPTEL Certification**: Elite + Silver in Algorithmic Graph Theory (Score: **77 / 100**, issued jointly by IIT Madras & IIT Kharagpur).\n• **Current Standing**: 3rd Year (Semester 5).\n• **Core Coursework**: Data Structures & Algorithms, Database Management Systems (PostgreSQL), Operating Systems, Computer Networks, and Machine Learning.",
       reasoningSteps: [
-        "Matched academic inquiry: PCCOE Pune B.Tech Computer Engineering",
+        "Matched academic & achievement inquiry: PCCOE Pune B.Tech Computer Engineering",
         "Verified cumulative CGPA metric: 8.86 / 10.0 through Semester 4",
-        "Retrieved official coursework curriculum",
+        "Retrieved NPTEL Elite + Silver recognition (77/100, IIT Madras/Kharagpur)",
       ],
       actions: [
-        { label: "View Academic Timeline", href: "/#about" },
-        { label: "View Verified CV", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+        { label: "View Academic Credentials", href: "/#about" },
+        { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+      ],
+    };
+  }
+
+  // 3.5. PROJECTS OVERVIEW / "WHAT HAS YASHVARDHAN BUILT"
+  if (
+    q.includes("built") ||
+    q.includes("project") ||
+    q.includes("portfolio") ||
+    q.includes("what has he made") ||
+    q.includes("what did he build") ||
+    q.includes("works")
+  ) {
+    return {
+      content:
+        "Yashvardhan has engineered several production-grade systems across web, systems, and machine learning:\n\n• **Shivkush Hi-Tech Nursery PWA**: Commercial offline-first agricultural platform for rural farmers in 2G/3G zones. 100% Lighthouse PWA compliance, Three.js 3D plant viewer, Supabase PostgreSQL with RLS.\n• **PralayVeer (SIH 2024 Finalist)**: Accessible disaster preparedness platform with real-time shelter routing and WCAG 2.1 AA compliance.\n• **Startup Valuation Predictor**: Supervised ML pipeline using XGBoost and Scikit-Learn to estimate venture pricing.\n• **Algorithmic Graph Theory Engine**: High-performance C++20 algorithms visualizer and benchmark suite.",
+      reasoningSteps: [
+        "Matched project catalog overview inquiry",
+        "Synthesized 4 flagship software systems across web and algorithms",
+        "Provided direct case study navigation",
+      ],
+      actions: [
+        { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
+        { label: "PralayVeer Case Study →", href: "/projects/pralayveer-disaster-response" },
+        { label: "View All Projects", href: "/#work" },
       ],
     };
   }

@@ -372,7 +372,7 @@ export const ConcaveCarousel = forwardRef<ConcaveCarouselRef, ConcaveCarouselPro
           "position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;white-space:nowrap;opacity:0;pointer-events:none;will-change:transform,opacity;";
         const tag = doc.createElement("span");
         tag.style.cssText =
-          "font-family:monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#00F0FF;";
+          "font-family:monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#C084FC;";
         const title = doc.createElement("span");
         title.style.cssText =
           "font-family:'Instrument Serif',Georgia,serif;font-size:22px;font-weight:400;color:#FFFFFF;letter-spacing:-0.02em;";
@@ -850,7 +850,7 @@ export const ConcaveCarousel = forwardRef<ConcaveCarouselRef, ConcaveCarouselPro
               type="button"
               aria-label="Previous Project"
               onClick={() => engineRef.current?.step(-1)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#161B26] bg-[#0A0D14]/80 text-[#8492A6] backdrop-blur-md transition-all duration-200 hover:border-[#00F0FF] hover:text-[#00F0FF] hover:shadow-[0_0_15px_rgba(0,240,255,0.25)]"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#161B26] bg-[#0A0D14]/80 text-[#8492A6] backdrop-blur-md transition-all duration-200 hover:border-[#A855F7] hover:text-[#C084FC] hover:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="m15 18-6-6 6-6" />
@@ -858,7 +858,7 @@ export const ConcaveCarousel = forwardRef<ConcaveCarouselRef, ConcaveCarouselPro
             </button>
 
             <span className="font-mono text-xs tabular-nums text-[#8492A6]">
-              <span className="text-[#00F0FF] font-semibold">
+              <span className="text-[#C084FC] font-semibold">
                 {String(activeIndex + 1).padStart(2, "0")}
               </span>
               <span className="opacity-40"> / {String(items.length).padStart(2, "0")}</span>
@@ -868,7 +868,7 @@ export const ConcaveCarousel = forwardRef<ConcaveCarouselRef, ConcaveCarouselPro
               type="button"
               aria-label="Next Project"
               onClick={() => engineRef.current?.step(1)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#161B26] bg-[#0A0D14]/80 text-[#8492A6] backdrop-blur-md transition-all duration-200 hover:border-[#00F0FF] hover:text-[#00F0FF] hover:shadow-[0_0_15px_rgba(0,240,255,0.25)]"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#161B26] bg-[#0A0D14]/80 text-[#8492A6] backdrop-blur-md transition-all duration-200 hover:border-[#A855F7] hover:text-[#C084FC] hover:shadow-[0_0_15px_rgba(168,85,247,0.25)]"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="m9 18 6-6-6-6" />

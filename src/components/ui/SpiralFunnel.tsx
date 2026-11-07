@@ -149,7 +149,7 @@ export function SpiralFunnel({
     const particleThetas = new Float32Array(particleCount);
     const particleHeights = new Float32Array(particleCount);
 
-    const moteColorA = new THREE.Color("#6EE7B7"); // subtle greenish-cyan glowing mote
+    const moteColorA = new THREE.Color("#C084FC"); // soft lavender glowing mote
     const moteColorB = new THREE.Color("#E9D5FF"); // lavender glow mote
     const moteColorC = new THREE.Color("#F472B6"); // pink luminous mote
 

@@ -20,26 +20,26 @@ export const LIGHT_PALETTE: MascotPalette = {
 
 /**
  * Dark Theme: Distinctive Nocturnal Obsidian Shadow Familiar (Kuro-Sprout)
- * Sleek midnight-obsidian body, striking glowing electric-cyan eyes with diamond starlight shines,
- * radiant bioluminescent emerald & cyber-mint foliage horns with glowing aqua tips,
- * ethereal stardust blush, and an ambient celestial cyan spirit halo.
+ * Sleek midnight-obsidian body, striking glowing royal-purple eyes with diamond starlight shines,
+ * radiant bioluminescent lavender & amethyst foliage horns with glowing violet tips,
+ * ethereal stardust blush, and an ambient celestial purple spirit halo.
  */
 export const DARK_PALETTE: MascotPalette = {
   body: "#10141D",
   bodyShade: "#080B12",
   bodyHighlight: "#1C2436",
   outline: "#030508",
-  leaves: "#00D27F",
-  leafHighlight: "#00FFA3",
-  leafTip: "#80FFEA",
+  leaves: "#A855F7",
+  leafHighlight: "#C084FC",
+  leafTip: "#E9D5FF",
   blush: "rgba(255, 94, 151, 0.45)",
   shadow: "rgba(0, 0, 0, 0.8)",
-  eyes: "#00F0FF",
+  eyes: "#C084FC",
   eyeShine: "#FFFFFF",
-  mouth: "#00F0FF",
-  sporeColor: "#00F0FF",
-  particleGlow: "rgba(0, 240, 255, 0.85)",
-  ambientGlow: "0 0 16px rgba(0, 240, 255, 0.5), 0 0 32px rgba(0, 255, 163, 0.22)",
+  mouth: "#C084FC",
+  sporeColor: "#A855F7",
+  particleGlow: "rgba(168, 85, 247, 0.85)",
+  ambientGlow: "0 0 16px rgba(168, 85, 247, 0.5), 0 0 32px rgba(192, 132, 252, 0.22)",
 };
 
 /**

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import Threads from "./Threads";
+import BouncingDotsLoader from "./BouncingDotsLoader";
 
 interface SitePreloaderProps {
   onComplete?: () => void;
@@ -22,6 +23,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
   const [selectedRealm, setSelectedRealm] = useState<"dark" | "light">("dark");
   const [clickPos, setClickPos] = useState({ x: 50, y: 50 });
   const [hoveredSide, setHoveredSide] = useState<"dark" | "light" | null>(null);
+  const [isDissolving, setIsDissolving] = useState(false);
 
   // Water-like smooth spring physics for the diagonal split line
   const rawSplit = useMotionValue(50);
@@ -39,7 +41,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     });
   }, [smoothSplit]);
 
-  // Phase 1: Fluid Typography Reveal & Counter (3.2 seconds total)
+  // Phase 1: Framer Bouncing Dots + Fluid Typography Reveal (3.4 seconds)
   useEffect(() => {
     setMounted(true);
 
@@ -54,7 +56,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       } catch {}
     }
 
-    const duration = 3200;
+    const duration = 3400;
     const start = performance.now();
 
     const updateProgress = (now: number) => {
@@ -75,7 +77,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
         setPercent(100);
         setTimeout(() => {
           setPhase("DUALITY");
-        }, 350);
+        }, 380);
       }
     };
 
@@ -117,7 +119,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [phase]);
 
-  // Trigger liquid portal expansion from exact click coordinates
+  // Trigger liquid portal expansion and subsequent slow cinematic dissolution
   const triggerRealmSelection = (choice: "dark" | "light", clientX: number, clientY: number) => {
     if (phase === "PORTAL_EXPANDING" || phase === "COMPLETE") return;
 
@@ -127,26 +129,32 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     setClickPos({ x: xPct, y: yPct });
     setSelectedRealm(choice);
     setPhase("PORTAL_EXPANDING");
+    setIsDissolving(false);
 
     try {
       sessionStorage.setItem("yashvardhan_preloader_seen_v2", "true");
     } catch {}
 
-    // Synchronize theme halfway through the portal expansion
+    // 1. Synchronize theme halfway through the portal expansion (400ms)
     setTimeout(() => {
       setTheme(choice);
-    }, 450);
+    }, 400);
 
-    // Complete transition and unmount preloader
+    // 2. Once portal occupies full screen (720ms), trigger slow cinematic dissolve
+    setTimeout(() => {
+      setIsDissolving(true);
+    }, 720);
+
+    // 3. Complete transition smoothly after the 800ms dissolve veil (1550ms total)
     setTimeout(() => {
       setPhase("COMPLETE");
       onComplete?.();
-    }, 950);
+    }, 1550);
   };
 
   if (!mounted || phase === "COMPLETE") return null;
 
-  // Slanted diagonal geometry with 12% top/bottom dynamic offset
+  // Slanted diagonal geometry with dynamic offset
   const topCut = splitDisplay + 6;
   const bottomCut = splitDisplay - 6;
 
@@ -156,11 +164,14 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
       aria-modal="true"
       aria-label="Yashvardhan Portfolio Genesis"
       onMouseMove={handleMouseMove}
-      className="fixed inset-0 z-[99999] overflow-hidden select-none bg-[#090B0E]"
+      className={`fixed inset-0 z-[99999] overflow-hidden select-none bg-[#090B0E] transition-opacity duration-700 ${
+        isDissolving ? "pointer-events-none" : "pointer-events-auto"
+      }`}
     >
       <AnimatePresence mode="wait">
         {/* ─────────────────────────────────────────────────────────────
-            STAGE 1: DUAL-HARMONY BRAND TYPOGRAPHY REVEAL (0.0s – 3.2s)
+            STAGE 1: DUAL-HARMONY BRAND PRELOADER WITH FRAMER BOUNCING DOTS
+            (0.0s – 3.4s)
             ───────────────────────────────────────────────────────────── */}
         {phase === "CALIBRATION" && (
           <motion.div
@@ -171,15 +182,15 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-12 z-20"
           >
-            {/* Dual Harmony Ambient Gradient Backdrop: Blending Obsidian & Petrichor */}
+            {/* Dual Harmony Ambient Gradient Backdrop: Blending Obsidian Purple & Petrichor Cedar */}
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0B0F19] via-[#0F141A] to-[#1A231E] opacity-90" />
-              {/* Subtle Starlight Violet & Cyan Glow (Obsidian Brand) */}
-              <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-cyan-500/10 blur-[100px]" />
-              <div className="absolute bottom-1/4 left-1/3 w-96 h-96 rounded-full bg-purple-500/10 blur-[100px]" />
-              {/* Subtle Sunlit Meadow Amber & Forest Glow (Petrichor Brand) */}
-              <div className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-amber-400/10 blur-[100px]" />
-              <div className="absolute bottom-1/3 right-1/3 w-96 h-96 rounded-full bg-emerald-500/10 blur-[100px]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0B0914] via-[#0E1117] to-[#16201B] opacity-95" />
+              {/* Subtle Starlight Violet & Royal Purple Nebula (Obsidian Brand) */}
+              <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-600/15 blur-[110px]" />
+              <div className="absolute bottom-1/4 left-1/3 w-96 h-96 rounded-full bg-violet-500/12 blur-[100px]" />
+              {/* Subtle Sunlit Meadow Amber & Forest Pine Glow (Petrichor Brand) */}
+              <div className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-amber-400/12 blur-[100px]" />
+              <div className="absolute bottom-1/3 right-1/3 w-96 h-96 rounded-full bg-emerald-600/12 blur-[110px]" />
             </div>
 
             {/* Monumental Name Typography: Letter-by-letter Staggered Wave */}
@@ -194,15 +205,15 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
                       animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
                       transition={{
                         duration: 0.85,
-                        delay: 0.15 + index * 0.055,
+                        delay: 0.12 + index * 0.05,
                         ease: [0.19, 1, 0.22, 1],
                       }}
                       className="font-display font-semibold text-4xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none inline-block"
                       style={{
-                        color: isFirstHalf ? "#F1F5F9" : "#FAF8F5",
+                        color: isFirstHalf ? "#F3E8FF" : "#FAF8F5",
                         textShadow: isFirstHalf
-                          ? "0 0 30px rgba(0, 240, 255, 0.35)"
-                          : "0 0 30px rgba(251, 191, 36, 0.3)",
+                          ? "0 0 35px rgba(168, 85, 247, 0.45)"
+                          : "0 0 35px rgba(251, 191, 36, 0.35)",
                       }}
                     >
                       {letter}
@@ -211,32 +222,50 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
                 })}
               </div>
 
-              {/* Water-like Liquid Brand Bar & Percentage */}
+              {/* Exact Framer BouncingDots Physics Loader */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-8 sm:mt-12 w-64 sm:w-80 flex flex-col items-center gap-3"
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-4 sm:mt-6 mb-2"
               >
-                {/* Dual-Brand Gradient Progress Track */}
+                <BouncingDotsLoader
+                  dotCount={4}
+                  dotSize={22}
+                  bounceHeight={48}
+                  animationDuration={1.35}
+                  dotSpacing={16}
+                  showRipple={true}
+                  showShadow={true}
+                />
+              </motion.div>
+
+              {/* Water-like Liquid Brand Progress Bar & Percentage */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="mt-4 w-64 sm:w-80 flex flex-col items-center gap-3"
+              >
+                {/* Dual-Brand Gradient Progress Track (Obsidian Purple to Petrichor Cedar/Amber) */}
                 <div className="relative w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
                   <motion.div
-                    className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-cyan-400 via-purple-400 via-emerald-400 to-amber-300"
+                    className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-[#A855F7] via-[#8B5CF6] via-[#10B981] to-[#F59E0B]"
                     style={{ width: `${percent}%` }}
                     transition={{ ease: "easeOut" }}
                   />
                   {/* Glowing Leading Bead */}
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 -ml-1 w-2 h-2 rounded-full bg-white shadow-[0_0_10px_#FFFFFF]"
+                    className="absolute top-1/2 -translate-y-1/2 -ml-1 w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_#FFFFFF]"
                     style={{ left: `${percent}%` }}
                   />
                 </div>
 
                 {/* Elegant Minimalist Percentage Counter */}
                 <div className="flex items-center justify-between w-full font-mono text-[11px] tracking-[0.25em] text-white/40 tabular-nums">
-                  <span className="text-cyan-400/80">OBSIDIAN</span>
-                  <span className="text-white font-medium">{String(percent).padStart(2, "0")}%</span>
-                  <span className="text-amber-300/80">PETRICHOR</span>
+                  <span className="text-purple-400/90 font-medium">OBSIDIAN</span>
+                  <span className="text-white font-semibold">{String(percent).padStart(2, "0")}%</span>
+                  <span className="text-amber-300/90 font-medium">PETRICHOR</span>
                 </div>
               </motion.div>
             </div>
@@ -256,38 +285,38 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
             className="absolute inset-0 z-30 overflow-hidden"
           >
             {/* =========================================================
-                LEFT / BOTTOM REALM: OBSIDIAN DARK
+                LEFT / BOTTOM REALM: OBSIDIAN DARK (PURPLE THEME)
                 ========================================================= */}
             <div
               onClick={(e) => triggerRealmSelection("dark", e.clientX, e.clientY)}
               className="absolute inset-0 cursor-pointer overflow-hidden transition-all duration-300"
               style={{
                 clipPath: `polygon(0 0, ${topCut}% 0, ${bottomCut}% 100%, 0 100%)`,
-                backgroundColor: "#05070A",
+                backgroundColor: "#05060A",
               }}
             >
-              {/* ReactBits Real-time Flowing WebGL Threads (Silk in Water) */}
-              <div className="absolute inset-0 pointer-events-none opacity-50">
+              {/* ReactBits Real-time Flowing WebGL Threads (Obsidian Royal Purple) */}
+              <div className="absolute inset-0 pointer-events-none opacity-55">
                 <Threads
-                  color={[0.0, 0.94, 1.0]}
-                  accentColor={[0.66, 0.33, 0.97]}
+                  color={[0.66, 0.33, 0.97]}
+                  accentColor={[0.48, 0.22, 0.93]}
                   amplitude={1.2}
                   distance={0.3}
                   enableMouseInteraction={true}
                   lineCount={36}
                   thickness={1.2}
-                  opacity={0.45}
+                  opacity={0.5}
                   className="w-full h-full"
                 />
               </div>
 
-              {/* Ambient Radial Stardust */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(0,240,255,0.18),transparent_65%)] pointer-events-none" />
+              {/* Ambient Radial Stardust Glow */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(168,85,247,0.22),transparent_65%)] pointer-events-none" />
 
               {/* Content Canvas */}
               <div className="absolute inset-y-0 left-0 w-full sm:w-[50vw] flex flex-col justify-between p-8 sm:p-16 z-10 pointer-events-none">
-                <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-cyan-400">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-purple-400">
+                  <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shadow-[0_0_8px_#C084FC]" />
                   <span>OBSIDIAN · DARK</span>
                 </div>
 
@@ -302,16 +331,16 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
                   >
                     DARK
                   </motion.h2>
-                  <p className="font-sans text-xs sm:text-sm text-cyan-100/70 font-light leading-relaxed max-w-sm">
-                    Midnight void, glowing cyan ribbons, and deep focused architecture.
+                  <p className="font-sans text-xs sm:text-sm text-purple-200/70 font-light leading-relaxed max-w-sm">
+                    Midnight void, luminous violet ribbons, and deep architectural focus.
                   </p>
 
                   <div className="pt-2">
                     <span
                       className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
                         hoveredSide === "dark"
-                          ? "bg-cyan-500 text-[#05070A] shadow-[0_0_28px_rgba(0,240,255,0.6)]"
-                          : "border border-cyan-500/30 text-cyan-300 bg-cyan-950/40"
+                          ? "bg-purple-600 text-white shadow-[0_0_30px_rgba(168,85,247,0.7)]"
+                          : "border border-purple-500/30 text-purple-300 bg-purple-950/40"
                       }`}
                     >
                       <span>Choose Obsidian</span>
@@ -320,8 +349,8 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
                   </div>
                 </div>
 
-                <div className="text-[11px] font-mono tracking-widest text-cyan-400/50">
-                  ✦ CYBERNETIC MATRIX
+                <div className="text-[11px] font-mono tracking-widest text-purple-400/50">
+                  ✦ ARCHITECTURAL RUNTIME
                 </div>
               </div>
             </div>
@@ -348,7 +377,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
               <div className="absolute inset-y-0 right-0 w-full sm:w-[50vw] flex flex-col justify-between items-end p-8 sm:p-16 text-right z-10 pointer-events-none">
                 <div className="flex items-center gap-2.5 text-xs font-mono tracking-widest text-[#2D5A42]">
                   <span>PETRICHOR · LIGHT</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shadow-[0_0_8px_#059669]" />
                 </div>
 
                 <div className="space-y-4 max-w-lg flex flex-col items-end">
@@ -394,12 +423,12 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
               }}
             >
               <div className="flex items-center gap-3 px-5 py-2.5 rounded-full backdrop-blur-2xl border border-white/20 bg-black/60 text-white shadow-2xl">
-                <span className="text-[11px] font-mono tracking-widest uppercase text-cyan-300">
-                  ✦ DARK
+                <span className="text-[11px] font-mono tracking-widest uppercase text-purple-300">
+                  ✦ OBSIDIAN
                 </span>
                 <span className="text-xs font-mono text-white/40">|</span>
                 <span className="text-[11px] font-mono tracking-widest uppercase text-amber-200">
-                  LIGHT ✦
+                  PETRICHOR ✦
                 </span>
               </div>
             </div>
@@ -407,21 +436,44 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
         )}
 
         {/* ─────────────────────────────────────────────────────────────
-            STAGE 3: TRENDING CIRCULAR LIQUID PORTAL EXPANSION
+            STAGE 3: EXPANDING PORTAL & CINEMATIC SLOW DISSOLVE
+            (Occupies screen smoothly, then slowly dissolves without sudden pop)
             ───────────────────────────────────────────────────────────── */}
         {phase === "PORTAL_EXPANDING" && (
           <motion.div
             key="stage-portal"
             initial={{
               clipPath: `circle(0% at ${clickPos.x}% ${clickPos.y}%)`,
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
             }}
-            animate={{
-              clipPath: `circle(160% at ${clickPos.x}% ${clickPos.y}%)`,
-            }}
-            transition={{
-              duration: 0.95,
-              ease: [0.19, 1, 0.22, 1], // The legendary Locomotive / Apple expo-out curve
-            }}
+            animate={
+              isDissolving
+                ? {
+                    clipPath: `circle(170% at ${clickPos.x}% ${clickPos.y}%)`,
+                    opacity: 0,
+                    scale: 1.04,
+                    filter: "blur(12px)",
+                  }
+                : {
+                    clipPath: `circle(170% at ${clickPos.x}% ${clickPos.y}%)`,
+                    opacity: 1,
+                    scale: 1,
+                    filter: "blur(0px)",
+                  }
+            }
+            transition={
+              isDissolving
+                ? {
+                    duration: 0.8,
+                    ease: [0.16, 1, 0.3, 1], // Gentle, water-smooth exit dissolution
+                  }
+                : {
+                    duration: 0.72,
+                    ease: [0.19, 1, 0.22, 1], // Expo-out expansion
+                  }
+            }
             className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none overflow-hidden"
             style={{
               backgroundColor: selectedRealm === "dark" ? "#06080D" : "#FAF8F5",
@@ -431,7 +483,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
             <div
               className={`absolute inset-0 opacity-40 ${
                 selectedRealm === "dark"
-                  ? "bg-[radial-gradient(circle_at_center,rgba(0,240,255,0.4),transparent_70%)]"
+                  ? "bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.45),transparent_70%)]"
                   : "bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5),transparent_70%)]"
               }`}
             />
@@ -439,11 +491,15 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
             {/* Radiant Realm Unfurl Emblem */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1.1, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
+              animate={
+                isDissolving
+                  ? { scale: 1.15, opacity: 0, filter: "blur(6px)" }
+                  : { scale: 1.05, opacity: 1, filter: "blur(0px)" }
+              }
+              transition={{ duration: isDissolving ? 0.6 : 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="text-center font-display text-4xl sm:text-6xl font-semibold tracking-tight"
               style={{
-                color: selectedRealm === "dark" ? "#F1F5F9" : "#17241C",
+                color: selectedRealm === "dark" ? "#F3E8FF" : "#17241C",
               }}
             >
               {selectedRealm === "dark" ? "OBSIDIAN" : "PETRICHOR"}

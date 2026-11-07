@@ -30,7 +30,7 @@ export function DecryptedText({
   characters = DEFAULT_CHARS,
   className = "",
   parentClassName = "",
-  encryptedClassName = "text-[#00F0FF] opacity-80",
+  encryptedClassName = "text-[#C084FC] opacity-80",
   animateOn = "hover",
 }: DecryptedTextProps) {
   const [displayText, setDisplayText] = useState(text);

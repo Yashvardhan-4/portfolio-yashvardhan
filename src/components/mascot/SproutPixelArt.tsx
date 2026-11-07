@@ -238,7 +238,7 @@ export function SproutPixelArt({
           {/* Cheeks Blush */}
           {blushPath && <path d={blushPath} fill={palette.blush} />}
 
-          {/* Eyes (Dark Ink in Light, Neon Cyan Glow in Dark) */}
+          {/* Eyes (Dark Ink in Light, Royal Purple Glow in Dark) */}
           {eyesPath && (
             <path
               d={eyesPath}
