@@ -159,7 +159,9 @@ export function MonumentalHero() {
             <div className="block md:hidden my-6 w-full max-w-[310px] mx-auto">
               <div
                 ref={mobileAnchorRef}
-                className="w-full aspect-[480/513] pointer-events-none"
+                className={`w-full pointer-events-none ${
+                  isLightMode ? "aspect-[480/360]" : "aspect-[480/513]"
+                }`}
                 aria-label="Mobile Portrait Spatial Guide"
               />
             </div>
@@ -222,13 +224,17 @@ export function MonumentalHero() {
           <div className="hidden md:flex md:col-span-5 relative items-center justify-center md:justify-end">
             {/* Subtle Ambient Radial Glow behind Portrait */}
             <div 
-              className="absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none opacity-25"
+              className={`absolute -inset-4 bg-[radial-gradient(circle_at_center,var(--accent-glow)_0%,transparent_70%)] blur-2xl pointer-events-none ${
+                isLightMode ? "opacity-15" : "opacity-25"
+              }`}
               aria-hidden="true" 
             />
 
             <div
               ref={desktopAnchorRef}
-              className="w-full aspect-[480/513] max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10"
+              className={`w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] pointer-events-none ml-auto relative z-10 ${
+                isLightMode ? "aspect-[480/360]" : "aspect-[480/513]"
+              }`}
               aria-label="Desktop Portrait Spatial Guide"
             />
           </div>

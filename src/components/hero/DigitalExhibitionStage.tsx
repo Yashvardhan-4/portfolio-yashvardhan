@@ -240,19 +240,23 @@ export function DigitalExhibitionStage({
       };
     });
 
-    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Cropped strictly to head & neck, matching dark mode)
+    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Cropped strictly to head & neck, height = 360)
     const baseWidthLight = halftoneDataLight.width;   // 480
-    const baseHeightLight = halftoneDataLight.height; // 513 (matched to dark mode)
+    const baseHeightLight = halftoneDataLight.height; // 360 (cropped strictly to neck)
     const rawDotsLight = halftoneDataLight.dots as Array<[number, number, number, number, number?, number?, number?]>;
 
     const portraitDotsLight: PortraitDot[] = rawDotsLight.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
-      const isCoreFeature = x0 > 165 && x0 < 315 && y0 > 170 && y0 < 430;
+      const isCoreFeature = x0 > 165 && x0 < 315 && y0 > 170 && y0 < 340;
       const featureWeight = isCoreFeature ? 0.60 : 1.0;
 
       const dxEdge = (x0 - baseWidthLight * 0.5) / 160;
-      const dyEdge = (y0 - baseHeightLight * 0.5) / 225;
+      const dyEdge = (y0 - baseHeightLight * 0.5) / 175;
       const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
       const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.18) : 1.0;
+
+      // Soft vertical bottom fade for neck so it dissolves seamlessly without harsh cutoffs
+      const bottomFade = y0 > 325 ? Math.max(0, 1 - (y0 - 325) / 35) : 1.0;
+      const combinedFade = edgeFade * bottomFade;
 
       const r = rRaw !== undefined ? rRaw : 45;
       const g = gRaw !== undefined ? gRaw : 40;
@@ -263,25 +267,25 @@ export function DigitalExhibitionStage({
       let radiusMultiplierLight = 1.0;
 
       if (l < 0.32) {
-        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : edgeFade));
+        const alpha = Math.min(0.98, (0.88 + (0.32 - l) * 0.35) * (isCoreFeature ? 1.0 : combinedFade));
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(200, 147, 85, 1.0)";
-        radiusMultiplierLight = 1.18;
+        radiusMultiplierLight = 1.18 * Math.max(0.2, bottomFade);
       } else if (l < 0.65) {
-        const alpha = 0.82 * edgeFade;
+        const alpha = 0.82 * combinedFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(215, 160, 95, 0.96)";
-        radiusMultiplierLight = 1.02;
+        radiusMultiplierLight = 1.02 * Math.max(0.2, bottomFade);
       } else if (l < 0.82) {
-        const alpha = 0.65 * edgeFade;
+        const alpha = 0.65 * combinedFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(230, 185, 120, 0.90)";
-        radiusMultiplierLight = 0.88;
+        radiusMultiplierLight = 0.88 * Math.max(0.2, bottomFade);
       } else {
-        const alpha = 0.42 * edgeFade;
+        const alpha = 0.42 * combinedFade;
         colorLight = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
         luminousColorLight = "rgba(240, 205, 145, 0.80)";
-        radiusMultiplierLight = 0.72;
+        radiusMultiplierLight = 0.72 * Math.max(0.2, bottomFade);
       }
 
       const initialDist = 55 + (i % 27) * 3.5;
@@ -510,9 +514,9 @@ export function DigitalExhibitionStage({
       }
 
       // ----------------------------------------------------
-      // SECTION A0: OCCLUSION BACKDROP (Keeps threads strictly BEHIND the portrait)
+      // SECTION A0: OCCLUSION BACKDROP (Keeps threads strictly BEHIND the portrait in Dark Mode)
       // ----------------------------------------------------
-      if (revealProgress > 0.15) {
+      if (!isLight && revealProgress > 0.15) {
         const pCenterX = anchorX + anchorW * 0.50;
         const pCenterY = anchorY + anchorH * 0.48;
         const pRadiusX = anchorW * 0.52;
@@ -521,7 +525,7 @@ export function DigitalExhibitionStage({
 
         if (maskAlpha > 0.01) {
           ctx.save();
-          const bgRgb = isLight ? "245, 239, 235" : "0, 0, 0";
+          const bgRgb = "0, 0, 0";
 
           // Solid full-portrait occlusion mask with soft feathered perimeter
           const portraitMask = ctx.createRadialGradient(
@@ -626,8 +630,9 @@ export function DigitalExhibitionStage({
         let isLitByScan = false;
         let scanBoost = 0;
         if (isScanning) {
+          const isWithinVisiblePortrait = !isLight || p.y0 <= 360;
           const distToScan = Math.abs(p.y - scanY);
-          if (distToScan < scanBandWidth) {
+          if (distToScan < scanBandWidth && isWithinVisiblePortrait) {
             isLitByScan = true;
             const q = distToScan / scanBandWidth;
             scanBoost = Math.pow(Math.cos(q * Math.PI * 0.5), 2);
