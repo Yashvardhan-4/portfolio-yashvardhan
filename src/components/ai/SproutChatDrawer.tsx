@@ -34,9 +34,9 @@ interface SproutChatDrawerProps {
 const SUGGESTED_QUESTIONS = [
   "What has Yashvardhan built?",
   "Tell me about Shivkush Nursery.",
-  "What are his strongest technical skills?",
-  "What are his academic achievements?",
-  "How can I contact him?",
+  "Why should I hire him?",
+  "What are his academic metrics?",
+  "Replay the Genesis intro ✦",
 ];
 
 export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
@@ -112,6 +112,38 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
     if (!text || isStreaming) return;
 
     setShowMenu(false);
+
+    // Client-side instant command interception for intro replay
+    const lower = text.toLowerCase();
+    if (
+      (lower.includes("replay") && (lower.includes("intro") || lower.includes("preloader") || lower.includes("duality"))) ||
+      lower.includes("genesis intro") ||
+      lower === "intro" ||
+      lower === "preloader"
+    ) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `user-${Date.now()}`,
+          role: "user",
+          content: text,
+        },
+        {
+          id: `sprout-${Date.now() + 1}`,
+          role: "model",
+          content: "Re-initiating the Genesis intro and realm chamber right now. Choose your realm wisely...",
+        },
+      ]);
+      setInputValue("");
+      setTimeout(() => {
+        onClose();
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent("replay-preloader"));
+        }, 250);
+      }, 750);
+      return;
+    }
+
     const userMessageId = `user-${Date.now()}`;
     const newUserMessage: ChatMessage = {
       id: userMessageId,
@@ -304,6 +336,11 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
   const handleActionClick = (action: { label: string; href: string; isExternal?: boolean }) => {
     if (action.href.includes("Resume") || action.label.toLowerCase().includes("resume")) {
       window.dispatchEvent(new CustomEvent("open-resume-modal"));
+    } else if (action.href === "#intro" || action.label.toLowerCase().includes("intro")) {
+      onClose();
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("replay-preloader"));
+      }, 250);
     }
   };
 
@@ -323,7 +360,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
           <div key={idx} className="flex items-start gap-2 my-1 pl-1">
             <span
               className={`inline-block w-1.5 h-1.5 rounded-full mt-2 shrink-0 ${
-                isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
+                isDarkMode ? "bg-purple-400" : "bg-emerald-600"
               }`}
             />
             <span className="flex-1">{renderInlineStyles(itemText)}</span>
@@ -348,7 +385,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
         return (
           <strong
             key={i}
-            className={`font-semibold ${isDarkMode ? "text-emerald-300" : "text-[#20352B]"}`}
+            className={`font-semibold ${isDarkMode ? "text-purple-300" : "text-[#20352B]"}`}
           >
             {part.slice(2, -2)}
           </strong>
@@ -362,7 +399,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
             key={i}
             className={`px-1.5 py-0.5 rounded text-[11px] font-mono border ${
               isDarkMode
-                ? "bg-[#18221D] border-[#26372E] text-emerald-300"
+                ? "bg-[#1C152F] border-[#36275A] text-purple-200"
                 : "bg-[#E5EBDD] border-[#D5DEC9] text-[#20352B]"
             }`}
           >
@@ -383,7 +420,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
             rel={url.startsWith("http") ? "noopener noreferrer" : undefined}
             className={`underline underline-offset-2 transition-colors font-medium ${
               isDarkMode
-                ? "text-emerald-400 hover:text-emerald-300"
+                ? "text-purple-400 hover:text-purple-300"
                 : "text-emerald-700 hover:text-emerald-800"
             }`}
           >
@@ -408,27 +445,27 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
       {/* Light subtle backdrop overlay on mobile only */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/20 sm:hidden pointer-events-auto"
+        className="fixed inset-0 bg-black/30 sm:hidden pointer-events-auto"
         aria-hidden="true"
       />
 
-      {/* Companion Window: Quiet Digital Garden Architecture */}
+      {/* Companion Window: Obsidian Royal Purple / Serene Ghibli Garden */}
       <div
         className={`pointer-events-auto select-text relative w-full sm:w-[440px] md:w-[460px] h-[92vh] sm:h-[600px] max-h-[84vh] rounded-t-2xl sm:rounded-2xl border transition-all duration-300 flex flex-col overflow-hidden shadow-2xl ${
           isDarkMode
-            ? "bg-[#111714] border-[#23322B] text-[#ECEEE7]"
+            ? "bg-[#0C0A14] border-[#2A1E45] text-[#F3E8FF]"
             : "bg-[#FCFBF8] border-[#D5DEC9] text-[#20352B]"
         }`}
         style={{
           boxShadow: isDarkMode
-            ? "0 24px 60px rgba(0, 0, 0, 0.85), 0 0 1px 1px rgba(35, 50, 43, 0.8)"
+            ? "0 24px 60px rgba(0, 0, 0, 0.95), 0 0 25px rgba(168, 85, 247, 0.16), 0 0 1px 1px rgba(168, 85, 247, 0.35)"
             : "0 20px 48px rgba(71, 120, 94, 0.16), 0 0 1px 1px rgba(213, 222, 201, 0.8)",
         }}
       >
         {/* Header: Compact, Elegant, Grounded in Sprout Persona */}
         <header
           className={`h-14 px-4 shrink-0 flex items-center justify-between border-b ${
-            isDarkMode ? "border-[#23322B] bg-[#111714]" : "border-[#D5DEC9] bg-[#FCFBF8]"
+            isDarkMode ? "border-[#221838] bg-[#0E0B18]" : "border-[#D5DEC9] bg-[#FCFBF8]"
           }`}
         >
           {/* Left: Sprout Mascot Identity */}
@@ -449,7 +486,11 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                   Sprout
                 </span>
                 <span
-                  className="text-[9.5px] font-mono px-1.5 py-0.5 rounded border uppercase font-semibold bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
+                  className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded border uppercase font-semibold ${
+                    isDarkMode
+                      ? "bg-purple-950/70 text-purple-300 border-purple-500/40"
+                      : "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
+                  }`}
                   title="In-Memory Vector RAG Engine active"
                 >
                   Vector RAG
@@ -457,7 +498,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               </div>
               <span
                 className={`text-[11px] mt-0.5 tracking-normal ${
-                  isDarkMode ? "text-[#9BA89F]" : "text-[#627768]"
+                  isDarkMode ? "text-[#A79BBF]" : "text-[#627768]"
                 }`}
               >
                 Grounded portfolio companion
@@ -474,7 +515,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               aria-label="Companion Options"
               className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors text-xs ${
                 isDarkMode
-                  ? "hover:bg-[#18221D] text-[#9BA89F] hover:text-[#ECEEE7]"
+                  ? "hover:bg-[#1C152F] text-[#A79BBF] hover:text-[#F3E8FF]"
                   : "hover:bg-[#E5EBDD] text-[#627768] hover:text-[#20352B]"
               }`}
             >
@@ -486,7 +527,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               <div
                 className={`absolute right-8 top-0 w-44 rounded-lg border py-1 shadow-xl z-20 text-xs ${
                   isDarkMode
-                    ? "bg-[#141B17] border-[#26372E] text-[#ECEEE7]"
+                    ? "bg-[#130E24] border-[#2E1F4D] text-[#F3E8FF]"
                     : "bg-[#FFFFFF] border-[#D5DEC9] text-[#20352B]"
                 }`}
               >
@@ -494,7 +535,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                   type="button"
                   onClick={handleClearHistory}
                   className={`w-full text-left px-3 py-1.5 transition-colors flex items-center gap-2 ${
-                    isDarkMode ? "hover:bg-[#1C2621]" : "hover:bg-[#F3F3E9]"
+                    isDarkMode ? "hover:bg-[#1E1738]" : "hover:bg-[#F3F3E9]"
                   }`}
                 >
                   <span>⟲</span> Clear conversation
@@ -503,10 +544,26 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                   type="button"
                   onClick={handleCopyTranscript}
                   className={`w-full text-left px-3 py-1.5 transition-colors flex items-center gap-2 ${
-                    isDarkMode ? "hover:bg-[#1C2621]" : "hover:bg-[#F3F3E9]"
+                    isDarkMode ? "hover:bg-[#1E1738]" : "hover:bg-[#F3F3E9]"
                   }`}
                 >
                   <span>📋</span> Copy transcript
+                </button>
+                <div className={`my-1 border-t ${isDarkMode ? "border-[#2E1F4D]" : "border-[#E5EBDD]"}`} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowMenu(false);
+                    onClose();
+                    setTimeout(() => {
+                      window.dispatchEvent(new CustomEvent("replay-preloader"));
+                    }, 250);
+                  }}
+                  className={`w-full text-left px-3 py-1.5 transition-colors flex items-center gap-2 ${
+                    isDarkMode ? "hover:bg-[#1E1738] text-purple-300" : "hover:bg-[#F3F3E9] text-emerald-800"
+                  }`}
+                >
+                  <span>✦</span> Replay Genesis Intro
                 </button>
               </div>
             )}
@@ -518,7 +575,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               aria-label="Close Sprout (Esc)"
               className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors text-xs ${
                 isDarkMode
-                  ? "hover:bg-[#18221D] text-[#9BA89F] hover:text-[#ECEEE7]"
+                  ? "hover:bg-[#1C152F] text-[#A79BBF] hover:text-[#F3E8FF]"
                   : "hover:bg-[#E5EBDD] text-[#627768] hover:text-[#20352B]"
               }`}
             >
@@ -540,7 +597,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               <div
                 className={`p-4 rounded-xl border transition-all ${
                   isDarkMode
-                    ? "bg-[#141B17]/70 border-[#23322B]"
+                    ? "bg-[#130E24]/80 border-[#2A1E45]"
                     : "bg-[#F3F3E9]/80 border-[#D5DEC9]"
                 }`}
               >
@@ -559,7 +616,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                     <div className="flex items-center gap-2 flex-wrap">
                       <p
                         className={`text-xs font-mono tracking-tight font-semibold ${
-                          isDarkMode ? "text-emerald-400" : "text-emerald-700"
+                          isDarkMode ? "text-purple-300" : "text-emerald-700"
                         }`}
                       >
                         Sprout · Vector RAG Companion
@@ -567,7 +624,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                       <span
                         className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded border uppercase tracking-wider font-semibold ${
                           isDarkMode
-                            ? "bg-[#1B2620] border-emerald-500/30 text-emerald-400"
+                            ? "bg-[#1F1538] border-purple-500/40 text-purple-300"
                             : "bg-[#E5EBDD] border-emerald-700/30 text-emerald-800"
                         }`}
                       >
@@ -576,10 +633,10 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                     </div>
                     <p
                       className={`text-[13px] leading-relaxed ${
-                        isDarkMode ? "text-[#C4CEC8]" : "text-[#3D4C42]"
+                        isDarkMode ? "text-[#D4CBE5]" : "text-[#3D4C42]"
                       }`}
                     >
-                      Hey, I&apos;m Sprout! I&apos;m Yashvardhan&apos;s tiny, delightfully opinionated portfolio companion. Grounded strictly in his verified engineering archives via an in-memory Vector RAG index. Ask me about his projects, academic metrics, or C++ algorithms!
+                      Hey, I&apos;m Sprout! I&apos;m Yashvardhan&apos;s tiny, delightfully opinionated portfolio companion. Grounded strictly in his verified engineering archives via an in-memory Vector RAG index. Ask me about his projects, academic metrics, or why you should hire him!
                     </p>
                   </div>
                 </div>
@@ -589,7 +646,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
               <div className="space-y-2 pt-1">
                 <span
                   className={`text-[11px] font-mono uppercase tracking-wider block ${
-                    isDarkMode ? "text-[#7B8B80]" : "text-[#627768]"
+                    isDarkMode ? "text-[#A79BBF]" : "text-[#627768]"
                   }`}
                 >
                   Suggested explorations
@@ -605,14 +662,14 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                       }}
                       className={`text-left p-2.5 rounded-lg border text-[12.5px] leading-snug transition-all duration-200 group flex items-center justify-between ${
                         isDarkMode
-                          ? "bg-[#141B17] hover:bg-[#18221D] border-[#23322B] hover:border-emerald-500/40 text-[#ECEEE7]"
+                          ? "bg-[#140F26] hover:bg-[#1E1738] border-[#261B40] hover:border-purple-500/50 text-[#F3E8FF]"
                           : "bg-[#FFFFFF] hover:bg-[#F3F3E9] border-[#D5DEC9] hover:border-emerald-700/40 text-[#20352B]"
                       }`}
                     >
                       <span>{question}</span>
                       <span
                         className={`text-xs opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-0.5 ml-1.5 shrink-0 ${
-                          isDarkMode ? "text-emerald-400" : "text-emerald-600"
+                          isDarkMode ? "text-purple-400" : "text-emerald-600"
                         }`}
                       >
                         →
@@ -637,10 +694,10 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                     className={`relative max-w-[92%] sm:max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed transition-all group ${
                       isUser
                         ? isDarkMode
-                          ? "bg-[#1C2621] border border-[#2A3B31] text-[#ECEEE7] rounded-tr-sm"
+                          ? "bg-[#261642] border border-[#3E246A] text-[#FFFFFF] rounded-tr-sm"
                           : "bg-[#E5EBDD] border border-[#D5DEC9] text-[#20352B] rounded-tr-sm"
                         : isDarkMode
-                        ? "bg-[#141B17] border border-[#23322B] text-[#ECEEE7] rounded-tl-sm w-full"
+                        ? "bg-[#120E22] border border-[#261B40] text-[#F3E8FF] rounded-tl-sm w-full"
                         : "bg-[#FFFFFF] border border-[#D5DEC9] text-[#20352B] rounded-tl-sm w-full"
                     }`}
                   >
@@ -650,10 +707,14 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                         <div className="flex items-center gap-1.5">
                           <span
                             className={`w-1.5 h-1.5 rounded-full ${
-                              isDarkMode ? "bg-emerald-400" : "bg-emerald-600"
+                              isDarkMode ? "bg-purple-400" : "bg-emerald-600"
                             }`}
                           />
-                          <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">
+                          <span
+                            className={`text-[10px] font-mono uppercase tracking-wider font-semibold ${
+                              isDarkMode ? "text-purple-300" : ""
+                            }`}
+                          >
                             Sprout
                           </span>
                         </div>
@@ -676,12 +737,24 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                       ) : (
                         // Subtle Thinking Feedback
                         <div className="flex items-center gap-2 py-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:150ms]" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:300ms]" />
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              isDarkMode ? "bg-purple-400" : "bg-emerald-500"
+                            } animate-bounce`}
+                          />
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              isDarkMode ? "bg-purple-400" : "bg-emerald-500"
+                            } animate-bounce [animation-delay:150ms]`}
+                          />
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              isDarkMode ? "bg-purple-400" : "bg-emerald-500"
+                            } animate-bounce [animation-delay:300ms]`}
+                          />
                           <span
                             className={`text-xs ml-1 font-mono italic ${
-                              isDarkMode ? "text-[#9BA89F]" : "text-[#627768]"
+                              isDarkMode ? "text-[#A79BBF]" : "text-[#627768]"
                             }`}
                           >
                             Sprout is querying vector index...
@@ -695,9 +768,9 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                       <div
                         className={`mt-2.5 pt-1.5 flex items-center justify-between text-[10.5px] font-mono border-t border-inherit ${
                           message.telemetry.securityWarning
-                            ? "text-amber-500 font-medium"
+                            ? "text-amber-400 font-medium"
                             : isDarkMode
-                            ? "text-emerald-400/90"
+                            ? "text-purple-300/90"
                             : "text-emerald-700/90"
                         }`}
                       >
@@ -709,7 +782,11 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                         ) : (
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="inline-flex items-center gap-1 font-semibold">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full inline-block animate-pulse ${
+                                  isDarkMode ? "bg-purple-400" : "bg-emerald-500"
+                                }`}
+                              />
                               <span>Vector RAG</span>
                             </span>
                             <span className="opacity-40">|</span>
@@ -739,7 +816,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                                 onClick={() => handleActionClick(action)}
                                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
                                   isDarkMode
-                                    ? "bg-[#18221D] hover:bg-[#1E2B24] border-[#2A3B31] text-emerald-300"
+                                    ? "bg-[#1B1433] hover:bg-[#251B44] border-[#37265E] text-purple-200 hover:text-white"
                                     : "bg-[#E5EBDD] hover:bg-[#D5DEC9] border-[#D5DEC9] text-emerald-800"
                                 }`}
                               >
@@ -757,7 +834,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                               rel={action.isExternal ? "noopener noreferrer" : undefined}
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
                                 isDarkMode
-                                  ? "bg-[#18221D] hover:bg-[#1E2B24] border-[#2A3B31] text-emerald-300"
+                                  ? "bg-[#1B1433] hover:bg-[#251B44] border-[#37265E] text-purple-200 hover:text-white"
                                   : "bg-[#E5EBDD] hover:bg-[#D5DEC9] border-[#D5DEC9] text-emerald-800"
                               }`}
                             >
@@ -780,13 +857,13 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
         {/* Composer: Clean, Integrated, Anchored */}
         <footer
           className={`p-3 shrink-0 border-t ${
-            isDarkMode ? "border-[#23322B] bg-[#111714]" : "border-[#D5DEC9] bg-[#FCFBF8]"
+            isDarkMode ? "border-[#221838] bg-[#0E0B18]" : "border-[#D5DEC9] bg-[#FCFBF8]"
           }`}
         >
           <div
             className={`relative flex items-center rounded-xl border transition-all ${
               isDarkMode
-                ? "bg-[#141B17] border-[#23322B] focus-within:border-emerald-500/50"
+                ? "bg-[#140F26] border-[#261B40] focus-within:border-purple-500/60"
                 : "bg-[#FFFFFF] border-[#D5DEC9] focus-within:border-emerald-700/50"
             }`}
           >
@@ -812,7 +889,7 @@ export function SproutChatDrawer({ isOpen, onClose }: SproutChatDrawerProps) {
                 className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
                   inputValue.trim() && !isStreaming
                     ? isDarkMode
-                      ? "bg-emerald-500 text-black font-bold hover:bg-emerald-400 active:scale-95"
+                      ? "bg-purple-600 hover:bg-purple-500 text-white font-bold active:scale-95 shadow-[0_0_12px_rgba(168,85,247,0.45)]"
                       : "bg-[#47785E] text-white font-bold hover:bg-[#3B664F] active:scale-95"
                     : "opacity-30 cursor-not-allowed text-neutral-400"
                 }`}

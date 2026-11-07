@@ -9,6 +9,7 @@ import {
   MapPin,
   Clock,
   Mail,
+  Sparkles,
 } from "lucide-react";
 import { ConversationalInquiryForm } from "./ConversationalInquiryForm";
 import { useTheme } from "@/context/ThemeContext";
@@ -179,8 +180,27 @@ export function ContactColophon() {
 
               <button
                 type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("replay-preloader"));
+                  }
+                }}
+                className="group flex items-center gap-1.5 hover:text-[var(--fg)] transition-colors focus-visible:outline-none focus-visible:text-[var(--accent)] cursor-pointer"
+                aria-label="Replay Intro Sequence (Shortcut: Shift + I)"
+              >
+                <Sparkles className="h-3 w-3 text-[var(--accent)] transition-transform group-hover:rotate-12" />
+                <span>Replay Intro</span>
+                <kbd className="hidden sm:inline-block text-[9px] px-1 py-0.5 rounded bg-[var(--surface)] border border-[var(--border)] text-[var(--fg-muted)] font-mono">
+                  ⇧I
+                </kbd>
+              </button>
+
+              <span className="text-[var(--border)]" aria-hidden="true">•</span>
+
+              <button
+                type="button"
                 onClick={scrollToTop}
-                className="group flex items-center gap-1 hover:text-[var(--fg)] transition-colors focus-visible:outline-none focus-visible:text-[var(--accent)]"
+                className="group flex items-center gap-1 hover:text-[var(--fg)] transition-colors focus-visible:outline-none focus-visible:text-[var(--accent)] cursor-pointer"
                 aria-label="Scroll to top of page"
               >
                 <span>Back to Top</span>

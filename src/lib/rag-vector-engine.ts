@@ -56,6 +56,7 @@ export function stemToken(token: string): string {
 
   // Domain-specific synonym & morphological reductions
   if (t === "hirable" || t === "hireable" || t === "hiring" || t === "hired") return "hire";
+  if (t === "available" || t === "availability") return "avail";
   if (t === "projects" || t === "projected" || t === "projecting") return "project";
   if (t === "skills" || t === "skilled") return "skill";
   if (t === "codes" || t === "coding" || t === "coded" || t === "coder" || t === "coders") return "code";
@@ -69,6 +70,8 @@ export function stemToken(token: string): string {
   if (t === "technologies" || t === "technology" || t === "technical" || t === "techs") return "tech";
   if (t === "contacted" || t === "contacting" || t === "contacts") return "contact";
   if (t === "interns" || t === "internships" || t === "interning") return "intern";
+  if (t === "c++" || t === "cpp") return "cpp";
+  if (t === "teach" || t === "teaching" || t === "teaches" || t === "taught") return "teach";
 
   // Standard English suffix stripping
   if (t.endsWith("sses")) return t.slice(0, -2);
@@ -371,32 +374,67 @@ export function synthesizeCuteSarcasticRagResponse(
 
   const queryLower = retrieval.query.toLowerCase();
 
-  // If query is out of scope / completely unrelated trivia (baking, world history, etc.)
-  if (retrieval.isOutOfScope || retrieval.topChunks.length === 0) {
-    const outOfScopeResponses = [
-      "🌱 *[Sprout tilts its head]*\n\nI’m tuned specifically to answer questions about Yashvardhan’s software engineering, projects, and coursework. I might not know about that, but I can tell you all about his **Shivkush Nursery PWA**, his **8.86 CGPA at PCCOE**, or why he'd be an exceptional hire for your engineering team!",
-      "🌱 *[Sprout blinks curiously]*\n\nMy vector RAG index didn't find a strong match for that in Yashvardhan's verified archives. Try asking me about his **500+ LeetCode problems**, his **NPTEL Elite+Silver in Graph Theory**, or whether he's available for **Summer 2026 internships**!",
-      "🌱 *[Sprout dusts off its leaves]*\n\nThat's a bit outside my botanical knowledge base! I'm here to showcase Yashvardhan's engineering accomplishments. Would you like to hear about his commercial projects, his tech stack, or his academic credentials?",
-    ];
-
-    const randomOut = outOfScopeResponses[Math.floor(Math.random() * outOfScopeResponses.length)];
+  // SPECIAL HANDLER 1: What has Yashvardhan built? (Built / Overview)
+  if (
+    queryLower.includes("built") ||
+    queryLower.includes("build") ||
+    queryLower.includes("what did he build") ||
+    queryLower.includes("what has he built") ||
+    queryLower.includes("what has yashvardhan built") ||
+    queryLower.includes("what did he make")
+  ) {
     return {
-      content: randomOut,
+      content:
+        "🌱 *[Sprout unrolls an engineering blueprint with pride]*\n\nFinally, someone asking about real engineering! Yashvardhan has architected and shipped high-impact systems across full-stack web, 3D WebGL, and algorithms:\n- **Shivkush Nursery PWA (Commercial):** Solo-engineered bilingual agricultural commerce platform with offline Service Worker caching (`sw.js`), Supabase PostgreSQL RLS, and interactive 3D WebGL plant models.\n- **PralayVeer (SIH 2024 Finalist):** Rapid disaster preparedness & accessible emergency shelter routing platform engineered for degraded networks.\n- **Algorithmic Graph Theory & Benchmark Engine (C++20):** High-performance Dijkstra, Bellman-Ford, and Dinic's Maximum Flow benchmarking suite.\n- **Startup Valuation ML Pipeline:** Supervised regression model predicting early-stage valuations.\n- **Sprout Vector RAG Companion:** The in-memory Vector RAG assistant you're talking with right now!\n\nWhich case study would you like to explore first?",
       actions: [
         { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
-        { label: "Academic Credentials", href: "/#about" },
+        { label: "View All Projects", href: "/#work" },
         { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
       ],
     };
   }
 
-  // Top retrieved chunk
-  const primary = retrieval.topChunks[0].chunk;
-  const secondary = retrieval.topChunks[1]?.chunk;
-
-  // SPECIAL HIGH-PRIORITY HANDLER 1: Recruiter / Hiring Pitch
+  // SPECIAL HANDLER 2: C++ / Teach Me CPP / Algorithms
   if (
-    primary.id === "recruitment-why-hire" ||
+    queryLower.includes("cpp") ||
+    queryLower.includes("c++") ||
+    queryLower.includes("teach me cpp") ||
+    queryLower.includes("learn cpp") ||
+    queryLower.includes("pointers") ||
+    queryLower.includes("graph theory")
+  ) {
+    return {
+      content:
+        "🌱 *[Sprout adjusts its tiny glasses]*\n\nWhile I can't deliver an entire university lecture on C++ in this chat drawer, Yashvardhan is an absolute C++ powerhouse!\n- He holds a **HackerRank 5-Star Gold Badge in C++** validating core language mastery.\n- He built a nanosecond-benchmarked **C++20 Algorithmic Graph Theory Engine** implementing Dijkstra's, Bellman-Ford, Ford-Fulkerson, and Dinic's Maximum Flow.\n- He earned **NPTEL Elite + Silver in Algorithmic Graph Theory** (Score: 77/100, issued by IIT Madras).\n- He's solved **500+ problems** across LeetCode and Codeforces with deep focus on Trees and DP.\n\nWant to inspect his C++ graph engine case study or see his competitive programming profile?",
+      actions: [
+        { label: "Explore C++ Graph Engine", href: "/projects/algorithmic-graph-engine" },
+        { label: "LeetCode Profile ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
+        { label: "Codeforces Profile ↗", href: "https://codeforces.com/profile/yashvardhan_4", isExternal: true },
+      ],
+    };
+  }
+
+  // SPECIAL HANDLER 3: Availability / Is he available?
+  if (
+    queryLower.includes("avail") ||
+    queryLower.includes("is he available") ||
+    queryLower.includes("when can he start") ||
+    queryLower.includes("free to work") ||
+    queryLower.includes("open to work")
+  ) {
+    return {
+      content:
+        "🌱 *[Sprout perks up immediately]*\n\nYes! Yashvardhan is actively open and available for **Summer & Fall 2026 Software Engineering Internships** (hybrid or remote). He is based in Pune, India, and ready to contribute to high-performance web systems and distributed backends.\n\nHe has an 8.86 CGPA at PCCOE Pune, production PWA shipping experience, and 500+ CP problems solved. Grab his resume or reach out to him directly!",
+      actions: [
+        { label: "Email Yashvardhan", href: "mailto:yashvardhanborude7@gmail.com" },
+        { label: "View PDF Resume ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+        { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
+      ],
+    };
+  }
+
+  // SPECIAL HANDLER 4: Recruiter / Hiring Pitch
+  if (
     queryLower.includes("hire") ||
     queryLower.includes("job") ||
     queryLower.includes("intern") ||
@@ -413,9 +451,8 @@ export function synthesizeCuteSarcasticRagResponse(
     };
   }
 
-  // SPECIAL HIGH-PRIORITY HANDLER 2: Sprout Identity / AI Assistant / RAG
+  // SPECIAL HANDLER 5: Sprout Identity / AI Assistant / RAG
   if (
-    primary.id === "sprout-companion-identity" ||
     queryLower.includes("who are you") ||
     queryLower.includes("are you ai") ||
     queryLower.includes("what are you") ||
@@ -431,6 +468,55 @@ export function synthesizeCuteSarcasticRagResponse(
       ],
     };
   }
+
+  // SPECIAL HANDLER 6: General Tech Questions (Python, React, TypeScript, SQL, Docker, Linux, AI)
+  if (
+    queryLower.includes("python") ||
+    queryLower.includes("javascript") ||
+    queryLower.includes("react") ||
+    queryLower.includes("next") ||
+    queryLower.includes("sql") ||
+    queryLower.includes("postgres") ||
+    queryLower.includes("docker") ||
+    queryLower.includes("linux") ||
+    queryLower.includes("ai") ||
+    queryLower.includes("three.js")
+  ) {
+    return {
+      content:
+        "🌱 *[Sprout dusts off its leaves]*\n\nI’m tuned specifically to showcase Yashvardhan’s software engineering accomplishments rather than act as a generic programming textbook. Speaking of technology, Yashvardhan writes **production TypeScript, Next.js, modern C++20, and PostgreSQL with Supabase RLS**!\n\nHe has solved over 500 algorithmic problems and built production PWAs with offline caching. Which part of his tech stack would you like to explore?",
+      actions: [
+        { label: "Technical Stack & Skills", href: "/#about" },
+        { label: "Explore Shipped Projects", href: "/#work" },
+        { label: "View Verified Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+      ],
+    };
+  }
+
+  // If query is out of scope / unrelated trivia (food, jokes, weather, generic chat)
+  if (retrieval.isOutOfScope || retrieval.topChunks.length === 0) {
+    const outOfScopeResponses = [
+      "🌱 *[Sprout tilts its head]*\n\nMy photosynthesis sensors say that's a bit outside my botanical database! I'm here specifically to guide you through Yashvardhan's software engineering career. How about we check out his **commercial Shivkush Nursery PWA** or his **8.86 CGPA at PCCOE Pune**?",
+      "🌱 *[Sprout dusts off its leaves]*\n\nI could try guessing, but my vector index is 100% grounded in Yashvardhan's verified projects and algorithms. If you're a recruiter or fellow developer, ask me about his **500+ LeetCode problems** or his **NPTEL Elite+Silver in Graph Theory**!",
+      "🌱 *[Sprout perks up]*\n\nIntriguing question! But remember, I'm Sprout—Yashvardhan's portfolio companion, not an open-ended search engine. Let me show you what he's built, or whether he's a great match for your engineering team!",
+      "🌱 *[Sprout taps a tiny leaf]*\n\nI'm keeping all my compute power focused on Yashvardhan's engineering archives! Try asking about his full-stack proficiencies, his C++20 benchmark engine, or why you should hire him.",
+      "🌱 *[Sprout smiles warmly]*\n\nThat's outside our project archives, but don't wander off just yet! Yashvardhan has built some seriously impressive systems—from offline-first PWAs to machine learning pipelines. Which one would you like to explore?",
+    ];
+
+    const randomOut = outOfScopeResponses[Math.floor(Math.random() * outOfScopeResponses.length)];
+    return {
+      content: randomOut,
+      actions: [
+        { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
+        { label: "Academic Credentials", href: "/#about" },
+        { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+      ],
+    };
+  }
+
+  // Top retrieved chunk
+  const primary = retrieval.topChunks[0].chunk;
+  const secondary = retrieval.topChunks[1]?.chunk;
 
   // Collect all unique action links from top retrieved chunks
   const actionMap = new Map<string, { label: string; href: string; isExternal?: boolean }>();

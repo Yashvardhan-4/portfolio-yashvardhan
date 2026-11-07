@@ -142,7 +142,10 @@ export const AI_KNOWLEDGE_CHUNKS: KnowledgeChunk[] = [
     id: "contact-availability",
     category: "contact",
     title: "Contact & Availability",
-    keywords: ["hire", "contact", "email", "phone", "internship", "availability", "job", "opportunity", "reach out", "connect", "collaborate"],
+    keywords: [
+      "hire", "contact", "email", "phone", "internship", "availability", "is he available",
+      "available", "free", "when can he start", "job", "opportunity", "reach out", "connect", "collaborate"
+    ],
     summary: "Open to Software Engineering Internships and Full-Stack development roles for Summer/Fall 2026.",
     fullContent:
       "Yashvardhan is actively open to Software Engineering Internships and collaborative software development opportunities for Summer and Fall 2026. He is based in Pune, Maharashtra, India, and open to hybrid or remote arrangements.\n- Email: yashvardhanborude7@gmail.com\n- Phone: +91-7058230773\n- Location: Pune, Maharashtra, India",
@@ -150,6 +153,40 @@ export const AI_KNOWLEDGE_CHUNKS: KnowledgeChunk[] = [
       { label: "Send Email", href: "mailto:yashvardhanborude7@gmail.com" },
       { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
       { label: "Download Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+    ],
+  },
+  {
+    id: "projects-portfolio-overview",
+    category: "projects",
+    title: "Overview of Shipped Systems & Projects",
+    keywords: [
+      "what has yashvardhan built", "what did he build", "what has he built", "built", "build",
+      "projects", "creations", "what did he make", "portfolio", "work", "showcase", "engineering projects"
+    ],
+    summary: "Shipped Shivkush Nursery commercial PWA, PralayVeer disaster response, C++20 Graph Engine, and ML Valuation Predictor.",
+    fullContent:
+      "Yashvardhan has architected and delivered production-grade software across full-stack web, 3D WebGL, machine learning, and low-level algorithmic systems:\n- **Shivkush Nursery Management System (Commercial Contract):** A solo-engineered PWA with offline Service Worker caching (`sw.js`), Supabase PostgreSQL secured with Row-Level Security (RLS), and interactive 3D WebGL plant visualization using Three.js.\n- **PralayVeer (Smart India Hackathon 2024 Finalist):** Rapid disaster preparedness & accessible emergency shelter routing platform engineered for degraded low-bandwidth networks.\n- **Algorithmic Graph Theory & Benchmark Engine (C++20):** High-performance implementations of Dijkstra's, Bellman-Ford, Ford-Fulkerson Maximum Flow, and Dinic's Algorithm with microsecond benchmarks.\n- **Early-Stage Startup Valuation Predictor (Machine Learning):** Supervised ML regression pipeline utilizing XGBoost and Scikit-Learn.\n- **Sprout Vector RAG Companion:** The in-memory Vector RAG assistant powering this portfolio companion.",
+    actions: [
+      { label: "View All Projects", href: "/#work" },
+      { label: "Shivkush Case Study", href: "/projects/shivkush-nursery-pwa" },
+      { label: "GitHub Profile", href: "https://github.com/Yashvardhan-4", isExternal: true },
+    ],
+  },
+  {
+    id: "skills-cpp-algorithms",
+    category: "skills",
+    title: "C++ Programming, Algorithms & Graph Theory",
+    keywords: [
+      "teach me cpp", "cpp", "c++", "c++20", "learn cpp", "pointers", "templates",
+      "stl", "dsa", "graph theory", "dijkstra", "algorithms", "problem solving", "competitive programming"
+    ],
+    summary: "HackerRank 5-Star Gold Badge in C++, C++20 Algorithmic Graph Theory Engine, and 500+ CP problems solved.",
+    fullContent:
+      "While Sprout cannot teach a full university semester of C++ inside a chat bubble, Yashvardhan is deeply proficient in C++:\n- **HackerRank 5-Star Gold Badge in C++** validating core language mastery.\n- **Algorithmic Graph Theory & Benchmark Engine (C++20):** High-performance implementations of Dijkstra's, Bellman-Ford, Ford-Fulkerson, and Dinic's Maximum Flow algorithms with nanosecond benchmarking.\n- **NPTEL Elite + Silver in Algorithmic Graph Theory** (Score: 77/100, issued by IIT Madras).\n- **500+ Algorithmic Problems Solved:** Including 213+ on LeetCode and Pupil rank (1227) on Codeforces, with heavy emphasis on Dynamic Programming, Trees, and Graphs.\n- Feel free to check out his C++ Graph Engine case study or his LeetCode profile!",
+    actions: [
+      { label: "Explore C++ Graph Engine", href: "/projects/algorithmic-graph-engine" },
+      { label: "LeetCode Profile ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
+      { label: "Codeforces Profile ↗", href: "https://codeforces.com/profile/yashvardhan_4", isExternal: true },
     ],
   },
   {

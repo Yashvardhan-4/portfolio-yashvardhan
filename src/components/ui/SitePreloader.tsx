@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import Threads from "./Threads";
@@ -24,6 +24,8 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
   const [hoveredSide, setHoveredSide] = useState<"dark" | "light" | null>(null);
   const [isDissolving, setIsDissolving] = useState(false);
 
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   // Water-like smooth spring physics for the diagonal split line
   const rawSplit = useMotionValue(50);
   const smoothSplit = useSpring(rawSplit, {
@@ -40,27 +42,99 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     });
   }, [smoothSplit]);
 
-  // Phase 1: Framer Bouncing Dots + Fluid Typography Reveal (~3.2 seconds)
-  useEffect(() => {
-    setMounted(true);
+  // Check if preloader should play on initial mount (with URL override support)
+  const checkShouldPlay = useCallback(() => {
+    if (typeof window === "undefined") return true;
 
-    if (typeof window !== "undefined") {
-      try {
-        const seen = sessionStorage.getItem("yashvardhan_preloader_seen_v2");
-        if (seen === "true") {
-          setPhase("COMPLETE");
-          onComplete?.();
-          return;
-        }
-      } catch {}
+    // 1. Shareable URL Query Override (?intro=true, ?intro=1, ?replay=true)
+    const params = new URLSearchParams(window.location.search);
+    if (
+      params.get("intro") === "true" ||
+      params.get("intro") === "1" ||
+      params.get("replay") === "true" ||
+      params.get("replay") === "1"
+    ) {
+      return true;
     }
 
-    const timer = setTimeout(() => {
+    // 2. Session check: if completed earlier in this browser session, skip
+    try {
+      const seen = sessionStorage.getItem("yashvardhan_preloader_seen_v2");
+      if (seen === "true") {
+        return false;
+      }
+    } catch {}
+
+    return true;
+  }, []);
+
+  // Launch the 3.4-second calibration wave into duality chamber
+  const startPreloaderSequence = useCallback(() => {
+    setMounted(true);
+    setPhase("CALIBRATION");
+    setIsDissolving(false);
+    rawSplit.set(50);
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       setPhase("DUALITY");
     }, 3400);
+  }, [rawSplit]);
 
-    return () => clearTimeout(timer);
-  }, [onComplete]);
+  // Initial mount check
+  useEffect(() => {
+    const shouldPlay = checkShouldPlay();
+    if (!shouldPlay) {
+      setMounted(true);
+      setPhase("COMPLETE");
+      onComplete?.();
+      return;
+    }
+
+    startPreloaderSequence();
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [checkShouldPlay, startPreloaderSequence, onComplete]);
+
+  // Global listeners for on-demand replay triggers and Shift + I shortcut
+  useEffect(() => {
+    const handleReplayEvent = () => {
+      try {
+        sessionStorage.removeItem("yashvardhan_preloader_seen_v2");
+      } catch {}
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      startPreloaderSequence();
+    };
+
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is currently typing in an input, textarea, or contentEditable
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      // Shift + I triggers on-demand replay
+      if (e.shiftKey && (e.key === "I" || e.key === "i")) {
+        e.preventDefault();
+        handleReplayEvent();
+      }
+    };
+
+    window.addEventListener("replay-preloader", handleReplayEvent);
+    window.addEventListener("keydown", handleGlobalKeyDown);
+
+    return () => {
+      window.removeEventListener("replay-preloader", handleReplayEvent);
+      window.removeEventListener("keydown", handleGlobalKeyDown);
+    };
+  }, [startPreloaderSequence]);
 
   // Mouse move on Duality stage -> water-like spring response
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
