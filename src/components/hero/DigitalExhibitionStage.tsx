@@ -240,23 +240,23 @@ export function DigitalExhibitionStage({
       };
     });
 
-    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Cropped strictly to full neck, height = 445)
+    // 1B. Initialize Portrait Halftone Dots for LIGHT MODE (Grounded neck and collar line, height = 472)
     const baseWidthLight = halftoneDataLight.width;   // 480
-    const baseHeightLight = halftoneDataLight.height; // 445 (cropped strictly to full neck)
+    const baseHeightLight = halftoneDataLight.height; // 472 (grounded collar line)
     const rawDotsLight = halftoneDataLight.dots as Array<[number, number, number, number, number?, number?, number?]>;
 
     const portraitDotsLight: PortraitDot[] = rawDotsLight.map(([x0, y0, r0, l, rRaw, gRaw, bRaw], i) => {
-      // Core features include forehead, eyes, nose, moustache, lips, chin, beard, and central neck
-      const isCoreFeature = x0 > 135 && x0 < 345 && y0 > 120 && y0 < 415;
+      // Core features include forehead, eyes, nose, moustache, lips, chin, beard, and full neck
+      const isCoreFeature = x0 > 135 && x0 < 345 && y0 > 120 && y0 < 435;
       const featureWeight = isCoreFeature ? 0.60 : 1.0;
 
-      const dxEdge = (x0 - baseWidthLight * 0.5) / 160;
-      const dyEdge = (y0 - baseHeightLight * 0.5) / 215;
+      const dxEdge = (x0 - baseWidthLight * 0.5) / 165;
+      const dyEdge = (y0 - baseHeightLight * 0.5) / 225;
       const distEdge = Math.sqrt(dxEdge * dxEdge + dyEdge * dyEdge);
       const edgeFade = distEdge > 0.85 ? Math.max(0, 1 - (distEdge - 0.85) / 0.18) : 1.0;
 
-      // Soft vertical bottom fade strictly at the base of the neck (Y > 415 to 445)
-      const bottomFade = y0 > 415 ? Math.max(0.15, 1 - (y0 - 415) / 32) : 1.0;
+      // Soft vertical bottom fade strictly at the base of the collar (Y > 440 to 472)
+      const bottomFade = y0 > 440 ? Math.max(0.15, 1 - (y0 - 440) / 32) : 1.0;
       const combinedFade = edgeFade * bottomFade;
 
       const r = rRaw !== undefined ? rRaw : 45;
@@ -631,7 +631,7 @@ export function DigitalExhibitionStage({
         let isLitByScan = false;
         let scanBoost = 0;
         if (isScanning) {
-          const isWithinVisiblePortrait = !isLight || p.y0 <= 445;
+          const isWithinVisiblePortrait = !isLight || p.y0 <= 472;
           const distToScan = Math.abs(p.y - scanY);
           if (distToScan < scanBandWidth && isWithinVisiblePortrait) {
             isLitByScan = true;
