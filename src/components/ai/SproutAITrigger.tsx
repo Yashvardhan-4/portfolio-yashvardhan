@@ -10,15 +10,15 @@ interface SproutAITriggerProps {
 }
 
 // Tailored palettes matching the portfolio's Quiet Garden theme:
-// Dark Mode: Botanical Obsidian + Royal Purple + Lavender + Amethyst Core
+// Dark Mode: Botanical Obsidian + Emerald + Electric Mint + Cyan + Warm White Core
 const DARK_THEME_STRANDS_PALETTE = [
-  "#7C3AED", // Royal violet
-  "#A855F7", // Bright purple
-  "#C084FC", // Soft lavender
-  "#FAF5FF", // Warm starlight core
-  "#C084FC", // Electric purple spark
-  "#6D28D9", // Deep amethyst
-  "#4C1D95", // Obsidian dusk
+  "#059669", // Deep emerald arch
+  "#10b981", // Forest mint
+  "#34d399", // Vivid mint
+  "#f0fdf4", // Warm white core
+  "#00f0ff", // Electric cyan spark
+  "#0284c7", // Sapphire rim
+  "#064e3b", // Deep spruce
 ];
 
 // Light Mode: Editorial Ghibli Garden + Sage + Warm Amber + Ivory Core
@@ -47,74 +47,56 @@ export function SproutAITrigger({ isOpen, onToggle }: SproutAITriggerProps) {
         onClick={onToggle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        aria-label={isOpen ? "Close Sprout (Press Escape)" : "Ask Sprout (Press ⌘K)"}
+        aria-label={isOpen ? "Close Sprout companion (Press Escape)" : "Ask Sprout AI (Press ⌘K)"}
         aria-expanded={isOpen}
         aria-controls="sprout-chat-companion"
-        className={`group relative h-12 px-3 sm:px-4 rounded-full border transition-all duration-300 flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-95 cursor-pointer backdrop-blur-md shadow-lg ${
-          isDarkMode
-            ? "bg-[#111714]/90 hover:bg-[#151e19] border-[#23322B] text-[#ECEEE7]"
-            : "bg-[#FAFBF7]/95 hover:bg-[#F3F3E9] border-[#D5DEC9] text-[#20352B]"
-        }`}
+        title={isOpen ? "Close Sprout (Esc)" : "Ask Sprout (⌘K)"}
+        className="group relative w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-all duration-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-90 cursor-pointer"
         style={{
-          boxShadow: isDarkMode
+          filter: isDarkMode
             ? isOpen
-              ? "0 0 24px rgba(52, 211, 153, 0.35), 0 8px 32px rgba(0,0,0,0.8)"
+              ? "drop-shadow(0 0 20px rgba(0, 240, 255, 0.6)) drop-shadow(0 0 8px rgba(52, 211, 153, 0.4))"
               : isHovered
-              ? "0 0 20px rgba(52, 211, 153, 0.25), 0 4px 20px rgba(0,0,0,0.6)"
-              : "0 4px 16px rgba(0,0,0,0.5)"
+              ? "drop-shadow(0 0 22px rgba(0, 240, 255, 0.5)) drop-shadow(0 6px 18px rgba(0, 0, 0, 0.8))"
+              : "drop-shadow(0 4px 14px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 8px rgba(52, 211, 153, 0.2))"
             : isOpen
-            ? "0 8px 24px rgba(71, 120, 94, 0.25), 0 2px 6px rgba(0,0,0,0.06)"
+            ? "drop-shadow(0 0 16px rgba(71, 120, 94, 0.45)) drop-shadow(0 6px 16px rgba(0, 0, 0, 0.12))"
             : isHovered
-            ? "0 6px 20px rgba(71, 120, 94, 0.18), 0 2px 6px rgba(0,0,0,0.05)"
-            : "0 4px 12px rgba(71, 120, 94, 0.1), 0 1px 3px rgba(0,0,0,0.04)",
-          transform: isHovered && !isOpen ? "translateY(-1.5px)" : undefined,
+            ? "drop-shadow(0 0 18px rgba(71, 120, 94, 0.35)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.1))"
+            : "drop-shadow(0 4px 12px rgba(71, 120, 94, 0.2)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06))",
+          transform: isHovered && !isOpen ? "scale(1.06)" : undefined,
         }}
       >
-        {/* Left: The Official React Bits <Strands /> Component in compact glass orb */}
-        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 flex items-center justify-center">
-          <div className="absolute inset-0 pointer-events-none">
-            <Strands
-              colors={isDarkMode ? DARK_THEME_STRANDS_PALETTE : LIGHT_THEME_STRANDS_PALETTE}
-              lightMode={!isDarkMode}
-              glass={true}
-              glassSize={1.1}
-              count={3}
-              speed={isHovered ? 1.6 : 0.9}
-              energy={isHovered ? 0.85 : 0.65}
-              interactive={true}
-              clickPulse={true}
-              scale={1.05}
-              glow={isDarkMode ? 1.2 : 0.8}
-            />
-          </div>
-        </div>
-
-        {/* Center: Friendly Editorial Label */}
-        <div className="flex items-center gap-1.5">
-          <span
-            className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${
-              isOpen
-                ? isDarkMode
-                  ? "bg-emerald-400"
-                  : "bg-emerald-600"
-                : "bg-emerald-500 animate-pulse"
-            }`}
+        {/* The Strands Ball itself IS the button */}
+        <div className="w-full h-full rounded-full overflow-hidden">
+          <Strands
+            colors={isDarkMode ? DARK_THEME_STRANDS_PALETTE : LIGHT_THEME_STRANDS_PALETTE}
+            lightMode={!isDarkMode}
+            glass={true}
+            glassSize={1.15}
+            count={3}
+            speed={isHovered ? 1.6 : 0.9}
+            energy={isHovered ? 0.9 : 0.65}
+            interactive={true}
+            clickPulse={true}
+            scale={1.1}
+            glow={isDarkMode ? 1.3 : 0.9}
           />
-          <span className="text-[13px] font-medium tracking-tight">
-            {isOpen ? "Close" : "Sprout"}
-          </span>
         </div>
 
-        {/* Right: Keyboard Shortcut Hint (Desktop only) */}
-        <kbd
-          className={`hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono border transition-colors ${
-            isDarkMode
-              ? "bg-[#18221D] border-[#26372E] text-[#9BA89F]"
-              : "bg-[#E5EBDD] border-[#D5DEC9] text-[#526356]"
+        {/* Minimal live status beacon on top-right rim */}
+        <span
+          className={`absolute top-0.5 right-0.5 w-3 h-3 rounded-full border-2 transition-colors ${
+            isDarkMode ? "border-[#090D0B]" : "border-[#F3F3E9]"
+          } ${
+            isOpen
+              ? isDarkMode
+                ? "bg-cyan-400 shadow-[0_0_8px_#00F0FF]"
+                : "bg-emerald-600"
+              : "bg-emerald-500 animate-pulse shadow-[0_0_6px_#10B981]"
           }`}
-        >
-          {isOpen ? "ESC" : "⌘K"}
-        </kbd>
+          aria-hidden="true"
+        />
       </button>
     </aside>
   );
