@@ -176,8 +176,8 @@ export function MonumentalHero() {
                       metal="silver"
                       strapColor="#1B382B"
                       strapWidth={0.65}
-                      size={0.65}
-                      strapLength={0.44}
+                      size={0.56}
+                      strapLength={0.38}
                       elasticity={0.55}
                       damping={0.45}
                       gravity={1.1}
@@ -262,10 +262,10 @@ export function MonumentalHero() {
         </div>
       </section>
 
-      {/* Light Mode 3D Physics Lanyard: Anchored at the absolute top ceiling of the screen (top-0), bleeding with unrestricted full-viewport physics */}
+      {/* Light Mode 3D Physics Lanyard: Anchored at top ceiling (top-0) spanning full-viewport bleed so swings/drags across headline are never clipped */}
       {hasMounted && isLightMode && (
         <div
-          className="hidden md:block absolute top-0 right-0 w-[55vw] lg:w-[50vw] xl:w-[46vw] h-[100svh] min-h-[720px] z-40 pointer-events-auto overflow-visible select-none"
+          className="hidden md:block absolute inset-0 w-full h-[100svh] min-h-[720px] z-30 pointer-events-none overflow-visible select-none"
           aria-label="Interactive 3D Engineering ID Lanyard"
         >
           <Lanyard
@@ -277,13 +277,13 @@ export function MonumentalHero() {
             metal="silver"
             strapColor="#1B382B"
             strapWidth={0.65}
-            size={0.62}
-            strapLength={0.42}
+            size={0.46}
+            strapLength={0.36}
             elasticity={0.55}
             damping={0.45}
             gravity={1.1}
             breeze={0.35}
-            anchor="center"
+            anchor={0.74}
           />
         </div>
       )}

@@ -14,7 +14,7 @@ export interface LanyardProps {
   finish?: 'glossy' | 'matte' | 'holographic' | 'metallic';
   cornerRadius?: number;
   size?: number;
-  anchor?: 'left' | 'center' | 'right';
+  anchor?: 'left' | 'center' | 'right' | number;
   strapLength?: number;
   strapImage?: string;
   strapColor?: string;
@@ -859,6 +859,7 @@ export const Lanyard: React.FC<LanyardProps> = ({
     const canvas = renderer.domElement;
     canvas.className = 'lanyard-canvas';
     canvas.setAttribute('aria-hidden', 'true');
+    canvas.style.pointerEvents = 'none';
     container.appendChild(canvas);
 
     const anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
@@ -1016,7 +1017,10 @@ export const Lanyard: React.FC<LanyardProps> = ({
       foilUniforms.foilKey.value.set(-2.5, 4, 6).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilFill.value.set(3, -1, 4).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilTop.value.set(0.5, 4.5, 8).normalize().transformDirection(camera.matrixWorldInverse);
-      const anchorX = ((ANCHORS[s.anchor || 'center'] ?? 0.5) - 0.5) * viewWidth;
+      const anchorFraction = typeof s.anchor === 'number'
+        ? clamp(s.anchor, 0, 1)
+        : (ANCHORS[s.anchor || 'center'] ?? 0.5);
+      const anchorX = (anchorFraction - 0.5) * viewWidth;
       const anchorY = viewHeight / 2 + 0.2;
       const cardTop = viewHeight / 2 - viewHeight * mix(0.12, 0.42, clamp(s.strapLength ?? 0.5, 0, 1));
       const hangTop = cardTop + (layout.hangY - layout.height / 2);
@@ -1296,6 +1300,21 @@ export const Lanyard: React.FC<LanyardProps> = ({
       start();
     };
 
+    const onWindowPointerMove = (event: PointerEvent) => {
+      if (!settingsRef.current.interactive) return;
+      if (sim.grab) return;
+      toPointer(event);
+      const hit = pickCard();
+      hovering = !!hit;
+      if (hovering) {
+        canvas.style.pointerEvents = 'auto';
+        setCursor('grab');
+      } else {
+        canvas.style.pointerEvents = 'none';
+        setCursor('');
+      }
+    };
+
     const onPointerMove = (event: PointerEvent) => {
       if (!settingsRef.current.interactive) return;
       toPointer(event);
@@ -1307,7 +1326,13 @@ export const Lanyard: React.FC<LanyardProps> = ({
       }
       if (event.pointerType === 'touch') return;
       hovering = !!pickCard();
-      setCursor(hovering ? 'grab' : '');
+      if (hovering) {
+        canvas.style.pointerEvents = 'auto';
+        setCursor('grab');
+      } else {
+        canvas.style.pointerEvents = 'none';
+        setCursor('');
+      }
     };
 
     const onPointerUp = (event: PointerEvent) => {
@@ -1316,14 +1341,62 @@ export const Lanyard: React.FC<LanyardProps> = ({
       if (press && event.type === 'pointerup' && performance.now() - press.time < 450) flip(press.point);
       press = null;
       canvas.releasePointerCapture?.(event.pointerId);
-      setCursor(hovering && event.pointerType !== 'touch' ? 'grab' : '');
+      toPointer(event);
+      hovering = !!pickCard();
+      if (hovering && event.pointerType !== 'touch') {
+        canvas.style.pointerEvents = 'auto';
+        setCursor('grab');
+      } else {
+        canvas.style.pointerEvents = 'none';
+        setCursor('');
+      }
+      start();
+    };
+
+    const onWindowTouchStart = (event: TouchEvent) => {
+      if (!settingsRef.current.interactive || event.touches.length !== 1) return;
+      toPointer(event.touches[0]);
+      const hit = pickCard();
+      if (hit) {
+        canvas.style.pointerEvents = 'auto';
+        sim.grab = {
+          local: hit.point.clone().sub(sim.body.position).applyQuaternion(sim.body.quaternion.clone().invert()),
+          rotation: sim.body.quaternion.clone(),
+          reach: hit.distance,
+          from: hit.point.clone(),
+          target: hit.point.clone()
+        };
+        press = { x: event.touches[0].clientX, y: event.touches[0].clientY, time: performance.now(), point: hit.point.clone() };
+        event.preventDefault();
+        start();
+      }
+    };
+
+    const onWindowTouchMove = (event: TouchEvent) => {
+      if (!sim.grab || event.touches.length !== 1) return;
+      toPointer(event.touches[0]);
+      if (press && Math.hypot(event.touches[0].clientX - press.x, event.touches[0].clientY - press.y) > 6) press = null;
+      raycaster.ray.at(sim.grab.reach, sim.grab.target);
+      event.preventDefault();
+      start();
+    };
+
+    const onWindowTouchEnd = () => {
+      if (!sim.grab) return;
+      sim.grab = null;
+      if (press && performance.now() - press.time < 450) flip(press.point);
+      press = null;
+      canvas.style.pointerEvents = 'none';
       start();
     };
 
     const onTouchStart = (event: TouchEvent) => {
       if (!settingsRef.current.interactive || event.touches.length !== 1) return;
       toPointer(event.touches[0]);
-      if (pickCard()) event.preventDefault();
+      if (pickCard()) {
+        canvas.style.pointerEvents = 'auto';
+        event.preventDefault();
+      }
     };
 
     canvas.addEventListener('pointerdown', onPointerDown);
@@ -1332,6 +1405,11 @@ export const Lanyard: React.FC<LanyardProps> = ({
     canvas.addEventListener('pointercancel', onPointerUp);
     canvas.addEventListener('lostpointercapture', onPointerUp);
     canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    window.addEventListener('pointermove', onWindowPointerMove, { passive: true });
+    window.addEventListener('touchstart', onWindowTouchStart, { passive: false });
+    window.addEventListener('touchmove', onWindowTouchMove, { passive: false });
+    window.addEventListener('touchend', onWindowTouchEnd);
+    window.addEventListener('touchcancel', onWindowTouchEnd);
 
     const resize = () => {
       view.width = Math.max(1, container.clientWidth);
@@ -1364,6 +1442,11 @@ export const Lanyard: React.FC<LanyardProps> = ({
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pointermove', onWindowPointerMove);
+      window.removeEventListener('touchstart', onWindowTouchStart);
+      window.removeEventListener('touchmove', onWindowTouchMove);
+      window.removeEventListener('touchend', onWindowTouchEnd);
+      window.removeEventListener('touchcancel', onWindowTouchEnd);
       canvas.removeEventListener('pointerdown', onPointerDown);
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerup', onPointerUp);
