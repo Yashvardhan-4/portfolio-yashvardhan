@@ -68,7 +68,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     return true;
   }, []);
 
-  // Launch the 3.4-second calibration wave into duality chamber
+  // Launch the crisp 2.3-second calibration wave into duality chamber
   const startPreloaderSequence = useCallback(() => {
     setMounted(true);
     setPhase("CALIBRATION");
@@ -78,7 +78,7 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setPhase("DUALITY");
-    }, 3400);
+    }, 2300);
   }, [rawSplit]);
 
   // Initial mount check
@@ -142,8 +142,8 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
     const { innerWidth } = window;
     const xPct = (e.clientX / innerWidth) * 100;
 
-    // Fluid membrane flex between 34% and 66%
-    const target = 34 + (xPct / 100) * 32;
+    // Wide fluid membrane flex between 28% and 72%
+    const target = 28 + (xPct / 100) * 44;
     rawSplit.set(target);
 
     if (xPct < 48) {
@@ -201,9 +201,10 @@ export function SitePreloader({ onComplete }: SitePreloaderProps) {
 
   if (!mounted || phase === "COMPLETE") return null;
 
-  // Slanted diagonal geometry with dynamic offset
-  const topCut = splitDisplay + 6;
-  const bottomCut = splitDisplay - 6;
+  // Slanted diagonal geometry leaning smoothly toward hovered realm
+  const slant = 6 + ((splitDisplay - 50) / 22) * 3;
+  const topCut = splitDisplay + slant;
+  const bottomCut = splitDisplay - slant;
 
   return (
     <div

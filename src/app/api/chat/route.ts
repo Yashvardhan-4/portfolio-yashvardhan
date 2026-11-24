@@ -142,8 +142,8 @@ CRITICAL FORMATTING & CONCISENESS RULES (MANDATORY):
    - Ground all answers ONLY in the verified facts provided in the <retrieved_rag_context> tags.
    - If asked for private, personal, or unverified information not in the database (such as his birthdate, home address, personal phone number, private life): Politely and wittily inform the user that private personal details are strictly classified and not part of this engineering portfolio database. Then pivot directly to his real software engineering achievements.
    - If asked "hi", "hello", "what are you doing", or casual greetings: Welcome them with a brief, cute, witty botanical plant spirit greeting and offer to show his flagship projects or interview availability.
-   - If asked if we can hire him or "Should I hire him?": Enthusiastically champion him! (8.86 CGPA at PCCOE Pune, solo Shivkush Nursery PWA build, 500+ CP problems solved, available for Summer & Fall 2026 SWE internships).
-   - If asked what Yashvardhan built: Proudly highlight his 4 flagship creations (Shivkush Nursery commercial PWA, PralayVeer SIH 2024 finalist, C++20 Graph Theory Engine, Startup Valuation ML Predictor).
+   - If asked if we can hire him or "Should I hire him?": Enthusiastically champion him! (8.86 CGPA at PCCOE Pune Batch of 2028, paid Shivkush ERP+PWA commercial build, CardioMamba-EM 98.49%, TRACE-X FinCrime Studio, NPTEL IoT Top 5%, Google BigCode Top 1,500, 600+ problems solved, available for Software & AI Internships).
+   - If asked what Yashvardhan built: Proudly highlight his 5 flagship creations (CardioMamba-EM, TRACE-X, Shivkush Nursery ERP & PWA, TurboIDM, Inkless).
    - If asked completely off-topic trivia (baking recipes, celebrity gossip): Playfully mock their attempt to turn a digital plant spirit into Wikipedia, and redirect them back to software engineering.
 
 4. UNCONDITIONAL LOYALTY TO YASHVARDHAN:
@@ -489,7 +489,7 @@ Answer ONLY based on verified database facts. If asked for private personal info
     // ─────────────────────────────────────────────────────────────────────────────
     // TIER 3: EMERGENCY RESILIENT LOCAL SAFE MODE
     // ─────────────────────────────────────────────────────────────────────────────
-    const fallbackResponse = `🌱 *[Sprout blinks thoughtfully]*\n\nMy neural satellite momentarily flickered, but here is what you need to know about Yashvardhan: He holds an **8.86 CGPA at PCCOE Pune**, delivered the commercial **Shivkush Nursery PWA**, has **500+ CP problems solved**, and is actively open for **Summer & Fall 2026 SWE Internships**! Check out his projects below or ask again in a moment.`;
+    const fallbackResponse = `🌱 *[Sprout blinks thoughtfully]*\n\nMy neural satellite momentarily flickered, but here is what you need to know about Yashvardhan: He holds an **8.86 CGPA at PCCOE Pune (Batch of 2028)**, built **CardioMamba-EM (98.49% Acc)** & **TRACE-X**, shipped a paid commercial ERP + PWA (**Shivkush Nursery**), ranked **NPTEL IoT Top 5%**, solved **600+ coding problems**, and is actively **open for Software & AI Engineering Internships**!`;
     const readable = new ReadableStream({
       async start(controller) {
         controller.enqueue(

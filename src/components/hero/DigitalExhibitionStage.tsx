@@ -510,6 +510,11 @@ export function DigitalExhibitionStage({
         portraitSparkImpulse = 0;
       }
 
+      // Gentle scroll-exit starlight dispersion (strictly zero at resting hero scrollY <= 20)
+      const scrollFactor = prefersReducedMotion
+        ? 0
+        : Math.min(1, Math.max(0, (window.scrollY - 20) / 520));
+
       // ----------------------------------------------------
       // SECTION A0: OCCLUSION BACKDROP (Keeps threads strictly BEHIND the portrait in Dark Mode)
       // ----------------------------------------------------
@@ -518,7 +523,7 @@ export function DigitalExhibitionStage({
         const pCenterY = anchorY + anchorH * 0.48;
         const pRadiusX = anchorW * 0.52;
         const pRadiusY = anchorH * 0.55;
-        const maskAlpha = Math.min(1.0, revealEase);
+        const maskAlpha = Math.min(1.0, revealEase) * (1 - scrollFactor);
 
         if (maskAlpha > 0.01) {
           ctx.save();
@@ -581,6 +586,12 @@ export function DigitalExhibitionStage({
 
         let targetX = baseX;
         let targetY = baseY;
+
+        // Scroll-exit breeze gently scatters dots upward like drifting starlight
+        if (scrollFactor > 0.005) {
+          targetX += p.initialOffsetX * portraitScale * scrollFactor * 0.55;
+          targetY -= scrollFactor * (45 + p.l * 72) * portraitScale;
+        }
 
         // Initial organic convergence from soft scatter on page load
         if (revealProgress < 1.0) {
@@ -670,9 +681,15 @@ export function DigitalExhibitionStage({
           ctx.fillStyle = isLight ? p.colorLight : p.color;
         }
 
+        if (scrollFactor > 0.005) {
+          ctx.globalAlpha = Math.max(0.06, 1 - scrollFactor * 0.88);
+        }
         ctx.beginPath();
         ctx.arc(p.x, p.y, drawRadius, 0, Math.PI * 2);
         ctx.fill();
+        if (scrollFactor > 0.005) {
+          ctx.globalAlpha = 1;
+        }
       }
     }
 

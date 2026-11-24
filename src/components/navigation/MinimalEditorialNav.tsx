@@ -26,21 +26,26 @@ export function MinimalEditorialNav() {
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[var(--bg)]/90 backdrop-blur-xl border-b border-[var(--border)] shadow-[0_4px_30px_rgba(0,0,0,0.08)]"
+          ? "backdrop-blur-xl border-b border-[var(--border)] shadow-[0_4px_30px_rgba(0,0,0,0.08)]"
           : "bg-transparent border-b border-transparent"
       }`}
+      style={{
+        backgroundColor: scrolled
+          ? "color-mix(in srgb, var(--bg) 92%, transparent)"
+          : "transparent",
+      }}
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16 h-16 sm:h-20 flex items-center justify-between">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-16 h-16 sm:h-20 flex items-center justify-between gap-3">
         {/* Left: Clean, Small Cool Typography for Name */}
         <a
           href="#"
-          className="group flex flex-col focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)] rounded py-1"
+          className="group flex flex-col focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)] rounded py-1 shrink-0"
           aria-label="Yashvardhan Borude - Home"
         >
-          <span className="font-display text-sm sm:text-base font-semibold tracking-[-0.02em] text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors">
+          <span className="font-display text-sm sm:text-base font-semibold tracking-[-0.02em] text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors whitespace-nowrap">
             Yashvardhan Borude
           </span>
-          <span className="font-mono text-[10px] text-[var(--fg-subtle)] tracking-wider uppercase">
+          <span className="font-mono text-[10px] text-[var(--fg-subtle)] tracking-wider uppercase whitespace-nowrap">
             Software &amp; Systems
           </span>
         </a>
@@ -48,7 +53,7 @@ export function MinimalEditorialNav() {
         {/* Center / Desktop Links with Animated SVG Underlines */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-8 text-xs font-mono tracking-wider text-[var(--fg-muted)]"
+          className="hidden md:flex items-center gap-4 lg:gap-8 text-xs font-mono tracking-wider text-[var(--fg-muted)] whitespace-nowrap"
         >
           <a
             href="#work"
@@ -60,7 +65,7 @@ export function MinimalEditorialNav() {
             href="#about"
             className="hover:text-[var(--fg)] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
           >
-            <AnimatedSVGUnderline strokeColor={accentColor}>Education</AnimatedSVGUnderline>
+            <AnimatedSVGUnderline strokeColor={accentColor}>Milestones</AnimatedSVGUnderline>
           </a>
           <a
             href="#contact"
@@ -94,11 +99,12 @@ export function MinimalEditorialNav() {
         </nav>
 
         {/* Right: Theme Switcher & Direct Let's Talk CTA */}
-        <div className="hidden sm:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2.5 lg:gap-3 shrink-0 whitespace-nowrap">
           {/* Tactile Ghibli Petrichor Theme Switcher */}
           <button
             type="button"
-            onClick={toggleTheme}
+            onClick={(e) => toggleTheme({ x: e.clientX, y: e.clientY })}
+            data-cursor-label={theme === "dark" ? "LIGHT REALM" : "DARK REALM"}
             className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono font-medium transition-all duration-300 active:scale-95 ${
               theme === "light"
                 ? "border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] hover:border-[var(--accent)] shadow-sm"
@@ -116,7 +122,7 @@ export function MinimalEditorialNav() {
 
           <a
             href="#contact"
-            className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-mono font-medium tracking-wider transition-all duration-300 active:scale-[0.98] ${
+            className={`group hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-mono font-medium tracking-wider transition-all duration-300 active:scale-[0.98] ${
               theme === "light"
                 ? "border-[var(--border)] bg-[var(--surface-card)] text-[var(--fg)] hover:border-[var(--accent)] hover:bg-[var(--surface-hover)] shadow-sm"
                 : "border-[#1E2430] bg-[#0E1015]/80 text-[#EDEDEF] hover:border-[#A855F7]/80 hover:bg-[#A855F7]/10 shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
@@ -133,7 +139,7 @@ export function MinimalEditorialNav() {
         <div className="flex md:hidden items-center gap-2">
           <button
             type="button"
-            onClick={toggleTheme}
+            onClick={(e) => toggleTheme({ x: e.clientX, y: e.clientY })}
             className={`flex h-10 px-3 items-center gap-1.5 rounded-xl border text-xs font-mono font-medium transition-all ${
               theme === "light"
                 ? "border-[var(--border)] bg-[var(--surface)] text-[var(--fg)]"
@@ -177,7 +183,7 @@ export function MinimalEditorialNav() {
               onClick={() => setMobileMenuOpen(false)}
               className="text-[var(--fg-muted)] hover:text-[var(--fg)] py-1 flex items-center justify-between"
             >
-              <span>Education</span>
+              <span>Milestones</span>
               <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-subtle)]" />
             </a>
             <a

@@ -1,8 +1,9 @@
 import { SitePreloader } from "@/components/ui/SitePreloader";
 import { MonumentalHero } from "@/components/hero/MonumentalHero";
-import { TechStackLoop } from "@/components/ui/TechStackLoop";
+import { LivingManifesto } from "@/components/story/LivingManifesto";
 import { SelectedWork } from "@/components/work/SelectedWork";
 import { AboutPhilosophy } from "@/components/about/AboutPhilosophy";
+import { AperturePortal } from "@/components/story/AperturePortal";
 import { ContactColophon } from "@/components/contact/ContactColophon";
 import { ClickSpark } from "@/components/ui/ClickSpark";
 import { MinimalEditorialNav } from "@/components/navigation/MinimalEditorialNav";
@@ -21,9 +22,10 @@ export default function Home() {
         <main className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col transition-colors duration-300">
           <MinimalEditorialNav />
           <MonumentalHero />
-          <TechStackLoop />
+          <LivingManifesto />
           <SelectedWork />
           <AboutPhilosophy />
+          <AperturePortal />
           <ContactColophon />
         </main>
       </ClickSpark>

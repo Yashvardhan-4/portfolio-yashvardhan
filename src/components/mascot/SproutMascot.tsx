@@ -159,22 +159,48 @@ export function SproutMascot() {
     return () => window.removeEventListener("resize", handleResize);
   }, [isEnabled, getHousePosition]);
 
-  // Theme switch reaction: Sprout does an excited celebratory bounce (if not asleep in house)
+  // Theme switch & chapter emotional tour guide reactions (always respects parked sleep state)
   useEffect(() => {
-    const handleThemeChange = () => {
-      if (isParkedRef.current) return; // Keep undisturbed if parked
+    const celebrate = (particle: "leaf" | "exclamation", impulse = -12) => {
+      if (isParkedRef.current || isReturningHomeRef.current) return;
       setMascotState("HAPPY");
-      jumpVelocityRef.current = -12;
-      spawnParticle("leaf", 8, -22, isDarkMode ? "#00FFA3" : "#47785E");
+      jumpVelocityRef.current = impulse;
+      spawnParticle(
+        particle,
+        8,
+        -22,
+        particle === "leaf"
+          ? isDarkMode
+            ? "#00FFA3"
+            : "#47785E"
+          : isDarkMode
+          ? "#C084FC"
+          : "#C89355"
+      );
       setTimeout(() => {
-        if (!isParkedRef.current && !isWalkingRef.current) {
+        if (!isParkedRef.current && !isWalkingRef.current && !activePerchRef.current) {
           setMascotState("IDLE");
         }
       }, 1200);
     };
 
+    const handleThemeChange = () => celebrate("leaf", -12);
+    const handleChapterReact = () => celebrate("exclamation", -9);
+    const handlePostcardSent = () => {
+      celebrate("leaf", -14);
+      setTimeout(() => celebrate("exclamation", -11), 220);
+    };
+
     window.addEventListener("theme-change", handleThemeChange);
-    return () => window.removeEventListener("theme-change", handleThemeChange);
+    window.addEventListener("sprout-theme-flip", handleThemeChange);
+    window.addEventListener("sprout-chapter-react", handleChapterReact);
+    window.addEventListener("sprout-postcard-sent", handlePostcardSent);
+    return () => {
+      window.removeEventListener("theme-change", handleThemeChange);
+      window.removeEventListener("sprout-theme-flip", handleThemeChange);
+      window.removeEventListener("sprout-chapter-react", handleChapterReact);
+      window.removeEventListener("sprout-postcard-sent", handlePostcardSent);
+    };
   }, [isDarkMode, spawnParticle]);
 
   // Handle clicking the Mascot House / Terrarium button (Toggle Park / Wake)

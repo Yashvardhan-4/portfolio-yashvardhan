@@ -1,32 +1,86 @@
 "use client";
 
-import React, { useState } from "react";
-import { carouselPlaceholderProjects, ProjectItem } from "@/data/carouselProjects";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import {
+  carouselPlaceholderProjects,
+  archiveProjects,
+  ProjectItem,
+  ArchiveWorkItem,
+} from "@/data/carouselProjects";
 import { ShivkushDiagram } from "./ProjectDiagrams";
+import { LiquidArtPlane } from "./LiquidArtPlane";
+import { ElasticDivider } from "@/components/ui/ElasticDivider";
+import { MagneticPill } from "@/components/ui/MagneticPill";
 import { useTheme } from "@/context/ThemeContext";
 import {
   ArrowUpRight,
   Github,
   X,
-  Maximize2,
-  Layers,
   ExternalLink,
   CheckCircle2,
+  Sparkles,
+  Wrench,
 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 
 export function SelectedWork() {
   const { theme } = useTheme();
   const isLight = theme === "light";
+
+  const [activeMoodIndex, setActiveMoodIndex] = useState(0);
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
-  const [modalTab, setModalTab] = useState<"overview" | "architecture">("overview");
+  const [modalTab, setModalTab] = useState<"story" | "engineering">("story");
+  const spreadRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Floating hover preview state for Dennis Snellenberg–style archive list
+  const [hoveredArchive, setHoveredArchive] = useState<ArchiveWorkItem | null>(null);
+  const previewX = useMotionValue(-300);
+  const previewY = useMotionValue(-300);
+  const smoothPreviewX = useSpring(previewX, { stiffness: 260, damping: 28, mass: 0.5 });
+  const smoothPreviewY = useSpring(previewY, { stiffness: 260, damping: 28, mass: 0.5 });
+
+  // Track which flagship chapter is centered in viewport for ambient color wash
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const observers: IntersectionObserver[] = [];
+
+    spreadRefs.current.forEach((el, idx) => {
+      if (!el) return;
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveMoodIndex(idx);
+          }
+        },
+        { threshold: 0.45 }
+      );
+      io.observe(el);
+      observers.push(io);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  // Close case study modal cleanly on Escape
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activeProject) {
+        closeProjectModal();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
 
   const openProjectModal = (project: ProjectItem) => {
     setActiveProject(project);
+    setModalTab("story");
     if (typeof window !== "undefined") {
       window.dispatchEvent(
         new CustomEvent("sprout-inspect-modal", { detail: { open: true, title: project.title } })
       );
+      window.dispatchEvent(new CustomEvent("sprout-chapter-react"));
     }
   };
 
@@ -39,293 +93,386 @@ export function SelectedWork() {
     }
   };
 
+  const activeMood =
+    carouselPlaceholderProjects[activeMoodIndex] || carouselPlaceholderProjects[0];
+  const moodTint = isLight ? activeMood.moodLight : activeMood.moodDark;
+
+  const handleArchivePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    previewX.set(e.clientX + 28);
+    previewY.set(e.clientY - 110);
+  };
+
   return (
     <section
       id="work"
-      aria-label="Selected Projects and Built Tools"
-      className="relative w-full border-t border-[var(--border)] bg-[var(--bg)] py-20 sm:py-28 scroll-mt-16 transition-colors duration-300"
+      aria-label="Selected Projects and Stories"
+      className="relative w-full bg-[var(--bg)] pb-24 sm:pb-36 scroll-mt-16 transition-colors duration-500"
     >
-      {/* Studio Ghibli Full-Width Mossy Waterfall Backdrop (Strictly Light Mode Only) */}
+      {/* Elastic Silk Arch Boundary */}
+      <ElasticDivider fill="var(--bg)" className="-mt-10 sm:-mt-16 relative z-20" />
+
+      {/* Studio Ghibli Waterfall Veil (Strictly Light Mode) */}
       {isLight && (
         <div
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
           aria-hidden="true"
         >
-          {/* Full-width Ghibli Mossy Forest Waterfall (Reference 2) */}
           <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center opacity-30 mix-blend-multiply"
+            className="absolute inset-0 w-full h-full bg-cover bg-center opacity-25 mix-blend-multiply"
             style={{ backgroundImage: `url('/images/ghibli-mossy-waterfall.jpg')` }}
           />
-          {/* Natural vignette wash so cards and typography have pristine contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] opacity-85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/80 via-transparent to-[var(--bg)]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-transparent to-[var(--bg)] opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/85 via-transparent to-[var(--bg)]/85" />
         </div>
       )}
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
-        {/* Section Header */}
-        <div className="mb-14 sm:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end border-b border-[var(--border)] pb-8">
+      {/* Living Color-Shifting Chapter Mood Wash */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 transition-all duration-1000 ease-out"
+        style={{
+          background: `radial-gradient(ellipse 75% 45% at 50% 42%, ${moodTint}, transparent 75%)`,
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16 pt-12 sm:pt-16">
+        {/* Section Editorial Header (12-Column Asymmetric Tension) */}
+        <div className="mb-12 sm:mb-16 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pb-10 border-b border-[var(--border)]">
           <div className="lg:col-span-7">
-            <span className="font-mono text-xs text-[var(--accent)] tracking-widest uppercase font-semibold flex items-center gap-2">
-              {isLight && <span className="text-xs" aria-hidden="true">🌿</span>}
-              Selected Work
+            <span className="font-mono text-[11px] text-[var(--accent)] tracking-[0.14em] uppercase font-semibold flex items-center gap-2">
+              {isLight && <span aria-hidden="true">🌿</span>}
+              03 · Selected Works
             </span>
-            <h2 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-6xl font-normal text-[var(--fg)] tracking-tight leading-[0.98]">
-              Things I&apos;ve Built.
+            <h2 className="mt-2.5 font-serif text-4xl sm:text-6xl lg:text-[4.25rem] font-normal text-[var(--fg)] tracking-[-0.03em] leading-[0.96] [text-wrap:balance]">
+              Crafted for real impact.
             </h2>
           </div>
 
-          <div className="lg:col-span-5 flex flex-col justify-end">
-            <p className="font-sans text-sm sm:text-base leading-relaxed text-[var(--fg-muted)] max-w-prose">
-              A collection of applications and tools I&apos;ve designed and built — focusing on speed, clean interfaces, and solving real user problems.
+          <div className="lg:col-span-5 flex flex-col justify-end lg:items-end">
+            <p className="font-sans text-sm sm:text-base leading-[1.65] text-[var(--fg-muted)] max-w-prose [text-wrap:pretty]">
+              Five flagship stories spanning healthcare AI, financial fraud clarity, commercial software, desktop performance, and local-first design.
             </p>
           </div>
         </div>
 
-        {/* Dynamic Stacking Cards on Scroll */}
-        <div className="relative space-y-12 sm:space-y-16 pb-12">
+        {/* 5 Editorial Magazine Flagship Spreads */}
+        <div className="divide-y divide-[var(--border)]">
           {carouselPlaceholderProjects.map((project, index) => {
-            // Increasing top offset for cascading stack effect
-            const topOffset = 88 + index * 24;
+            const imageLeft = index % 2 === 0;
 
             return (
-              <div
+              <article
                 key={project.id}
-                style={{ top: `${topOffset}px` }}
-                className="sticky transition-all duration-500 ease-out"
+                ref={(el) => {
+                  spreadRefs.current[index] = el;
+                }}
+                className="group py-14 sm:py-20 first:pt-4 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
               >
-                <article className="group relative rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] shadow-2xl hover:border-[var(--accent)]/50 transition-all duration-500 overflow-hidden">
-                  {/* Botanical Field Folio Index (Strictly Light Mode Only) */}
-                  {isLight && (
+                {/* Artwork Column (7 Cols) */}
+                <div
+                  className={`lg:col-span-7 ${
+                    imageLeft ? "lg:order-1" : "lg:order-2"
+                  }`}
+                >
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => openProjectModal(project)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openProjectModal(project);
+                      }
+                    }}
+                    data-cursor-label="VIEW STORY"
+                    aria-label={`Open full story for ${project.title}`}
+                    className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] shadow-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                  >
+                    <LiquidArtPlane src={project.src} alt={project.alt} />
+
+                    {/* Soft Bottom Scrim + Quiet Museum Index */}
                     <div
-                      className="absolute top-3.5 right-6 font-mono text-[9px] text-[var(--accent)]/50 pointer-events-none select-none tracking-widest uppercase z-10"
                       aria-hidden="true"
-                    >
-                      FOLIO · 0{index + 1}
-                    </div>
-                  )}
-
-                  {/* Card Inner Grid */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center p-6 sm:p-8 lg:p-10">
-                    {/* Visual Presentation Column (7 Columns) */}
-                    <div className="lg:col-span-7">
-                      <div className="relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg)] shadow-xl">
-                        {/* Browser Chrome Header */}
-                        <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-4 py-2.5">
-                          <div className="flex items-center gap-2">
-                            <span className={`h-2.5 w-2.5 rounded-full bg-[#EF4444]/80 ${isLight ? "shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" : ""}`} />
-                            <span className={`h-2.5 w-2.5 rounded-full bg-[#F59E0B]/80 ${isLight ? "shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" : ""}`} />
-                            <span className={`h-2.5 w-2.5 rounded-full bg-[#10B981]/80 ${isLight ? "shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.75)]" : ""}`} />
-                            {project.liveUrl && (
-                              <span className="ml-3 font-mono text-[11px] text-[var(--fg-muted)] hidden sm:flex items-center gap-1.5 bg-[var(--bg)] px-2.5 py-0.5 rounded border border-[var(--border)]">
-                                <span className="text-[#10B981] text-xs">🔒</span>
-                                <span className="truncate max-w-[200px]">
-                                  {project.liveUrl.replace("https://", "")}
-                                </span>
-                              </span>
-                            )}
-                          </div>
-
-                          <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--accent)] bg-[var(--accent-muted)] px-2.5 py-0.5 rounded border border-[var(--accent)]/30 font-medium">
-                            {project.category}
-                          </span>
-                        </div>
-
-                        {/* High-Resolution Viewport Preview */}
-                        <div
-                          onClick={() => openProjectModal(project)}
-                          className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--bg)] cursor-pointer"
-                        >
-                          <img
-                            src={project.src}
-                            alt={project.alt}
-                            className="w-full h-full object-cover object-top filter brightness-[0.98] contrast-[1.02] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                            loading="lazy"
-                          />
-
-                          {/* Hover Inspection Badge */}
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[var(--bg)]/50 backdrop-blur-[2px]">
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--accent)] bg-[var(--surface)] text-[var(--fg)] font-mono text-xs shadow-lg">
-                              <Maximize2 className="h-3.5 w-3.5 text-[var(--accent-secondary)]" />
-                              <span>Inspect architecture &amp; details</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Story & Technical Breakdown Column (5 Columns) */}
-                    <div className="lg:col-span-5 flex flex-col justify-between space-y-5">
-                      <div>
-                        <span className="font-mono text-xs text-[var(--accent)] uppercase tracking-wider font-semibold block">
-                          {project.category}
-                        </span>
-
-                        <h3 className="mt-1 font-serif text-3xl sm:text-4xl text-[var(--fg)] tracking-tight">
-                          {project.title}
-                        </h3>
-                        <p className="mt-1 font-mono text-xs text-[var(--accent-secondary)]">
-                          {project.subtitle}
-                        </p>
-
-                        <p className="mt-3 font-sans text-sm sm:text-base leading-relaxed text-[var(--fg-muted)]">
-                          {project.description}
-                        </p>
-
-                        {/* Benchmark Metrics (Tabular Mono) */}
-                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 border-y border-[var(--border)] py-3.5">
-                          {project.metrics.map((metric, mIdx) => (
-                            <div key={mIdx} className="space-y-0.5">
-                              <span className="block font-mono text-[9px] text-[var(--fg-subtle)] uppercase tracking-wider">
-                                BENCHMARK
-                              </span>
-                              <span className="block font-mono text-xs text-[var(--fg)] font-medium tabular-nums">
-                                {metric}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Tech Stack Pills */}
-                        <div className="mt-4 flex flex-wrap gap-1.5">
-                          {project.stack.map((tech) => (
-                            <span
-                              key={tech}
-                              className="font-mono text-[11px] text-[var(--fg-muted)] bg-[var(--surface)] border border-[var(--border)] px-2 py-0.5 rounded"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Action Links */}
-                      <div className="pt-2 flex flex-wrap items-center gap-2.5">
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--fg)] text-[var(--bg)] font-mono text-xs font-semibold hover:opacity-90 shadow-sm transition-all active:scale-[0.98]"
-                          >
-                            <span>Live Demo</span>
-                            <ExternalLink className="h-3 w-3 text-[var(--bg)]" />
-                          </a>
-                        )}
-
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] font-mono text-xs hover:border-[var(--accent)] hover:text-[var(--accent-secondary)] transition-all active:scale-[0.98]"
-                          >
-                            <Github className="h-3.5 w-3.5" />
-                            <span>Source Code</span>
-                          </a>
-                        )}
-
-                        <button
-                          type="button"
-                          onClick={() => openProjectModal(project)}
-                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] font-mono text-xs transition-all active:scale-[0.98]"
-                        >
-                          <Layers className="h-3.5 w-3.5 text-[var(--accent)]" />
-                          <span>Architecture Deep Dive</span>
-                        </button>
-                      </div>
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
+                    />
+                    <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-center justify-between text-white/90 font-mono text-[10px] uppercase tracking-[0.14em]">
+                      <span className="px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-md border border-white/15 tabular-nums">
+                        {project.index} · {project.category}
+                      </span>
+                      <span className="px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-md border border-white/15">
+                        {project.year}
+                      </span>
                     </div>
                   </div>
-                </article>
-              </div>
+                </div>
+
+                {/* Narrative Story Column (5 Cols) */}
+                <div
+                  className={`lg:col-span-5 flex flex-col justify-between space-y-5 ${
+                    imageLeft ? "lg:order-2" : "lg:order-1"
+                  }`}
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--accent)]">
+                      <span className="font-semibold">{project.roleOrType}</span>
+                      <span className="text-[var(--fg-subtle)] tabular-nums">{project.index} / 05</span>
+                    </div>
+
+                    <h3 className="font-serif text-3xl sm:text-5xl text-[var(--fg)] tracking-[-0.025em] leading-[1.02]">
+                      {project.title}
+                    </h3>
+
+                    <p className="font-display text-sm sm:text-base font-medium text-[var(--fg)]/90 leading-snug">
+                      {project.humanHook}
+                    </p>
+
+                    <p className="font-sans text-sm leading-[1.7] text-[var(--fg-muted)] max-w-prose [text-wrap:pretty]">
+                      {project.humanStory}
+                    </p>
+                  </div>
+
+                  {/* Clean Hairline Metrics Row */}
+                  <div className="grid grid-cols-3 gap-3 border-y border-[var(--border)] py-4">
+                    {project.humanMetrics.map((m, mIdx) => (
+                      <div key={mIdx} className="space-y-1">
+                        <span className="block font-mono text-[10px] uppercase tracking-wider text-[var(--fg-subtle)]">
+                          {m.label}
+                        </span>
+                        <span className="block font-mono text-xs sm:text-sm font-semibold text-[var(--fg)] tabular-nums">
+                          {m.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Action Row */}
+                  <div className="pt-1 flex flex-wrap items-center gap-2.5">
+                    <MagneticPill
+                      as="button"
+                      type="button"
+                      variant="primary"
+                      cursorLabel="EXPLORE"
+                      onClick={() => openProjectModal(project)}
+                      className="px-4 py-2 font-mono text-xs font-semibold"
+                    >
+                      <span>Explore Story</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </MagneticPill>
+
+                    {project.liveUrl && (
+                      <MagneticPill
+                        as="a"
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="secondary"
+                        cursorLabel="LIVE SITE"
+                        className="px-4 py-2 font-mono text-xs"
+                      >
+                        <span>Live Demo</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </MagneticPill>
+                    )}
+
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-cursor-label="GITHUB"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] font-mono text-xs transition-colors"
+                      >
+                        <Github className="h-3.5 w-3.5" />
+                        <span>Code</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
             );
           })}
         </div>
+
+        {/* Dennis Snellenberg–style Floating-Preview Hairline Archive Index */}
+        <div
+          className="mt-12 sm:mt-16 pt-12 border-t border-[var(--border)] relative"
+          onPointerMove={handleArchivePointerMove}
+          onPointerLeave={() => setHoveredArchive(null)}
+        >
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--accent)] font-semibold block">
+                More Verified Works
+              </span>
+              <h3 className="mt-1 font-serif text-2xl sm:text-4xl text-[var(--fg)] tracking-tight">
+                Hackathons &amp; Foundations
+              </h3>
+            </div>
+            <Link
+              href="/projects"
+              data-cursor-label="FULL ARCHIVE"
+              className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--fg-muted)] hover:text-[var(--accent)] transition-colors"
+            >
+              <span>View Complete Register (8 Projects)</span>
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
+            {archiveProjects.map((item) => (
+              <Link
+                key={item.id}
+                href={`/projects/${item.slug}`}
+                onPointerEnter={() => setHoveredArchive(item)}
+                data-cursor-label="READ BRIEF"
+                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-6 py-5 sm:py-7 px-2 hover:px-4 transition-all duration-300 hover:bg-[var(--surface)]/50"
+              >
+                <div className="space-y-1">
+                  <span className="font-serif text-2xl sm:text-3xl text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors block">
+                    {item.title}
+                  </span>
+                  <span className="font-sans text-xs sm:text-sm text-[var(--fg-muted)] block">
+                    {item.summary}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-4 sm:gap-6 shrink-0 font-mono text-xs text-[var(--fg-muted)]">
+                  <span className="hidden md:inline-block">{item.category}</span>
+                  <span className="tabular-nums text-[var(--fg-subtle)]">{item.year}</span>
+                  <ArrowUpRight className="h-4 w-4 text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Floating Spring Image Preview Capsule (Desktop Fine Pointer) */}
+          <AnimatePresence>
+            {hoveredArchive && (
+              <motion.div
+                key={hoveredArchive.id}
+                aria-hidden="true"
+                initial={{ opacity: 0, scale: 0.72, rotate: -4 }}
+                animate={{ opacity: 1, scale: 1, rotate: -2 }}
+                exit={{ opacity: 0, scale: 0.72, rotate: -4 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                style={{ left: smoothPreviewX, top: smoothPreviewY }}
+                className="hidden lg:block fixed z-40 pointer-events-none w-72 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-card)] shadow-2xl"
+              >
+                <div className="aspect-[16/10] w-full overflow-hidden">
+                  <img
+                    src={hoveredArchive.previewImage}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="px-3.5 py-2.5 flex items-center justify-between font-mono text-[10px] text-[var(--fg-muted)] bg-[var(--surface)]">
+                  <span className="truncate">{hoveredArchive.outcome}</span>
+                  <span className="text-[var(--accent)] shrink-0 ml-2">{hoveredArchive.year}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Interactive Architecture Modal */}
+      {/* Full-Screen Curved Curtain Case-Study Takeover Modal */}
       <AnimatePresence>
         {activeProject && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-[var(--bg)]/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-[var(--bg)]/85 backdrop-blur-lg"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-project-title"
+            onClick={closeProjectModal}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 15 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] shadow-2xl p-6 sm:p-8 space-y-6"
+              data-lenis-prevent
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, y: 40, scale: 0.94, borderRadius: "2.5rem" }}
+              animate={{ opacity: 1, y: 0, scale: 1, borderRadius: "1rem" }}
+              exit={{ opacity: 0, y: 30, scale: 0.96, borderRadius: "2rem" }}
+              transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-6 sm:p-9 space-y-6"
             >
               {/* Modal Top Bar */}
-              <div className="flex items-start justify-between border-b border-[var(--border)] pb-4">
+              <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] pb-5">
                 <div>
-                  <span className="font-mono text-xs text-[var(--accent)] uppercase tracking-wider font-semibold block">
-                    {activeProject.category}
+                  <span className="font-mono text-[11px] text-[var(--accent)] uppercase tracking-[0.14em] font-semibold block">
+                    {activeProject.index} · {activeProject.category} · {activeProject.year}
                   </span>
                   <h3
                     id="modal-project-title"
-                    className="mt-1 font-serif text-2xl sm:text-3xl text-[var(--fg)]"
+                    className="mt-1.5 font-serif text-3xl sm:text-4xl text-[var(--fg)] tracking-tight"
                   >
                     {activeProject.title}
                   </h3>
-                  <p className="font-mono text-xs text-[var(--fg-muted)]">{activeProject.subtitle}</p>
+                  <p className="mt-1 font-sans text-xs sm:text-sm text-[var(--fg-muted)]">
+                    {activeProject.subtitle}
+                  </p>
                 </div>
 
                 <button
                   type="button"
                   onClick={closeProjectModal}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] transition-colors cursor-pointer"
                   aria-label="Close project modal"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
-              {/* Modal Tab Switcher */}
-              <div className="flex items-center gap-2 border-b border-[var(--border)] pb-2 font-mono text-xs">
+              {/* Dual-Audience Tab Switcher */}
+              <div className="flex flex-wrap items-center gap-2 border-b border-[var(--border)] pb-3 font-mono text-xs">
                 <button
                   type="button"
-                  onClick={() => setModalTab("overview")}
-                  className={`px-3 py-1.5 rounded-lg transition-colors ${
-                    modalTab === "overview"
-                      ? "bg-[var(--surface)] text-[var(--fg)] font-semibold border border-[var(--border)]"
-                      : "text-[var(--fg-muted)] hover:text-[var(--fg)]"
+                  onClick={() => setModalTab("story")}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full transition-colors cursor-pointer ${
+                    modalTab === "story"
+                      ? "bg-[var(--fg)] text-[var(--bg)] font-semibold"
+                      : "border border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)]"
                   }`}
                 >
-                  Overview &amp; Features
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>The Story (Overview)</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setModalTab("architecture")}
-                  className={`px-3 py-1.5 rounded-lg transition-colors ${
-                    modalTab === "architecture"
-                      ? "bg-[var(--surface)] text-[var(--fg)] font-semibold border border-[var(--border)]"
-                      : "text-[var(--fg-muted)] hover:text-[var(--fg)]"
+                  onClick={() => setModalTab("engineering")}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full transition-colors cursor-pointer ${
+                    modalTab === "engineering"
+                      ? "bg-[var(--fg)] text-[var(--bg)] font-semibold"
+                      : "border border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)]"
                   }`}
                 >
-                  Architecture &amp; How It Works
+                  <Wrench className="h-3.5 w-3.5" />
+                  <span>Under the Hood (For Engineers)</span>
                 </button>
               </div>
 
-              {/* Tab 1: Overview */}
-              {modalTab === "overview" && (
+              {/* Tab 1: Plain-English Human Story */}
+              {modalTab === "story" && (
                 <div className="space-y-6">
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg)]">
                     <img
                       src={activeProject.src}
                       alt={activeProject.alt}
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-cover object-center"
                     />
                   </div>
 
-                  <div className="space-y-3">
+                  <p className="font-serif text-xl sm:text-2xl text-[var(--fg)] leading-relaxed">
+                    {activeProject.humanHook}
+                  </p>
+
+                  <p className="font-sans text-sm sm:text-base text-[var(--fg-muted)] leading-[1.7] max-w-prose">
+                    {activeProject.humanStory}
+                  </p>
+
+                  <div className="space-y-3 border-t border-[var(--border)] pt-5">
                     <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--accent)] font-semibold">
-                      Key Highlights &amp; Solved Challenges
+                      Why It Matters
                     </h4>
-                    <ul className="space-y-2 font-sans text-sm text-[var(--fg-muted)]">
+                    <ul className="space-y-2.5 font-sans text-sm text-[var(--fg-muted)]">
                       {activeProject.highlights.map((highlight, hIdx) => (
                         <li key={hIdx} className="flex items-start gap-2.5">
                           <CheckCircle2 className="h-4 w-4 text-[var(--accent)] shrink-0 mt-0.5" />
@@ -334,16 +481,42 @@ export function SelectedWork() {
                       ))}
                     </ul>
                   </div>
+                </div>
+              )}
 
-                  <div>
+              {/* Tab 2: Deep Technical Breakdown for SWE Reviewers */}
+              {modalTab === "engineering" && (
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--accent)] font-semibold">
+                      Verified Architecture &amp; Engineering Specs
+                    </h4>
+                    <ul className="space-y-3 font-sans text-sm text-[var(--fg)] leading-relaxed">
+                      {activeProject.engineeringHighlights.map((spec, sIdx) => (
+                        <li
+                          key={sIdx}
+                          className="flex items-start gap-3 border-t border-[var(--border)] pt-3 first:border-t-0 first:pt-0"
+                        >
+                          <span className="font-mono text-[11px] text-[var(--accent)] mt-0.5 shrink-0 tabular-nums">
+                            0{sIdx + 1}
+                          </span>
+                          <span>{spec}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {activeProject.id === "shivkush-consultancy" && <ShivkushDiagram />}
+
+                  <div className="border-t border-[var(--border)] pt-5">
                     <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--accent)] font-semibold mb-3">
-                      Technology Stack
+                      Core Stack
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {activeProject.stack.map((tech) => (
                         <span
                           key={tech}
-                          className="font-mono text-xs text-[var(--fg)] bg-[var(--surface)] border border-[var(--border)] px-3 py-1.5 rounded-lg"
+                          className="font-mono text-xs text-[var(--fg)] bg-[var(--bg)] border border-[var(--border)] px-3 py-1 rounded-full"
                         >
                           {tech}
                         </span>
@@ -353,63 +526,18 @@ export function SelectedWork() {
                 </div>
               )}
 
-              {/* Tab 2: Architecture & Schematics */}
-              {modalTab === "architecture" && (
-                <div className="space-y-6">
-                  {activeProject.id === "shivkush-consultancy" ? (
-                    <ShivkushDiagram />
-                  ) : (
-                    <div className="border border-[var(--border)] bg-[var(--surface)] p-5 rounded-xl space-y-4">
-                      <div className="flex items-center justify-between border-b border-[var(--border)] pb-2 font-mono text-xs text-[var(--fg-muted)]">
-                        <span>System Architecture — {activeProject.title}</span>
-                        <span className="text-[var(--accent)]">Parallel Execution Core</span>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs text-[var(--fg-muted)]">
-                        <div className="border border-[var(--border)] bg-[var(--surface-card)] p-4 rounded-lg space-y-2">
-                          <span className="text-[var(--fg)] font-semibold block">Client Layer</span>
-                          <p className="text-[11px] leading-relaxed">
-                            Event-driven interface running on React 19 and custom WebGL viewports.
-                          </p>
-                        </div>
-                        <div className="border border-[var(--border)] bg-[var(--surface-card)] p-4 rounded-lg space-y-2">
-                          <span className="text-[var(--accent)] font-semibold block">Execution Core</span>
-                          <p className="text-[11px] leading-relaxed">
-                            Multi-stream concurrency pipelines handling fast local disk writes without buffer locking.
-                          </p>
-                        </div>
-                        <div className="border border-[var(--border)] bg-[var(--surface-card)] p-4 rounded-lg space-y-2">
-                          <span className="text-[var(--accent-nature)] font-semibold block">Data Integrity</span>
-                          <p className="text-[11px] leading-relaxed">
-                            Local-first persistence via IndexedDB &amp; PostgreSQL with zero data loss guarantees.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="space-y-2 font-sans text-sm text-[var(--fg-muted)]">
-                    <h4 className="font-mono text-xs uppercase tracking-wider text-[var(--accent)] font-semibold">
-                      Engineering Principles Applied
-                    </h4>
-                    <p className="leading-relaxed">
-                      Every architectural decision prioritizes user latency, resilient failure recovery, and zero unnecessary dependencies. Built to perform reliably under real-world conditions.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Modal Actions */}
-              <div className="flex items-center justify-between border-t border-[var(--border)] pt-4">
-                <div className="flex items-center gap-3">
+              {/* Modal Bottom Action Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-5">
+                <div className="flex flex-wrap items-center gap-2.5">
                   {activeProject.liveUrl && (
                     <a
                       href={activeProject.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--fg)] text-[var(--bg)] font-mono text-xs font-semibold hover:opacity-90 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--fg)] text-[var(--bg)] font-mono text-xs font-semibold hover:opacity-90 transition-opacity"
                     >
-                      <span>Visit Live Application</span>
-                      <ExternalLink className="h-3.5 w-3.5 text-[var(--bg)]" />
+                      <span>Open Live Site</span>
+                      <ExternalLink className="h-3.5 w-3.5" />
                     </a>
                   )}
                   {activeProject.githubUrl && (
@@ -417,18 +545,25 @@ export function SelectedWork() {
                       href={activeProject.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--fg)] font-mono text-xs hover:border-[var(--accent)] hover:text-[var(--accent-secondary)] transition-colors"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--border)] bg-[var(--bg)] text-[var(--fg)] font-mono text-xs hover:border-[var(--accent)] transition-colors"
                     >
                       <Github className="h-3.5 w-3.5" />
-                      <span>View GitHub Repository</span>
+                      <span>Source Code</span>
                     </a>
                   )}
+                  <Link
+                    href={`/projects/${activeProject.slug}`}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--accent)] font-mono text-xs transition-colors"
+                  >
+                    <span>Full Case Study Page</span>
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
 
                 <button
                   type="button"
                   onClick={closeProjectModal}
-                  className="font-mono text-xs text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors"
+                  className="font-mono text-xs text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
                 >
                   Close [Esc]
                 </button>

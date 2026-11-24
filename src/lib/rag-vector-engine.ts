@@ -385,11 +385,11 @@ export function synthesizeCuteSarcasticRagResponse(
   ) {
     return {
       content:
-        "🌱 *[Sprout unrolls an engineering blueprint with pride]*\n\nFinally, someone asking about real engineering! Yashvardhan has architected and shipped high-impact systems across full-stack web, 3D WebGL, and algorithms:\n- **Shivkush Nursery PWA (Commercial):** Solo-engineered bilingual agricultural commerce platform with offline Service Worker caching (`sw.js`), Supabase PostgreSQL RLS, and interactive 3D WebGL plant models.\n- **PralayVeer (SIH 2024 Finalist):** Rapid disaster preparedness & accessible emergency shelter routing platform engineered for degraded networks.\n- **Algorithmic Graph Theory & Benchmark Engine (C++20):** High-performance Dijkstra, Bellman-Ford, and Dinic's Maximum Flow benchmarking suite.\n- **Startup Valuation ML Pipeline:** Supervised regression model predicting early-stage valuations.\n- **Sprout Vector RAG Companion:** The in-memory Vector RAG assistant you're talking with right now!\n\nWhich case study would you like to explore first?",
+        "🌱 *[Sprout unrolls an exhibition portfolio with pride]*\n\nHere are Yashvardhan's 5 flagship verified creations:\n- **CardioMamba-EM:** BiMamba deep learning cardiac screening model reaching **98.49% accuracy & 99.56% sensitivity**, distilled to 448 KB.\n- **TRACE-X:** 7-engine financial crime & insider-risk studio built with FastAPI, NetworkX, React Flow, and Docker.\n- **Shivkush Nursery (Paid Client Contract):** Enterprise daily-operations ERP (18.5K+ LOC, append-only cashbook, <300ms 10K-row Excel) + offline bilingual 3D PWA.\n- **TurboIDM:** Cross-platform 32-stream HTTP Range download accelerator (up to 8x faster, 0.00s merge).\n- **Inkless:** Sub-5ms local-first journal synced safely to Postgres with custom GLSL shaders.\n\nWhich story would you like to explore?",
       actions: [
-        { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
-        { label: "View All Projects", href: "/#work" },
-        { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+        { label: "CardioMamba Case Study →", href: "/projects/cardiomamba-em" },
+        { label: "TRACE-X Live Demo ↗", href: "https://frontend-chi-pied-40.vercel.app", isExternal: true },
+        { label: "View All Work", href: "/#work" },
       ],
     };
   }
@@ -405,11 +405,10 @@ export function synthesizeCuteSarcasticRagResponse(
   ) {
     return {
       content:
-        "🌱 *[Sprout adjusts its tiny glasses]*\n\nWhile I can't deliver an entire university lecture on C++ in this chat drawer, Yashvardhan is an absolute C++ powerhouse!\n- He holds a **HackerRank 5-Star Gold Badge in C++** validating core language mastery.\n- He built a nanosecond-benchmarked **C++20 Algorithmic Graph Theory Engine** implementing Dijkstra's, Bellman-Ford, Ford-Fulkerson, and Dinic's Maximum Flow.\n- He earned **NPTEL Elite + Silver in Algorithmic Graph Theory** (Score: 77/100, issued by IIT Madras).\n- He's solved **500+ problems** across LeetCode and Codeforces with deep focus on Trees and DP.\n\nWant to inspect his C++ graph engine case study or see his competitive programming profile?",
+        "🌱 *[Sprout adjusts its tiny glasses]*\n\nWhile I can't deliver a whole university course in a chat bubble, Yashvardhan is a sharp C++ & systems engineer!\n- **HackerRank 5-Star Badge in C++** and **Google BigCode 2026 Global Top 1,500**.\n- **NPTEL Elite + Silver in Algorithmic Graph Theory** (Score: 77/100, IIT Madras / Kharagpur) + **NPTEL Top 5% in IoT** (91/100).\n- **600+ algorithmic problems solved** across LeetCode (315+), Codeforces (Pupil 1227), and CodeChef (2-Star 1434).\n\nWant to check his coding profiles or resume?",
       actions: [
-        { label: "Explore C++ Graph Engine", href: "/projects/algorithmic-graph-engine" },
-        { label: "LeetCode Profile ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
-        { label: "Codeforces Profile ↗", href: "https://codeforces.com/profile/yashvardhan_4", isExternal: true },
+        { label: "LeetCode (315+) ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
+        { label: "Codeforces (1227) ↗", href: "https://codeforces.com/profile/yashvardhanborude7", isExternal: true },
       ],
     };
   }
@@ -424,11 +423,11 @@ export function synthesizeCuteSarcasticRagResponse(
   ) {
     return {
       content:
-        "🌱 *[Sprout perks up immediately]*\n\nYes! Yashvardhan is actively open and available for **Summer & Fall 2026 Software Engineering Internships** (hybrid or remote). He is based in Pune, India, and ready to contribute to high-performance web systems and distributed backends.\n\nHe has an 8.86 CGPA at PCCOE Pune, production PWA shipping experience, and 500+ CP problems solved. Grab his resume or reach out to him directly!",
+        "🌱 *[Sprout perks up immediately]*\n\nYes! Yashvardhan is actively **available for Software Engineering, AI-ML, Data & Full Stack Internships**.\n\nHe holds an **8.86 CGPA** at PCCOE Pune (Batch of 2028), shipped a paid production ERP + PWA, earned **IIT Kharagpur NPTEL Top 5%**, built **CardioMamba-EM (98.49% Acc)** & **TRACE-X**, and solved **600+ coding problems**!",
       actions: [
         { label: "Email Yashvardhan", href: "mailto:yashvardhanborude7@gmail.com" },
         { label: "View PDF Resume ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-        { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
+        { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude-8640a6319", isExternal: true },
       ],
     };
   }
@@ -442,11 +441,11 @@ export function synthesizeCuteSarcasticRagResponse(
   ) {
     return {
       content:
-        "🌱 *[Sprout gasps dramatically]*\n\nIs he hirable? Should you hire him? Let me put it this way: if you *don't* hire him, your competitor probably will, and then you'll have to watch them enjoy clean architectures, zero-downtime offline PWAs, and an 8.86 CGPA work ethic while you debug legacy spaghetti code.\n\nHere is why Yashvardhan is an absolute powerhouse for your team:\n- **Solo Production Track Record:** Delivered the commercial **Shivkush Nursery PWA** from scratch—handling bilingual offline caching, Supabase PostgreSQL with Row-Level Security (RLS), and 3D WebGL visualizations.\n- **Academic & Theoretical Rigor:** 8.86 / 10.0 CGPA at PCCOE Pune; **NPTEL Elite + Silver in Algorithmic Graph Theory** (Score 77/100, IIT Madras/Kharagpur).\n- **Algorithmic Muscle:** **500+ competitive programming problems** solved across LeetCode, Codeforces (Pupil 1227), and CodeChef.\n- **Autonomous & Fast-Adapting:** Bridges modern Next.js/TypeScript frontend engineering with resilient distributed backend architectures.\n\nHe is actively interviewing for **Summer & Fall 2026 Software Engineering Internships**. Grab his resume before my leaves turn yellow!",
+        "🌱 *[Sprout beams enthusiastically]*\n\nLooking at Yashvardhan for an engineering team? Here is the quick summary in plain terms:\n- **Shipped Real Commercial Software:** Sole engineer paid to build **Shivkush Nursery's daily ERP (18.5K+ LOC)** and bilingual offline-ready storefront.\n- **AI & Financial Intelligence:** Built **CardioMamba-EM** (98.49% cardiac screening accuracy, 448 KB) and **TRACE-X** (7-engine fraud analytics studio).\n- **Proven Academic Topper:** **8.86 CGPA** at PCCOE Pune (2028), **NPTEL Top 5% Topper (91/100)** in IoT, **Elite+Silver** in Graph Theory, **Google BigCode Top 1,500**, and **600+ DSA problems solved**.\n\nHe is actively **open to Software & AI Engineering Internships** right now!",
       actions: [
         { label: "View PDF Resume ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
         { label: "Email Yashvardhan", href: "mailto:yashvardhanborude7@gmail.com" },
-        { label: "Explore Case Studies", href: "/#work" },
+        { label: "Explore Work", href: "/#work" },
       ],
     };
   }
@@ -484,9 +483,9 @@ export function synthesizeCuteSarcasticRagResponse(
   ) {
     return {
       content:
-        "🌱 *[Sprout dusts off its leaves]*\n\nI’m tuned specifically to showcase Yashvardhan’s software engineering accomplishments rather than act as a generic programming textbook. Speaking of technology, Yashvardhan writes **production TypeScript, Next.js, modern C++20, and PostgreSQL with Supabase RLS**!\n\nHe has solved over 500 algorithmic problems and built production PWAs with offline caching. Which part of his tech stack would you like to explore?",
+        "🌱 *[Sprout dusts off its leaves]*\n\nI’m tuned specifically to showcase Yashvardhan’s real software engineering accomplishments rather than act as a textbook. He ships **Python/PyTorch AI (CardioMamba-EM), FastAPI + NetworkX (TRACE-X), Next.js 16 + PostgreSQL ACID systems (Shivkush ERP), Electron/Node.js (TurboIDM), and C++20 algorithms** with over 600 solved problems!\n\nWhich project or skill area would you like to inspect?",
       actions: [
-        { label: "Technical Stack & Skills", href: "/#about" },
+        { label: "Milestones & Skills", href: "/#about" },
         { label: "Explore Shipped Projects", href: "/#work" },
         { label: "View Verified Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
       ],
@@ -496,19 +495,17 @@ export function synthesizeCuteSarcasticRagResponse(
   // If query is out of scope / unrelated trivia (food, jokes, weather, generic chat)
   if (retrieval.isOutOfScope || retrieval.topChunks.length === 0) {
     const outOfScopeResponses = [
-      "🌱 *[Sprout tilts its head]*\n\nMy photosynthesis sensors say that's a bit outside my botanical database! I'm here specifically to guide you through Yashvardhan's software engineering career. How about we check out his **commercial Shivkush Nursery PWA** or his **8.86 CGPA at PCCOE Pune**?",
-      "🌱 *[Sprout dusts off its leaves]*\n\nI could try guessing, but my vector index is 100% grounded in Yashvardhan's verified projects and algorithms. If you're a recruiter or fellow developer, ask me about his **500+ LeetCode problems** or his **NPTEL Elite+Silver in Graph Theory**!",
-      "🌱 *[Sprout perks up]*\n\nIntriguing question! But remember, I'm Sprout—Yashvardhan's portfolio companion, not an open-ended search engine. Let me show you what he's built, or whether he's a great match for your engineering team!",
-      "🌱 *[Sprout taps a tiny leaf]*\n\nI'm keeping all my compute power focused on Yashvardhan's engineering archives! Try asking about his full-stack proficiencies, his C++20 benchmark engine, or why you should hire him.",
-      "🌱 *[Sprout smiles warmly]*\n\nThat's outside our project archives, but don't wander off just yet! Yashvardhan has built some seriously impressive systems—from offline-first PWAs to machine learning pipelines. Which one would you like to explore?",
+      "🌱 *[Sprout tilts its head]*\n\nMy photosynthesis sensors say that's a bit outside my portfolio database! Ask me about **CardioMamba-EM (98.49% AI)**, **TRACE-X**, or his **Shivkush Nursery ERP contract**!",
+      "🌱 *[Sprout dusts off its leaves]*\n\nMy vector index stays 100% grounded in Yashvardhan's verified portfolio. Try asking about his **NPTEL Top 5% IoT score (91/100)**, **600+ coding problems**, or **Google BigCode Global Top 1,500** rank!",
+      "🌱 *[Sprout perks up]*\n\nIntriguing question! I'm Sprout—Yashvardhan's portfolio guide. Let me show you what he's built or his internship availability!",
     ];
 
     const randomOut = outOfScopeResponses[Math.floor(Math.random() * outOfScopeResponses.length)];
     return {
       content: randomOut,
       actions: [
-        { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
-        { label: "Academic Credentials", href: "/#about" },
+        { label: "CardioMamba Case Study →", href: "/projects/cardiomamba-em" },
+        { label: "Milestones & Honors", href: "/#about" },
         { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
       ],
     };
@@ -532,19 +529,19 @@ export function synthesizeCuteSarcasticRagResponse(
   let opening = "";
   switch (primary.category) {
     case "education":
-      opening = "🌱 *[Sprout pulls out the official academic ledger]*\n\nAh, asking for report cards? Fair enough. Here is what Yashvardhan has achieved at PCCOE Pune without losing his mind:";
+      opening = "🌱 *[Sprout pulls out the official academic ledger]*\n\nHere are Yashvardhan's verified PCCOE Pune academic & national IIT NPTEL credentials:";
       break;
     case "projects":
-      opening = "🌱 *[Sprout beams proudly]*\n\nFinally, a question about real engineering! Yes, the human actually builds things that solve real-world problems:";
+      opening = "🌱 *[Sprout beams proudly]*\n\nHere is the verified story behind this project:";
       break;
     case "skills":
-      opening = "🌱 *[Sprout inspects the toolbelt]*\n\nHe doesn't just collect buzzwords for his resume; here is the actual stack he uses to ship software:";
+      opening = "🌱 *[Sprout inspects the toolbelt]*\n\nHere is the verified stack Yashvardhan uses across production systems and AI research:";
       break;
     case "competitive-programming":
-      opening = "🌱 *[Sprout adjusts its tiny glasses]*\n\nOh boy, don't get him started on algorithms. He's solved over 500 problems across platforms—he dreams in dynamic programming:";
+      opening = "🌱 *[Sprout adjusts its tiny glasses]*\n\nOver 600 algorithmic problems solved plus Google BigCode 2026 Global Top 1,500:";
       break;
     case "contact":
-      opening = "🌱 *[Sprout perks up]*\n\nLooking to hire him or collaborate? Good decision. He's currently looking for Summer & Fall 2026 SWE internships:";
+      opening = "🌱 *[Sprout perks up]*\n\nYashvardhan is actively open to Software & AI Engineering Internships:";
       break;
     default:
       opening = "🌱 *[Sprout nods knowingly]*\n\nHere is what our Vector RAG pipeline retrieved straight from Yashvardhan's verified archives:";

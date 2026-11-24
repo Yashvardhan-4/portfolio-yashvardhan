@@ -45,45 +45,55 @@ export function ResumeModal() {
   const handleCopyATS = () => {
     const atsText = `
 YASHVARDHAN SHASHIKANT BORUDE
-Full Stack Software Engineer & Competitive Programmer
-Pune, Maharashtra, India | +91-7058230773 | yashvardhanborude7@gmail.com
-GitHub: https://github.com/Yashvardhan-4 | LinkedIn: https://linkedin.com/in/yashvardhan-borude
-LeetCode: https://leetcode.com/u/yashvardhan_4/ | Codeforces: https://codeforces.com/profile/yashvardhan_4
+Software Engineering Intern | AI-ML, Data & Full Stack
+Pune, India | +91-7058230773 | yashvardhanborude7@gmail.com
+LinkedIn: https://linkedin.com/in/yashvardhan-borude-8640a6319 | GitHub: https://github.com/Yashvardhan-4
+Coding Profiles: LeetCode 315+ Solved (https://leetcode.com/u/yashvardhan_4/) | Codeforces Pupil 1227 (https://codeforces.com/profile/yashvardhanborude7) | CodeChef 2-Star 1434 (https://www.codechef.com/users/cheer_swan_02) | HackerRank 5-Star C++ (https://www.hackerrank.com/profile/yashvardhanboru9)
+
+SUMMARY
+Computer Engineering undergraduate (CGPA: 8.86/10, PCCOE Pune, Batch of 2028) who shipped a production ERP for a paying client around ACID transactions, an append-only financial ledger, and role-based access control. Builds deep learning models (PyTorch, 98.49% benchmark accuracy), financial-crime graph analytics (FastAPI, NetworkX), and full-stack TypeScript/Python systems. Google BigCode 2026 Top 1,500; 600+ DSA problems solved. Available for Software & AI Engineering Internships.
+
+TECHNICAL SKILLS
+Languages: Python, C++, SQL (PostgreSQL, PL/pgSQL), TypeScript, JavaScript (ES2023+), Java (Core OOP), HTML5, CSS3
+AI-ML & Data Science: PyTorch, Mamba (SSMs), Scikit-Learn, Pandas, NumPy, SciPy, NetworkX, Statistical Validation
+Data & Databases: PostgreSQL 15+, Stored Procedures, ACID Transactions, Row Locking, SQL Views, Indexing, IndexedDB
+Full Stack: React 19, Next.js 16, Node.js, Express.js, FastAPI, SQLAlchemy, Pydantic, REST APIs, WebSockets, Tailwind CSS
+Cloud & Automation: Docker, GitHub Actions, Supabase, Vercel, Netlify Functions, Electron, Linux/Bash, Git, Postman
+
+WORK EXPERIENCE
+Shivkush Hi-Tech Nursery — Full Stack Software Engineer (Paid Freelance Contract) | Ahilyanagar, India | Dec 2025 – May 2026
+- Built the client's daily-operations ERP (SNMS: billing, bookings, inventory, staff) in Next.js 16, TypeScript, and PostgreSQL (18.5K+ LOC, 18 migrations, 8 stored procedures); eliminated overselling via atomic dispatches with SELECT ... FOR UPDATE row locks and Row-Level Security.
+- Replaced mutable balances with an append-only payment ledger and daily cashbook view reconciling cash, UPI, and split payments (100% cash-on-hand reconciliation), paired with a hub exporting 10,000-row Excel reports in <300ms and bilingual receipts.
+- Shipped the client's offline-first customer website (PWA) for low-bandwidth rural users, reducing image payloads by 93.9% (WebP) and 3D asset size by 83.9% (Draco compression).
+
+PROJECTS
+CardioMamba-EM — Deep Learning for Cardiac Screening | PyTorch, Mamba SSM, SciPy, FastAPI | 2026 – Present
+- Designed a bidirectional BiMamba SSM over synchronized ECG/heart-sound signals (500 Hz) with O(L) scaling, surpassing HPA-Net and PACFNet on PhysioNet CinC 2016 (98.49% accuracy, 99.56% sensitivity).
+- Validated via patient-independent 5-fold CV (360 patients, 91.57% AUROC, bootstrap CI, DeLong test), cutting missed cases by 66.7% (18 to 6); distilled to 112K params (448 KB, ~160ms) in a FastAPI + React UI.
+
+TRACE-X — Financial Crime & Insider Risk Engine | FastAPI, Next.js 14, NetworkX, Docker | Sep 2026
+- Built a 7-engine AML + insider-risk prototype (FastAPI, SQLAlchemy, NetworkX) correlating off-hours IAM privilege overrides with downstream transfers via regulatory threshold structuring checks, directed cycle detection, and exponential time-decay scoring.
+- Implemented an interactive React Flow attack-graph studio, counterfactual edge-removal sandbox, and 7-scenario banking twin benchmark deployed on Vercel with containerized Docker Compose setup.
+
+TurboIDM — Download Accelerator | Node.js, Electron, React 19, GitHub Actions | Jun 2026
+- Built a desktop download manager accelerating throttled transfers by up to 8x using 32 parallel HTTP Range streams and a work-stealing scheduler that splits slow byte ranges across idle workers.
+- Wrote each stream directly to its pre-allocated byte offset (zero merge delay) and automated Win/macOS/Linux builds via GitHub Actions.
+
+Inkless — Local-First Journal with Cloud Sync | Next.js 16, TypeScript, IndexedDB, PostgreSQL | Sep 2026
+- Committed every edit to IndexedDB and a transactional outbox atomically (<5ms saves, zero offline loss), with a background sync worker performing block-level last-write-wins reconciliation into RLS-protected PostgreSQL.
 
 EDUCATION
-Pimpri Chinchwad College of Engineering (PCCOE), Pune
-Bachelor of Technology in Computer Engineering | CGPA: 8.86 / 10.0 (Till Semester 4) | Expected May 2028
-Relevant Coursework: Data Structures & Algorithms, DBMS, Operating Systems, Computer Networks, OOP, Machine Learning.
+Pimpri Chinchwad College of Engineering (PCCOE), Pune | Bachelor of Technology in Computer Engineering | CGPA: 8.86 / 10.0 (Till Semester 4) | Expected May 2028
+Coursework: Data Structures & Algorithms, DBMS, OOP, Operating Systems, Computer Networks, Machine Learning.
 
-HONORS & CERTIFICATIONS
-NPTEL Elite + Silver Certificate — Algorithmic Graph Theory & Data Structures
-Issuer: IIT Madras / IIT Kharagpur | Score: 77/100 (Top Percentile Nationwide)
-Topics: Graph Traversals, Dijkstra, Bellman-Ford, Ford-Fulkerson Max Flow, Dinic's Algorithm, Bipartite Matching.
+CERTIFICATIONS
+- NPTEL Elite (Top 5% Topper) — Internet of Things (IIT Kharagpur, 91/100; 82,864 learners) | Jul–Oct 2026
+- NPTEL Elite + Silver — Algorithmic Graph Theory & DSA (IIT Madras / Kharagpur, 77/100) | Jan–Apr 2025
 
-COMPETITIVE PROGRAMMING
-- 500+ Algorithmic Problems Solved Across Platforms
-- LeetCode: 213+ Solved (Specialized in Trees, Dynamic Programming, and Graph Algorithms)
-- Codeforces: Pupil Rank (Peak Rating: 1227, 200+ Contest Problems Solved)
-- CodeChef: 2-Star (Peak Rating: 1434)
-- HackerRank: 5-Star Gold Badge in C++
-- Google BigCode 2026: Ranked in Global Top 1,500
-
-EXPERIENCE
-Shivkush Hi-Tech Nursery — Full Stack Software Developer (Commercial Freelance Contract) | Dec 2025 – May 2026
-- Engineered and deployed a production bilingual (English/Marathi) agricultural e-commerce PWA.
-- Architected offline service worker caching with 100% Lighthouse PWA audit compliance.
-- Secured Supabase PostgreSQL backend with granular Row-Level Security (RLS) policies for anonymous ordering.
-- Integrated interactive 3D WebGL hero canvas using Three.js and dynamic particle systems.
-
-Smart India Hackathon (SIH 2024) — Lead Frontend Engineer (PralayVeer) | Aug 2024
-- Architected rapid-response disaster preparedness platform for low-bandwidth rural networks.
-- Built accessible evacuation mapping using Leaflet API adhering to WCAG AA contrast standards.
-
-TECHNICAL PROFICIENCIES
-Languages: C++, TypeScript, JavaScript (ES6+), Python, SQL (PostgreSQL), HTML5, CSS3.
-Frontend: Next.js (App Router), React.js, Three.js, WebGL, Canvas API, Tailwind CSS, PWAs.
-Backend: Node.js, Express.js, PostgreSQL, Supabase, Row-Level Security (RLS), REST APIs.
-Tools & Systems: Git, GitHub, Linux, Bash, Docker (Basics), Postman, Figma, Vercel.
+ACHIEVEMENTS & HONORS
+- Google BigCode 2026: Ranked in the Global Top 1,500 participants; Smart India Hackathon (SIH 2024): Delivered disaster-preparedness MVP in 24h sprint.
+- Competitive Programming: 600+ problems solved; LeetCode 315+, CodeChef 2-Star (Peak 1434), Codeforces Pupil (Max 1227), HackerRank 5-Star (C++).
+- Paid Client Engagement: Sole engineer for Shivkush Hi-Tech Nursery's ERP and customer website, from requirements to production (2025–2026).
     `.trim();
 
     try {
@@ -332,68 +342,79 @@ Tools & Systems: Git, GitHub, Linux, Bash, Docker (Basics), Postman, Figma, Verc
 
                 <div className="p-4 sm:p-6 rounded-xl border border-[var(--border)] bg-[var(--surface)]/50 font-mono text-xs leading-relaxed text-[var(--fg)] overflow-x-auto whitespace-pre-wrap selection:bg-[var(--accent)] selection:text-white">
 {`YASHVARDHAN SHASHIKANT BORUDE
-Full Stack Software Engineer & Algorithmic Developer
+Software Engineering Intern | AI-ML, Data & Full Stack
 Pune, Maharashtra, India | +91-7058230773 | yashvardhanborude7@gmail.com
-GitHub: https://github.com/Yashvardhan-4 | LinkedIn: https://linkedin.com/in/yashvardhan-borude
-LeetCode: https://leetcode.com/u/yashvardhan_4/ | Codeforces: https://codeforces.com/profile/yashvardhan_4
+GitHub: https://github.com/Yashvardhan-4 | LinkedIn: https://linkedin.com/in/yashvardhan-borude-8640a6319
+LeetCode: https://leetcode.com/u/yashvardhan_4/ (315+) | Codeforces: https://codeforces.com/profile/yashvardhanborude7 (Pupil 1227)
+CodeChef: https://www.codechef.com/users/cheer_swan_02 (2-Star 1434) | HackerRank: https://www.hackerrank.com/profile/yashvardhanboru9 (5-Star C++)
 
 ================================================================================
-EDUCATION
+PROFESSIONAL SUMMARY
 ================================================================================
-Pimpri Chinchwad College of Engineering (PCCOE), Pune
-Bachelor of Technology in Computer Engineering
-Timeline: 2024 – 2028 (Expected May 2028)
-Academic Performance: CGPA 8.86 / 10.0 (Till Semester 4)
-Core Coursework:
-- Data Structures & Algorithms
-- Database Management Systems (PostgreSQL)
-- Operating Systems & Linux Concurrency
-- Computer Networks & Protocols
-- Object-Oriented Programming (C++)
-- Machine Learning Foundations
+Computer Engineering undergraduate (CGPA: 8.86/10, PCCOE Pune, Batch of 2028) who shipped
+a production ERP for a paying client around ACID transactions, an append-only financial
+ledger, and role-based access control. Builds deep learning models (PyTorch, 98.49%
+benchmark accuracy), financial-crime graph analytics (FastAPI, NetworkX), and full-stack
+TypeScript/Python systems. Google BigCode 2026 Top 1,500; 600+ DSA problems solved.
+Available for Software & AI Engineering Internships.
 
 ================================================================================
-HONORS & CERTIFICATIONS
+WORK EXPERIENCE (PAID COMMERCIAL CONTRACT)
 ================================================================================
-NPTEL Elite + Silver Certificate — Algorithmic Graph Theory & Data Structures
-- Issuer: IIT Madras / IIT Kharagpur
-- Score: 77/100 (Top Percentile Nationwide)
-- Topics: Graph Traversals (DFS/BFS), Shortest Paths (Dijkstra, Bellman-Ford),
-  Network Flows (Ford-Fulkerson, Dinic's Algorithm), Bipartite Matching,
-  Spanning Trees (Kruskal, Prim).
+Shivkush Hi-Tech Nursery — Full Stack Software Engineer | Ahilyanagar, India
+Timeline: Dec 2025 – May 2026
+- Built daily-operations ERP (SNMS: billing, bookings, inventory, staff) in Next.js 16,
+  TypeScript, and PostgreSQL (18.5K+ LOC, 18 migrations, 8 stored procedures); eliminated
+  overselling via atomic dispatches with SELECT ... FOR UPDATE row locks & Row-Level Security.
+- Replaced mutable balances with an append-only payment ledger & daily cashbook reconciling
+  cash, UPI, and split payments (100% cash-on-hand accuracy), exporting 10,000-row Excel
+  reports in <300ms with bilingual receipts.
+- Shipped offline-first customer PWA cutting image payloads by 93.9% (WebP) and 3D assets
+  by 83.9% (Draco compression).
 
 ================================================================================
-COMPETITIVE PROGRAMMING & ALGORITHMIC DISTINCTION
+FLAGSHIP PROJECTS
 ================================================================================
-- 500+ Algorithmic Problems Solved Across Verified Competitive Platforms
-- LeetCode: 213+ Solved (Specialized in Trees, Dynamic Programming, and Graph Theory)
-- Codeforces: Pupil Rank (Peak Rating: 1227, 200+ Contest Problems Solved)
-- CodeChef: 2-Star (Peak Rating: 1434)
-- HackerRank: 5-Star Gold Badge in C++
-- Google BigCode 2026: Ranked in Global Top 1,500
+1. CardioMamba-EM — Deep Learning for Cardiac Screening (2026 – Present)
+   PyTorch, Mamba SSM, SciPy, FastAPI
+   - Bidirectional BiMamba SSM over synchronized 500 Hz ECG/PCG signals with O(L) scaling;
+     98.49% accuracy & 99.56% sensitivity on PhysioNet CinC 2016 (beating HPA-Net & PACFNet).
+   - 5-fold patient-independent CV (360 patients, 91.57% AUROC), cutting missed cases by
+     66.7% (18 to 6); distilled to 112K params (448 KB, ~160ms) in FastAPI + React UI.
+
+2. TRACE-X — Financial Crime & Insider Risk Engine (Sep 2026)
+   FastAPI, Next.js 14, NetworkX, SQLAlchemy, React Flow, Docker
+   - 7-engine AML + insider-risk prototype correlating off-hours IAM overrides with downstream
+     transfers via structuring checks, directed cycle detection & time-decay scoring.
+   - Interactive React Flow attack-graph studio, counterfactual edge-removal sandbox, and
+     7-scenario banking twin deployed on Vercel + Docker Compose.
+
+3. TurboIDM — Download Accelerator (Jun 2026)
+   Node.js, Electron, React 19, GitHub Actions
+   - Up to 8x faster transfers via 32 parallel HTTP Range streams & work-stealing scheduler.
+   - Direct pre-allocated byte offset writes (0.00s merge delay) & Win/macOS/Linux CI builds.
+
+4. Inkless — Local-First Journal with Cloud Sync (Sep 2026)
+   Next.js 16, TypeScript, IndexedDB, PostgreSQL
+   - <5ms atomic local IndexedDB + transactional outbox commits (zero offline loss) and
+     background block-level LWW reconciliation into RLS-protected PostgreSQL.
 
 ================================================================================
-PROFESSIONAL EXPERIENCE & COMMERCIAL CONTRACTS
+EDUCATION & CERTIFICATIONS
 ================================================================================
-Shivkush Hi-Tech Nursery — Full Stack Software Developer (Commercial Freelance Contract)
-Timeline: Dec 2025 – May 2026 | Location: Pune, India
-- Engineered and deployed a production bilingual (English/Marathi) agricultural e-commerce PWA.
-- Architected offline service worker caching with 100% Lighthouse PWA audit compliance.
-- Secured Supabase PostgreSQL backend with granular Row-Level Security (RLS) policies for anonymous ordering.
-- Integrated interactive 3D WebGL hero canvas using Three.js and dynamic particle systems.
-
-Smart India Hackathon (SIH 2024) — Lead Frontend Engineer (PralayVeer Platform)
-Timeline: Aug 2024 | Location: Pune, India
-- Architected rapid-response disaster preparedness platform for low-bandwidth rural networks.
-- Built accessible evacuation mapping using Leaflet API adhering to WCAG AA contrast standards.
+Pimpri Chinchwad College of Engineering (PCCOE), Pune (Expected May 2028)
+- B.Tech Computer Engineering | CGPA: 8.86 / 10.0 (Till Semester 4)
+- NPTEL Elite (Top 5% Topper) — Internet of Things (IIT Kharagpur, 91/100; 82,864 learners)
+- NPTEL Elite + Silver — Algorithmic Graph Theory & DSA (IIT Madras / Kharagpur, 77/100)
 
 ================================================================================
-TECHNICAL PROFICIENCIES
+HONORS & TECHNICAL SKILLS
 ================================================================================
-- Languages: C++, TypeScript, JavaScript (ES6+), Python, SQL (PostgreSQL), HTML5, CSS3
-- Frontend: Next.js (App Router), React.js, Three.js, WebGL, Canvas API, Tailwind CSS, PWAs
-- Backend: Node.js, Express.js, PostgreSQL, Supabase, Row-Level Security (RLS), REST APIs
-- Tools & Systems: Git, GitHub, Linux, Bash, Docker (Basics), Postman, Figma, Vercel`}
+- Google BigCode 2026: Global Top 1,500 | SIH 2024: Delivered 24h disaster-response MVP
+- Competitive Programming: 600+ solved (LeetCode 315+, Codeforces 1227, CodeChef 1434, HackerRank 5-Star)
+- Languages: Python, C++, SQL (PostgreSQL, PL/pgSQL), TypeScript, JavaScript, Java, HTML5, CSS3
+- AI/ML & Data: PyTorch, Mamba SSMs, Scikit-Learn, Pandas, NumPy, SciPy, NetworkX, PostgreSQL 15+
+- Web & Cloud: React 19, Next.js 16, Node.js, FastAPI, SQLAlchemy, Three.js, Docker, GitHub Actions, Vercel`}
                 </div>
               </div>
             )}

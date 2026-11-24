@@ -6,6 +6,8 @@
 - /images/yashvardhan-cutout.png : Fallback PNG high-res portrait
 
 [PROJECT VISUAL SHOWCASE SPREADS]
+- /projects/cardiomamba.png : CardioMamba-EM sculptural frosted glass, crimson wave & rose-gold fine-art editorial visual
+- /projects/tracex.png : TRACE-X sculptural smoked-emerald & obsidian prism optical caustics editorial visual
 - /projects/turboidm.png : TurboIDM High-speed download accelerator desktop app and Chrome MV3 extension interface
 - /projects/inkless.png : Inkless offline-first journal with 120 FPS fluid canvas interface
 - /projects/shivkush.png : ShivKush Nursery bilingual agricultural e-commerce and inventory portal interface

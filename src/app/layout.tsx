@@ -9,6 +9,7 @@ import { SproutAICompanion } from "@/components/ai/SproutAICompanion";
 import { ResumeModal } from "@/components/ui/ResumeModal";
 import { TactileToast } from "@/components/ui/TactileToast";
 import { DevToolsProtection } from "@/components/security/DevToolsProtection";
+import { SpatialCursor } from "@/components/ui/SpatialCursor";
 
 const SITE_URL = "https://www.yashvardhanborude.tech";
 
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Yashvardhan Borude",
   },
   description:
-    "Official portfolio of Yashvardhan Borude (PCCOE Pune). Architecting resilient full-stack web systems, C++20 graph engines, 3D WebGL, and commercial PWAs.",
+    "Official portfolio of Yashvardhan Borude (PCCOE Pune). Building AI cardiac models, financial crime engines, full-stack production apps, and tactile interactive web experiences.",
   keywords: [
     "Yashvardhan Borude",
     "Yashvardhan Shashikant Borude",
@@ -35,11 +36,14 @@ export const metadata: Metadata = {
     "Creative Developer Portfolio",
     "Full Stack Software Engineer Pune",
     "PCCOE Pune Computer Engineering",
-    "Competitive Programmer LeetCode 500+",
-    "Shivkush Nursery PWA",
-    "PralayVeer Hackathon",
-    "Algorithmic Graph Theory Engine C++20",
-    "SWE Internships Summer 2026",
+    "CardioMamba-EM Cardiac AI",
+    "TRACE-X Financial Crime Engine",
+    "Shivkush Nursery ERP PWA",
+    "TurboIDM Download Accelerator",
+    "Inkless Local-First Journal",
+    "NPTEL Top 5% IoT",
+    "Competitive Programmer 600+",
+    "Software & AI Engineering Internships",
     "Next.js WebGL Portfolio",
     "Three.js Developer",
     "PostgreSQL Supabase Architect",
@@ -59,7 +63,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Yashvardhan Borude — Software Engineer & Builder",
     description:
-      "Official engineering portfolio of Yashvardhan Borude (PCCOE Pune). Full-stack web systems, C++20 graph engines, 3D WebGL, and commercial PWAs.",
+      "Official portfolio of Yashvardhan Borude (PCCOE Pune). AI cardiac models, financial intelligence, production full-stack software, and interactive 3D web.",
     url: SITE_URL,
     siteName: "Yashvardhan Borude",
     locale: "en_US",
@@ -77,7 +81,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Yashvardhan Borude — Software Engineer & Builder",
     description:
-      "Computer Engineering student at PCCOE Pune building resilient web systems, C++20 graph engines, and 3D WebGL platforms.",
+      "Computer Engineering student at PCCOE Pune building AI models, financial crime software, production web apps, and interactive 3D experiences.",
     creator: "@yashvardhan_4",
     images: ["/og-image.png"],
   },
@@ -152,18 +156,14 @@ export default function RootLayout({
     ],
     knowsAbout: [
       "Software Engineering",
+      "Deep Learning (PyTorch, Mamba SSM)",
       "Full Stack Development",
-      "Next.js",
-      "React.js",
-      "PostgreSQL",
-      "Supabase",
-      "Row-Level Security (RLS)",
-      "Three.js",
-      "WebGL",
-      "C++",
-      "Data Structures & Algorithms",
-      "Competitive Programming",
-      "Progressive Web Apps",
+      "FastAPI & NetworkX",
+      "Next.js & React 19",
+      "PostgreSQL & Row-Level Security",
+      "Three.js & WebGL Shaders",
+      "C++ & Algorithms",
+      "Desktop Systems (Electron)",
     ],
   };
 
@@ -180,7 +180,7 @@ export default function RootLayout({
       "Yashvardhan Shashikant Borude",
     ],
     description:
-      "Official portfolio and architectural systems ledger of Yashvardhan Borude, Computer Engineering undergraduate at PCCOE Pune.",
+      "Official portfolio of Yashvardhan Borude, Computer Engineering undergraduate at PCCOE Pune (Batch of 2028) — AI-ML, Financial Intelligence, Production Systems & Creative Web.",
     publisher: {
       "@id": `${SITE_URL}/#person`,
     },
@@ -192,7 +192,7 @@ export default function RootLayout({
     "@type": "ProfilePage",
     "@id": `${SITE_URL}/#profilepage`,
     url: SITE_URL,
-    name: "Yashvardhan Borude — Full Stack Software Engineer Portfolio",
+    name: "Yashvardhan Borude — Software Engineer Portfolio",
     mainEntity: {
       "@id": `${SITE_URL}/#person`,
     },
@@ -201,39 +201,47 @@ export default function RootLayout({
   const projectsItemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Featured Engineering Projects by Yashvardhan Borude",
+    name: "Featured Projects by Yashvardhan Borude",
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
-        name: "Shivkush Nursery Commercial PWA",
+        name: "CardioMamba-EM — Deep Learning Cardiac Screening",
         description:
-          "Solo commercial progressive web app with bilingual offline service worker caching, Supabase PostgreSQL RLS, and 3D WebGL plant visualization.",
-        url: `${SITE_URL}/projects/shivkush-nursery-pwa`,
+          "Bidirectional BiMamba SSM over synchronized 500 Hz ECG & heart-sound signals reaching 98.49% benchmark accuracy and 99.56% sensitivity.",
+        url: `${SITE_URL}/projects/cardiomamba-em`,
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "PralayVeer Disaster Management Platform",
+        name: "TRACE-X — Financial Crime & Insider Risk Engine",
         description:
-          "Smart India Hackathon 2024 finalist platform for disaster preparedness and accessible shelter routing on low-bandwidth networks.",
-        url: `${SITE_URL}/projects/pralayveer-disaster-response`,
+          "7-engine AML and insider-risk studio built with FastAPI, NetworkX, Next.js 14, React Flow, and Docker.",
+        url: `${SITE_URL}/projects/trace-x`,
       },
       {
         "@type": "ListItem",
         position: 3,
-        name: "Algorithmic Graph Theory & Benchmark Engine",
+        name: "Shivkush Nursery — Enterprise ERP & Bilingual 3D PWA",
         description:
-          "High-performance C++20 graph theory and maximum flow engine benchmarking Dijkstra, Bellman-Ford, and Dinic's Algorithm.",
-        url: `${SITE_URL}/projects/algorithmic-graph-engine`,
+          "Paid client contract combining Next.js 16 + PostgreSQL ACID ERP with an offline-first English/Marathi 3D plant PWA.",
+        url: `${SITE_URL}/projects/shivkush-nursery-pwa`,
       },
       {
         "@type": "ListItem",
         position: 4,
-        name: "Startup Valuation ML Pipeline",
+        name: "TurboIDM — Multi-Stream Download Accelerator",
         description:
-          "Supervised machine learning regression model predicting early-stage valuations with Scikit-Learn and XGBoost.",
-        url: `${SITE_URL}/projects/startup-valuation-predictor`,
+          "Up to 8x faster cross-platform Electron download manager with 32 parallel HTTP Range streams and 0.00s merge.",
+        url: `${SITE_URL}/projects/turboidm`,
+      },
+      {
+        "@type": "ListItem",
+        position: 5,
+        name: "Inkless — Local-First Journal & Cloud Sync",
+        description:
+          "Sub-5ms atomic local IndexedDB journal synced via block-level Last-Write-Wins Postgres reconciliation and GLSL shaders.",
+        url: `${SITE_URL}/projects/inkless`,
       },
     ],
   };
@@ -304,6 +312,7 @@ export default function RootLayout({
         <ThemeProvider>
           <SmoothScrollProvider>
             <DevToolsProtection />
+            <SpatialCursor />
             <RainRippleEffect />
             <SproutMascot />
             <SproutAICompanion />

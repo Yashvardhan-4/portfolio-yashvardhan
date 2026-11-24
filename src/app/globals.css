@@ -114,9 +114,19 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Dimensional Portal Theme Transition Snapshots */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  z-index: 9999;
 }
 
 ::selection {

@@ -28,571 +28,289 @@ export const AI_KNOWLEDGE_CHUNKS: KnowledgeChunk[] = [
     category: "about",
     title: "About Yashvardhan Borude",
     keywords: ["who", "about", "bio", "background", "introduce", "yashvardhan", "borude", "profile", "overview", "what do you do"],
-    summary: "Full Stack Software Engineer & Competitive Programmer from Pune, India.",
+    summary: "Software Engineering undergraduate (PCCOE Pune, Batch of 2028) specializing in AI-ML, Data Systems, and Full Stack Web.",
     fullContent:
-      "Yashvardhan Borude is a Computer Engineering undergraduate at Pimpri Chinchwad College of Engineering (PCCOE) Pune (Class of 2028). He specializes in high-performance web systems, production PostgreSQL architectures with Row-Level Security (RLS), and algorithmic problem-solving. He has authored production applications including a commercial bilingual PWA for Shivkush Hi-Tech Nursery, built national hackathon finalists (PralayVeer for SIH 2024), and holds an NPTEL Elite+Silver certification in Algorithmic Graph Theory.",
+      "Yashvardhan Borude is a B.Tech Computer Engineering undergraduate at PCCOE Pune (CGPA: 8.86/10, Expected May 2028). He shipped a paid commercial ERP + offline PWA for Shivkush Hi-Tech Nursery around PostgreSQL ACID transactions and Row-Level Security, builds clinical cardiac deep learning models (CardioMamba-EM, 98.49% benchmark accuracy), financial-crime graph analytics (TRACE-X), desktop download acceleration (TurboIDM), and local-first creative web software (Inkless). He ranked Global Top 1,500 in Google BigCode 2026 and solved 600+ algorithmic problems.",
     actions: [
-      { label: "View Experience", href: "/#work" },
+      { label: "View Selected Work", href: "/#work" },
       { label: "Contact Yashvardhan", href: "/#contact" },
-      { label: "GitHub Profile", href: "https://github.com/Yashvardhan-4", isExternal: true },
+      { label: "GitHub Profile ↗", href: "https://github.com/Yashvardhan-4", isExternal: true },
+    ],
+  },
+  {
+    id: "project-cardiomamba",
+    category: "projects",
+    title: "CardioMamba-EM — Deep Learning Cardiac Screening",
+    keywords: [
+      "cardiomamba", "cardio", "mamba", "heart", "ecg", "pcg", "ssm", "pytorch",
+      "physionet", "medical", "healthcare", "auroc", "deep learning", "ml", "ai"
+    ],
+    summary: "Bidirectional BiMamba SSM for synchronized 500 Hz ECG & heart-sound screening (98.49% accuracy, 99.56% sensitivity).",
+    fullContent:
+      "CardioMamba-EM combines electrical heart rhythms (ECG) and acoustic heart sounds (500 Hz PCG) inside an O(L) bidirectional BiMamba Selective State-Space Model. It outperformed published literature (HPA-Net & PACFNet) on PhysioNet CinC 2016 with **98.49% accuracy** and **99.56% sensitivity**. Validated via patient-independent 5-fold CV (360 patients, 91.57% AUROC, DeLong statistical testing), it reduced missed cardiac cases by **66.7%** (from 18 down to 6) and was distilled into a tiny **112K-parameter (448 KB, ~160ms)** model served with FastAPI + React.",
+    actions: [
+      { label: "Read Case Study →", href: "/projects/cardiomamba-em" },
+      { label: "Explore Showcase", href: "/#work" },
+    ],
+  },
+  {
+    id: "project-tracex",
+    category: "projects",
+    title: "TRACE-X — Financial Crime & Insider Risk Engine",
+    keywords: [
+      "trace", "tracex", "trace-x", "aml", "fincrime", "financial crime", "fraud",
+      "insider", "risk", "networkx", "fastapi", "react flow", "docker", "iam", "banking"
+    ],
+    summary: "7-engine AML & insider-risk engine with interactive React Flow counterfactual attack-graph studio.",
+    fullContent:
+      "TRACE-X is a 7-engine anti-money-laundering (AML) and insider-risk prototype built with **FastAPI, SQLAlchemy, NetworkX, Next.js 14, React Flow, and Docker**. It correlates off-hours IAM privilege overrides directly with downstream transfers using regulatory structuring checks, directed cycle detection, and exponential time-decay scoring. Features an interactive counterfactual edge-removal sandbox and a 7-scenario banking twin benchmark deployed live on Vercel.",
+    actions: [
+      { label: "Live Demo ↗", href: "https://frontend-chi-pied-40.vercel.app", isExternal: true },
+      { label: "GitHub Repo ↗", href: "https://github.com/Yashvardhan-4/TRACE-X", isExternal: true },
+      { label: "Read Case Study →", href: "/projects/trace-x" },
     ],
   },
   {
     id: "project-shivkush",
     category: "projects",
-    title: "Shivkush Nursery Management System",
+    title: "Shivkush Nursery — Enterprise ERP (SNMS) & Bilingual PWA",
     keywords: [
-      "shivkush", "nursery", "pwa", "ecommerce", "commercial", "agriculture",
-      "plants", "supabase", "freelance", "contract", "offline", "hi-tech", "tell me about shivkush", "shivkush nursery"
+      "shivkush", "snms", "erp", "nursery", "pwa", "ecommerce", "commercial", "agriculture",
+      "supabase", "freelance", "contract", "offline", "for update", "ledger", "excel", "draco"
     ],
-    summary: "Production bilingual agricultural commerce engine with offline PWA caching & PostgreSQL RLS.",
+    summary: "Paid solo contract: Next.js 16 + PostgreSQL ERP (18.5K+ LOC, 18 migrations, append-only ledger) + offline bilingual 3D PWA.",
     fullContent:
-      "Shivkush Nursery Management System is a solo commercial software contract engineered by Yashvardhan for an agricultural plant nursery in Ahilyanagar, India (Dec 2025 – May 2026). It solves low-bandwidth 2G/3G connectivity constraints for rural farmers using an offline-first Service Worker architecture (`sw.js` with `CACHE_NAME = 'shivkush-v1'`). Key technical achievements include:\n- Bilingual catalog (English / Marathi) with zero-account-barrier ordering.\n- Supabase PostgreSQL database secured with granular Row-Level Security (RLS) policies allowing public inserts while restricting administrative management.\n- Interactive 3D WebGL plant visualization using Three.js and lightweight 2D canvas particle systems.\n- 1-tap direct WhatsApp routing for customer order fulfillment.",
+      "Commissioned as sole engineer for Shivkush Hi-Tech Nursery (Dec 2025 – May 2026), Yashvardhan shipped both their daily-operations ERP (SNMS) and client storefront:\n- **Operations ERP (SNMS):** 18.5K+ LOC, 18 migrations, and 8 PostgreSQL stored procedures eliminating overselling via `SELECT ... FOR UPDATE` row locks and Row-Level Security.\n- **Audit & Speed:** Append-only payment ledger + `vw_daily_cashbook` delivering **100% cash-on-hand reconciliation** and **10,000-row Excel exports in <300ms**.\n- **Customer PWA:** Offline-first English/Marathi platform cutting image weight by **93.9%** (WebP) and 3D plant size by **83.9%** (Google Draco).",
     actions: [
-      { label: "Explore Case Study", href: "/projects/shivkush-nursery-pwa" },
-      { label: "Source Verification", href: "https://github.com/Yashvardhan-4", isExternal: true },
+      { label: "Live Storefront ↗", href: "https://shivkush-hi-tech-nursery.vercel.app/", isExternal: true },
+      { label: "Explore Case Study →", href: "/projects/shivkush-nursery-pwa" },
+    ],
+  },
+  {
+    id: "project-turboidm",
+    category: "projects",
+    title: "TurboIDM — Multi-Stream Download Accelerator",
+    keywords: [
+      "turboidm", "download", "accelerator", "electron", "http range", "work stealing",
+      "ftruncate", "posix", "chrome", "mv3", "extension", "streams"
+    ],
+    summary: "Up to 8x faster cross-platform download manager using 32 HTTP Range streams, work-stealing scheduler, and 0.00s merge.",
+    fullContent:
+      "TurboIDM is a desktop download manager built with **Node.js, Electron, React 19, Chrome MV3, and GitHub Actions**. It accelerates throttled transfers by **up to 8x** across 32 concurrent HTTP Range streams with a dynamic work-stealing scheduler that splits slow byte ranges across idle workers. Each stream writes straight to its pre-allocated byte offset on disk (POSIX `ftruncate`), eliminating post-download merge stalls across Windows, macOS, and Linux.",
+    actions: [
+      { label: "GitHub Releases ↗", href: "https://github.com/Yashvardhan-4/TurboIDM-Releases", isExternal: true },
+      { label: "Live Website ↗", href: "https://turbo-idm.vercel.app/", isExternal: true },
+      { label: "Read Case Study →", href: "/projects/turboidm" },
+    ],
+  },
+  {
+    id: "project-inkless",
+    category: "projects",
+    title: "Inkless — Local-First Journal & Cloud Sync",
+    keywords: [
+      "inkless", "journal", "diary", "local first", "offline", "indexeddb", "dexie",
+      "outbox", "lww", "last write wins", "glsl", "shader"
+    ],
+    summary: "Sub-5ms atomic local IndexedDB journal with transactional outbox and block-level Postgres sync.",
+    fullContent:
+      "Inkless is an offline-first distraction-free journal built with **Next.js 16, TypeScript, IndexedDB, and RLS-protected PostgreSQL**. Every edit commits atomically to IndexedDB + a transactional outbox in **under 5ms** (zero offline loss), synchronized cleanly in the background via block-level Last-Write-Wins (LWW) reconciliation alongside custom GLSL shaders.",
+    actions: [
+      { label: "Live App ↗", href: "https://inkless-ashen.vercel.app/", isExternal: true },
+      { label: "GitHub Repo ↗", href: "https://github.com/Yashvardhan-4/Inkless", isExternal: true },
     ],
   },
   {
     id: "project-pralayveer",
     category: "projects",
-    title: "PralayVeer — Rapid Disaster Preparedness",
-    keywords: ["pralayveer", "disaster", "hackathon", "sih", "smart india", "evacuation", "shelter", "leaflet", "emergency"],
-    summary: "Emergency coordination & accessible shelter routing platform engineered for degraded networks (SIH 2024 Finalist).",
+    title: "PralayVeer — Smart India Hackathon 2024 MVP",
+    keywords: ["pralayveer", "disaster", "hackathon", "sih", "smart india", "evacuation", "shelter", "leaflet"],
+    summary: "Rapid disaster preparedness & shelter locator delivered inside a 24-hour SIH 2024 sprint.",
     fullContent:
-      "PralayVeer is a rapid-response disaster preparedness platform built for the Smart India Hackathon (SIH 2024), where Yashvardhan served as Lead Frontend Engineer. Engineered specifically for high-stress emergency communication and low-bandwidth networks, it provides real-time evacuation routing and accessible shelter mapping via Leaflet API, adhering strictly to WCAG AA contrast standards.",
-    actions: [
-      { label: "Explore Case Study", href: "/projects/pralayveer-disaster-response" },
-    ],
-  },
-  {
-    id: "project-valuation",
-    category: "projects",
-    title: "Early-Stage Startup Valuation Predictor",
-    keywords: ["startup", "valuation", "machine learning", "predictor", "xgboost", "random forest", "finance", "venture capital"],
-    summary: "Supervised regression pipeline predicting pre-money valuations for early-stage tech ventures.",
-    fullContent:
-      "A machine learning pipeline engineered with Python, Scikit-Learn, and XGBoost to predict pre-money startup valuations based on founder pedigree, market size, funding stages, and traction metrics. It features rigorous cross-validation and feature importance analysis.",
-    actions: [
-      { label: "Explore Case Study", href: "/projects/startup-valuation-predictor" },
-    ],
-  },
-  {
-    id: "project-graph-engine",
-    category: "projects",
-    title: "Algorithmic Graph Theory & Benchmark Engine",
-    keywords: ["graph", "engine", "algorithms", "dijkstra", "ford fulkerson", "bfs", "dfs", "benchmark", "c++", "max flow"],
-    summary: "High-performance C++20 graph algorithms suite with empirical benchmark visualizer.",
-    fullContent:
-      "A high-performance algorithmic suite implemented in C++20 featuring optimized implementations of Dijkstra's, Bellman-Ford, Ford-Fulkerson Maximum Flow, and Dinic's Algorithm. Benchmarked across dense and sparse random graphs with interactive execution trace visualizers.",
-    actions: [
-      { label: "Explore Case Study", href: "/projects/algorithmic-graph-engine" },
-    ],
+      "PralayVeer is a rapid-response disaster preparedness MVP engineered during Smart India Hackathon (SIH 2024) in a strict 24-hour sprint, offering high-contrast WCAG AA shelter mapping via Leaflet API designed to stay legible on weak networks.",
+    actions: [{ label: "Read Case Study →", href: "/projects/pralayveer-disaster-response" }],
   },
   {
     id: "education-academics",
     category: "education",
     title: "Education & Academic Standing",
-    keywords: ["education", "college", "pccoe", "cgpa", "degree", "marks", "grade", "university", "btech", "computer engineering"],
-    summary: "B.Tech in Computer Engineering at PCCOE Pune with CGPA 8.86 / 10.0.",
+    keywords: ["education", "college", "pccoe", "cgpa", "gpa", "degree", "btech", "graduation", "2028", "coursework"],
+    summary: "B.Tech Computer Engineering at PCCOE Pune (Batch of 2028) with 8.86 / 10.0 CGPA.",
     fullContent:
-      "Yashvardhan is pursuing his Bachelor of Technology (B.Tech) in Computer Engineering at Pimpri Chinchwad College of Engineering (PCCOE), Pune (Expected graduation: May 2028). He maintains a cumulative CGPA of 8.86 / 10.0 (till Semester 4, currently in 3rd Year / Semester 5). Core coursework includes Data Structures & Algorithms, DBMS, Operating Systems, Computer Networks, OOP, and Machine Learning.",
-    actions: [
-      { label: "View Academic Timeline", href: "/#about" },
-    ],
+      "Yashvardhan is pursuing his **Bachelor of Technology (B.Tech) in Computer Engineering** at **Pimpri Chinchwad College of Engineering (PCCOE), Pune** (Expected **May 2028**). He holds a **CGPA of 8.86 / 10.0** (till Semester 4). Core coursework includes Data Structures & Algorithms, DBMS, Object-Oriented Programming, Operating Systems, Computer Networks, and Machine Learning.",
+    actions: [{ label: "View Milestones", href: "/#about" }],
   },
   {
     id: "certifications-nptel",
     category: "education",
-    title: "NPTEL Certification — Algorithmic Graph Theory",
-    keywords: ["nptel", "certification", "graph theory", "iit", "silver", "elite", "score", "certificate", "madras", "kharagpur"],
-    summary: "NPTEL Elite + Silver Certificate in Algorithmic Graph Theory (Score: 77/100, Top Tier).",
+    title: "NPTEL National Certifications (IIT Kharagpur & IIT Madras)",
+    keywords: ["nptel", "certification", "certificate", "iot", "internet of things", "topper", "top 5%", "91", "graph theory", "iit", "silver", "elite"],
+    summary: "NPTEL Elite Top 5% Topper in IoT (91/100 across 82,864 learners) + Elite+Silver in Graph Theory (77/100).",
     fullContent:
-      "Yashvardhan earned the prestigious NPTEL Elite + Silver Certificate in Algorithmic Graph Theory & Data Structures (issued by IIT Madras / Kharagpur, Jan 2025 – Apr 2025) with a proctored score of 77/100, placing him in the top percentile nationwide. The certification validates rigorous theoretical mastery in network flows, bipartite matching, shortest paths, and NP-completeness reductions.",
+      "Yashvardhan holds two top-tier national IIT certifications via NPTEL:\n- **NPTEL Elite (Top 5% National Topper) — Internet of Things** (IIT Kharagpur, Jul–Oct 2026): Scored **91 / 100** placing in the Top 5% out of **82,864 learners**.\n- **NPTEL Elite + Silver — Algorithmic Graph Theory & DSA** (IIT Madras / IIT Kharagpur, Jan–Apr 2025): Scored **77 / 100** covering network flows, shortest paths, matching, and NP-completeness.",
     actions: [
-      { label: "Explore Graph Engine Project", href: "/projects/algorithmic-graph-engine" },
+      { label: "View Milestones & Seals", href: "/#about" },
+      { label: "View Resume PDF ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
     ],
   },
   {
     id: "competitive-programming",
     category: "competitive-programming",
-    title: "Competitive Programming & Problem Solving",
-    keywords: ["leetcode", "codeforces", "dsa", "competitive programming", "codechef", "hackerrank", "rating", "solved", "bigcode"],
-    summary: "500+ problems solved across LeetCode, Codeforces (Pupil 1227), CodeChef (2-Star), and HackerRank (5-Star Gold).",
+    title: "Competitive Programming & Google BigCode 2026",
+    keywords: ["leetcode", "codeforces", "codechef", "hackerrank", "dsa", "competitive", "problems", "600+", "315+", "bigcode", "pupil"],
+    summary: "Google BigCode 2026 Global Top 1,500 & 600+ DSA problems solved across LeetCode (315+), Codeforces, CodeChef, HackerRank.",
     fullContent:
-      "Yashvardhan is an active competitive programmer with 500+ algorithmic problems solved across platforms:\n- LeetCode: 213+ problems solved (handle: yashvardhan_4), focusing heavily on Trees, Dynamic Programming, and Graph algorithms.\n- Codeforces: Pupil rank (Peak Rating: 1227, handle: yashvardhan_4), 200+ contest problems solved.\n- CodeChef: 2-Star (Peak Rating: 1434, handle: yashvardhan_4).\n- HackerRank: 5-Star Gold Badge in C++.\n- Google BigCode 2026: Ranked in the Global Top 1,500.",
+      "Yashvardhan brings strong algorithmic foundations with **Google BigCode 2026 Global Top 1,500** recognition and **600+ DSA problems solved**:\n- **LeetCode:** 315+ Solved (`yashvardhan_4`)\n- **Codeforces:** Pupil (Max Rating **1227**, 200+ solved, `yashvardhanborude7`)\n- **CodeChef:** 2-Star (Peak Rating **1434**, `cheer_swan_02`)\n- **HackerRank:** 5-Star in C++ (`yashvardhanboru9`)",
     actions: [
-      { label: "LeetCode Profile ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
-      { label: "Codeforces Profile ↗", href: "https://codeforces.com/profile/yashvardhan_4", isExternal: true },
+      { label: "LeetCode ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
+      { label: "Codeforces ↗", href: "https://codeforces.com/profile/yashvardhanborude7", isExternal: true },
     ],
   },
   {
     id: "skills-techstack",
     category: "skills",
-    title: "Technical Stack & Engineering Capabilities",
-    keywords: ["skills", "tech stack", "languages", "frameworks", "technologies", "next.js", "react", "typescript", "c++", "postgresql"],
-    summary: "C++, TypeScript, Next.js, React, Three.js, Node.js, PostgreSQL (Supabase RLS), Linux, Docker basics.",
+    title: "Technical Skills & Stack",
+    keywords: ["skills", "tech stack", "languages", "frameworks", "python", "c++", "java", "pytorch", "fastapi", "postgresql", "react", "next.js", "docker"],
+    summary: "Python, C++, TypeScript, SQL/PostgreSQL, Java, PyTorch, Mamba SSM, NetworkX, FastAPI, React 19, Next.js 16, Three.js, Docker.",
     fullContent:
-      "Core Technical Proficiencies:\n- Languages: C++, TypeScript, JavaScript (ES6+), Python, SQL (PostgreSQL), HTML5/CSS3.\n- Frontend: Next.js (App Router), React.js, Three.js (WebGL), Canvas API, Tailwind CSS, Progressive Web Apps (PWAs).\n- Backend & Databases: Node.js, Express.js, PostgreSQL, Supabase, Row-Level Security (RLS), RESTful APIs, Service Workers.\n- Engineering Tools: Git, GitHub, Linux/Bash, Docker (Basics), Postman, Figma, Vercel.",
-    actions: [
-      { label: "View All Projects", href: "/#work" },
-    ],
+      "Verified skills from Yashvardhan's production and research stack:\n- **Languages:** Python, C++, SQL (PostgreSQL, PL/pgSQL), TypeScript, JavaScript, Java, HTML5/CSS3.\n- **AI-ML & Data Science:** PyTorch, Mamba (SSMs), Scikit-Learn, Pandas, NumPy, SciPy, NetworkX.\n- **Databases:** PostgreSQL 15+, Stored Procedures, ACID Transactions, Row Locking, SQL Views, Indexing, IndexedDB.\n- **Full Stack & Cloud:** React 19, Next.js 16, FastAPI, SQLAlchemy, Node.js, Express.js, Three.js, Docker, GitHub Actions, Supabase, Vercel, Electron.",
+    actions: [{ label: "View All Projects", href: "/#work" }],
   },
   {
     id: "contact-availability",
     category: "contact",
-    title: "Contact & Availability",
-    keywords: [
-      "hire", "contact", "email", "phone", "internship", "availability", "is he available",
-      "available", "free", "when can he start", "job", "opportunity", "reach out", "connect", "collaborate"
-    ],
-    summary: "Open to Software Engineering Internships and Full-Stack development roles for Summer/Fall 2026.",
+    title: "Contact & Internship Availability",
+    keywords: ["hire", "contact", "email", "phone", "internship", "intern", "available", "availability", "job", "opportunity", "collaborate"],
+    summary: "Available for Software Engineering & AI-ML Internships. Based in Pune, India.",
     fullContent:
-      "Yashvardhan is actively open to Software Engineering Internships and collaborative software development opportunities for Summer and Fall 2026. He is based in Pune, Maharashtra, India, and open to hybrid or remote arrangements.\n- Email: yashvardhanborude7@gmail.com\n- Phone: +91-7058230773\n- Location: Pune, Maharashtra, India",
+      "Yashvardhan is actively **available for Software Engineering, AI-ML, Data, and Full Stack Internships** (based in Pune, India, and open to in-person, hybrid, or remote collaborations).\n- **Email:** yashvardhanborude7@gmail.com\n- **Phone:** +91-7058230773\n- **LinkedIn:** linkedin.com/in/yashvardhan-borude-8640a6319",
     actions: [
       { label: "Send Email", href: "mailto:yashvardhanborude7@gmail.com" },
-      { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
-      { label: "Download Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-    ],
-  },
-  {
-    id: "projects-portfolio-overview",
-    category: "projects",
-    title: "Overview of Shipped Systems & Projects",
-    keywords: [
-      "what has yashvardhan built", "what did he build", "what has he built", "built", "build",
-      "projects", "creations", "what did he make", "portfolio", "work", "showcase", "engineering projects"
-    ],
-    summary: "Shipped Shivkush Nursery commercial PWA, PralayVeer disaster response, C++20 Graph Engine, and ML Valuation Predictor.",
-    fullContent:
-      "Yashvardhan has architected and delivered production-grade software across full-stack web, 3D WebGL, machine learning, and low-level algorithmic systems:\n- **Shivkush Nursery Management System (Commercial Contract):** A solo-engineered PWA with offline Service Worker caching (`sw.js`), Supabase PostgreSQL secured with Row-Level Security (RLS), and interactive 3D WebGL plant visualization using Three.js.\n- **PralayVeer (Smart India Hackathon 2024 Finalist):** Rapid disaster preparedness & accessible emergency shelter routing platform engineered for degraded low-bandwidth networks.\n- **Algorithmic Graph Theory & Benchmark Engine (C++20):** High-performance implementations of Dijkstra's, Bellman-Ford, Ford-Fulkerson Maximum Flow, and Dinic's Algorithm with microsecond benchmarks.\n- **Early-Stage Startup Valuation Predictor (Machine Learning):** Supervised ML regression pipeline utilizing XGBoost and Scikit-Learn.\n- **Sprout Vector RAG Companion:** The in-memory Vector RAG assistant powering this portfolio companion.",
-    actions: [
-      { label: "View All Projects", href: "/#work" },
-      { label: "Shivkush Case Study", href: "/projects/shivkush-nursery-pwa" },
-      { label: "GitHub Profile", href: "https://github.com/Yashvardhan-4", isExternal: true },
-    ],
-  },
-  {
-    id: "skills-cpp-algorithms",
-    category: "skills",
-    title: "C++ Programming, Algorithms & Graph Theory",
-    keywords: [
-      "teach me cpp", "cpp", "c++", "c++20", "learn cpp", "pointers", "templates",
-      "stl", "dsa", "graph theory", "dijkstra", "algorithms", "problem solving", "competitive programming"
-    ],
-    summary: "HackerRank 5-Star Gold Badge in C++, C++20 Algorithmic Graph Theory Engine, and 500+ CP problems solved.",
-    fullContent:
-      "While Sprout cannot teach a full university semester of C++ inside a chat bubble, Yashvardhan is deeply proficient in C++:\n- **HackerRank 5-Star Gold Badge in C++** validating core language mastery.\n- **Algorithmic Graph Theory & Benchmark Engine (C++20):** High-performance implementations of Dijkstra's, Bellman-Ford, Ford-Fulkerson, and Dinic's Maximum Flow algorithms with nanosecond benchmarking.\n- **NPTEL Elite + Silver in Algorithmic Graph Theory** (Score: 77/100, issued by IIT Madras).\n- **500+ Algorithmic Problems Solved:** Including 213+ on LeetCode and Pupil rank (1227) on Codeforces, with heavy emphasis on Dynamic Programming, Trees, and Graphs.\n- Feel free to check out his C++ Graph Engine case study or his LeetCode profile!",
-    actions: [
-      { label: "Explore C++ Graph Engine", href: "/projects/algorithmic-graph-engine" },
-      { label: "LeetCode Profile ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
-      { label: "Codeforces Profile ↗", href: "https://codeforces.com/profile/yashvardhan_4", isExternal: true },
-    ],
-  },
-  {
-    id: "recruitment-why-hire",
-    category: "contact",
-    title: "Why Hire Yashvardhan — Recruiter & Hiring Guide",
-    keywords: [
-      "hire", "hirable", "hireable", "why hire", "should hire", "should i hire", "is he hirable",
-      "recruit", "recruiting", "recruiter", "interview", "candidate", "internship", "intern",
-      "role", "job", "full time", "strengths", "fit", "work ethic", "worth hiring"
-    ],
-    summary: "Proven production shipping track record, 8.86 CGPA, NPTEL Elite+Silver in Graph Theory, and 500+ CP problems.",
-    fullContent:
-      "Why Yashvardhan is an exceptional addition to your engineering team:\n- **Solo Production Track Record:** Delivered the commercial Shivkush Nursery PWA from scratch—including bilingual offline service workers, Supabase PostgreSQL with Row-Level Security (RLS), and 3D WebGL visualizations.\n- **Academic & Theoretical Rigor:** 8.86 / 10.0 CGPA at PCCOE Pune; NPTEL Elite + Silver in Algorithmic Graph Theory (Score 77/100, IIT Madras/Kharagpur).\n- **Algorithmic Muscle:** 500+ competitive programming problems solved across LeetCode, Codeforces (Pupil 1227), and CodeChef.\n- **Autonomous & Fast-Adapting:** Bridges modern Next.js/TypeScript frontend engineering with resilient distributed backend architectures.\n- **Availability:** Actively seeking Summer & Fall 2026 Software Engineering Internships.",
-    actions: [
-      { label: "View PDF Resume ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-      { label: "Email Yashvardhan", href: "mailto:yashvardhanborude7@gmail.com" },
-      { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
-    ],
-  },
-  {
-    id: "sprout-companion-identity",
-    category: "about",
-    title: "Sprout AI Companion & Vector RAG Architecture",
-    keywords: [
-      "who are you", "are you ai", "what are you", "sprout", "bot", "assistant", "ai",
-      "companion", "vector rag", "rag", "how do you work", "architecture", "what can you do"
-    ],
-    summary: "Sprout is Yashvardhan's custom portfolio AI companion, driven by an in-memory Vector RAG engine.",
-    fullContent:
-      "I am Sprout, Yashvardhan's custom AI portfolio companion and a live demonstration of his systems engineering craft. Here is how I work:\n- **In-Memory Vector RAG Pipeline:** I parse questions into normalized sub-word and n-gram vectors, computing cosine similarity over Yashvardhan's project chunks in under 2ms.\n- **Multi-Layer Security:** Equipped with an automated scanner that deflects prompt injections, instruction overrides, and roleplay exploits.\n- **Dual-Generation Engine:** Seamlessly connects to Google Gemini 2.5 Flash neural streaming when online, or runs local grounded synthesis when offline.\n- **Ask Me Anything:** I'm here to walk you through his projects, academic credentials, competitive programming records, or interview availability!",
-    actions: [
-      { label: "Explore Projects", href: "/#work" },
-      { label: "View Verified Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-      { label: "Contact Yashvardhan", href: "/#contact" },
+      { label: "Open Resume PDF ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+      { label: "Open Contact Postcard", href: "/#contact" },
     ],
   },
 ];
 
 export const STARTER_PROMPTS = [
-  "What is Yashvardhan's CGPA & NPTEL score?",
-  "Tell me about the Shivkush Nursery PWA",
-  "What is his competitive programming standing?",
-  "What technologies does he specialize in?",
-  "Is he available for Summer 2026 internships?",
+  "Tell me about CardioMamba-EM (98.49% AI)",
+  "What is TRACE-X financial crime engine?",
+  "Tell me about his paid Shivkush ERP contract",
+  "What awards & NPTEL topper ranks does he hold?",
+  "Is he available for internships right now?",
 ];
 
-/**
- * Intelligent Multi-Tier Semantic Intent Classifier & Synthesizer.
- * Accurately answers the exact question asked without dumping irrelevant boilerplate.
- */
 export function classifyIntentAndSynthesize(query: string): SemanticResponse {
   const q = query.trim().toLowerCase();
 
-  // 1. GREETING INTENT
   if (/^(hi|hello|hey|hola|yo|good morning|good afternoon|good evening|howdy|sup)\b/i.test(q)) {
     return {
       content:
-        "Hello! I'm **Sprout AI**, Yashvardhan's interactive portfolio companion. I'm strictly grounded in his verified projects, academic records at PCCOE Pune, and competitive programming achievements.\n\nWhat would you like to explore today? You can ask about his commercial work (like the **Shivkush Nursery PWA**), his **CGPA & NPTEL awards**, his **500+ LeetCode problems**, or his technical stack.",
-      reasoningSteps: [
-        "Identified user conversational greeting",
-        "Initialized Sprout companion persona with verified portfolio scope",
-      ],
+        "Hello! I'm **Sprout AI**, Yashvardhan's portfolio guide. Everything here matches his verified work: **CardioMamba-EM** cardiac AI (98.49%), **TRACE-X** fraud analytics, a **paid client ERP & PWA** for Shivkush Nursery, **IIT Kharagpur IoT Top 5%**, and **600+ coding problems solved**.\n\nWhat would you like to explore?",
+      reasoningSteps: ["Greeted visitor", "Summarized updated portfolio milestones"],
       actions: [
-        { label: "Explore Shivkush PWA →", href: "/projects/shivkush-nursery-pwa" },
-        { label: "Academic Credentials", href: "/#about" },
-        { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
+        { label: "Explore Work →", href: "/#work" },
+        { label: "View Official Resume ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
       ],
     };
   }
 
-  // 2. IDENTITY / CREATOR INTENT
-  if (
-    q.includes("who are you") ||
-    q.includes("what can you do") ||
-    q.includes("who created you") ||
-    q.includes("who made you") ||
-    q.includes("what is sprout") ||
-    q.includes("what is your purpose")
-  ) {
+  if (q.includes("cardiomamba") || q.includes("heart") || q.includes("ecg") || q.includes("cardio") || q.includes("mamba")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[1].fullContent,
+      reasoningSteps: ["Matched CardioMamba-EM cardiac deep learning chunk"],
+      actions: AI_KNOWLEDGE_CHUNKS[1].actions || [],
+    };
+  }
+
+  if (q.includes("trace") || q.includes("fraud") || q.includes("aml") || q.includes("fincrime") || q.includes("insider")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[2].fullContent,
+      reasoningSteps: ["Matched TRACE-X financial crime engine chunk"],
+      actions: AI_KNOWLEDGE_CHUNKS[2].actions || [],
+    };
+  }
+
+  if (q.includes("turboidm") || q.includes("download") || q.includes("electron") || q.includes("stream")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[4].fullContent,
+      reasoningSteps: ["Matched TurboIDM desktop downloader chunk"],
+      actions: AI_KNOWLEDGE_CHUNKS[4].actions || [],
+    };
+  }
+
+  if (q.includes("inkless") || q.includes("journal") || q.includes("diary") || q.includes("indexeddb")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[5].fullContent,
+      reasoningSteps: ["Matched Inkless local-first journal chunk"],
+      actions: AI_KNOWLEDGE_CHUNKS[5].actions || [],
+    };
+  }
+
+  if (q.includes("shivkush") || q.includes("snms") || q.includes("erp") || q.includes("nursery") || q.includes("freelance") || q.includes("client")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[3].fullContent,
+      reasoningSteps: ["Matched Shivkush Nursery commercial ERP & PWA chunk"],
+      actions: AI_KNOWLEDGE_CHUNKS[3].actions || [],
+    };
+  }
+
+  if (q.includes("nptel") || q.includes("iot") || q.includes("topper") || q.includes("top 5") || q.includes("certif") || q.includes("iit") || q.includes("award")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[8].fullContent,
+      reasoningSteps: ["Matched NPTEL national certifications chunk (IoT 91/100 Top 5% + Graph Theory 77/100)"],
+      actions: AI_KNOWLEDGE_CHUNKS[8].actions || [],
+    };
+  }
+
+  if (q.includes("cgpa") || q.includes("gpa") || q.includes("college") || q.includes("pccoe") || q.includes("education") || q.includes("2028")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[7].fullContent,
+      reasoningSteps: ["Matched PCCOE Pune academic chunk (8.86 CGPA, Batch of 2028)"],
+      actions: AI_KNOWLEDGE_CHUNKS[7].actions || [],
+    };
+  }
+
+  if (q.includes("leetcode") || q.includes("codeforces") || q.includes("codechef") || q.includes("hackerrank") || q.includes("bigcode") || q.includes("dsa") || q.includes("600")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[9].fullContent,
+      reasoningSteps: ["Matched Competitive Programming & Google BigCode Top 1,500 chunk"],
+      actions: AI_KNOWLEDGE_CHUNKS[9].actions || [],
+    };
+  }
+
+  if (q.includes("hire") || q.includes("intern") || q.includes("avail") || q.includes("contact") || q.includes("email")) {
+    return {
+      content: AI_KNOWLEDGE_CHUNKS[11].fullContent,
+      reasoningSteps: ["Matched availability & contact chunk (Open to Internships)"],
+      actions: AI_KNOWLEDGE_CHUNKS[11].actions || [],
+    };
+  }
+
+  if (q.includes("resume") || q.includes("cv") || q.includes("pdf")) {
     return {
       content:
-        "I am **Sprout AI**, a custom intelligent companion designed for Yashvardhan Borude's portfolio.\n\nUnlike generic AI chatbots, I operate with **strict factual grounding** in Yashvardhan's actual work:\n• **Commercial Software Contracts** (Shivkush Nursery bilingual PWA)\n• **Academic Credentials** (PCCOE Pune Computer Engineering, CGPA 8.86/10.0)\n• **National Honors** (NPTEL Elite + Silver in Graph Theory, SIH 2024 Finalist)\n• **Competitive Programming** (500+ solved across LeetCode, Codeforces, CodeChef)\n\nFeel free to ask me any question about his engineering experience or availability!",
-      reasoningSteps: [
-        "Parsed inquiry regarding assistant identity and technical capabilities",
-        "Summarized grounded knowledge boundaries",
-      ],
-      actions: [
-        { label: "Explore Projects", href: "/#work" },
-        { label: "Contact Yashvardhan", href: "/#contact" },
-      ],
+        "You can inspect or download Yashvardhan's **latest November 2026 Resume** directly inside the portfolio (including ATS plaintext copy), covering CardioMamba-EM, TRACE-X, Shivkush ERP & PWA, TurboIDM, Inkless, NPTEL IoT Top 5% (91/100), and 600+ DSA problems solved.",
+      reasoningSteps: ["Retrieved latest PDF Resume reference"],
+      actions: [{ label: "Open Resume PDF ↗", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true }],
     };
   }
 
-  // 3. EDUCATION / CGPA / ACADEMICS INTENT
-  if (
-    q.includes("cgpa") ||
-    q.includes("gpa") ||
-    q.includes("marks") ||
-    q.includes("grade") ||
-    q.includes("college") ||
-    q.includes("pccoe") ||
-    q.includes("university") ||
-    q.includes("education") ||
-    q.includes("degree") ||
-    q.includes("btech") ||
-    q.includes("academic") ||
-    q.includes("achievement") ||
-    q.includes("semester")
-  ) {
+  const matched = matchKnowledgeChunk(query);
+  if (matched) {
     return {
-      content:
-        "Yashvardhan is pursuing his **B.Tech in Computer Engineering** at **Pimpri Chinchwad College of Engineering (PCCOE)**, Pune (Class of 2028):\n\n• **Academic Standing**: Cumulative **CGPA of 8.86 / 10.0** (recorded till Semester 4).\n• **NPTEL Certification**: Elite + Silver in Algorithmic Graph Theory (Score: **77 / 100**, issued jointly by IIT Madras & IIT Kharagpur).\n• **Current Standing**: 3rd Year (Semester 5).\n• **Core Coursework**: Data Structures & Algorithms, Database Management Systems (PostgreSQL), Operating Systems, Computer Networks, and Machine Learning.",
-      reasoningSteps: [
-        "Matched academic & achievement inquiry: PCCOE Pune B.Tech Computer Engineering",
-        "Verified cumulative CGPA metric: 8.86 / 10.0 through Semester 4",
-        "Retrieved NPTEL Elite + Silver recognition (77/100, IIT Madras/Kharagpur)",
-      ],
-      actions: [
-        { label: "View Academic Credentials", href: "/#about" },
-        { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-      ],
+      content: matched.chunk.fullContent,
+      reasoningSteps: [`Semantic match: ${matched.chunk.title}`],
+      actions: matched.chunk.actions || [{ label: "Explore Work", href: "/#work" }],
     };
   }
 
-  // 3.5. PROJECTS OVERVIEW / "WHAT HAS YASHVARDHAN BUILT"
-  if (
-    q.includes("built") ||
-    q.includes("project") ||
-    q.includes("portfolio") ||
-    q.includes("what has he made") ||
-    q.includes("what did he build") ||
-    q.includes("works")
-  ) {
-    return {
-      content:
-        "Yashvardhan has engineered several production-grade systems across web, systems, and machine learning:\n\n• **Shivkush Hi-Tech Nursery PWA**: Commercial offline-first agricultural platform for rural farmers in 2G/3G zones. 100% Lighthouse PWA compliance, Three.js 3D plant viewer, Supabase PostgreSQL with RLS.\n• **PralayVeer (SIH 2024 Finalist)**: Accessible disaster preparedness platform with real-time shelter routing and WCAG 2.1 AA compliance.\n• **Startup Valuation Predictor**: Supervised ML pipeline using XGBoost and Scikit-Learn to estimate venture pricing.\n• **Algorithmic Graph Theory Engine**: High-performance C++20 algorithms visualizer and benchmark suite.",
-      reasoningSteps: [
-        "Matched project catalog overview inquiry",
-        "Synthesized 4 flagship software systems across web and algorithms",
-        "Provided direct case study navigation",
-      ],
-      actions: [
-        { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
-        { label: "PralayVeer Case Study →", href: "/projects/pralayveer-disaster-response" },
-        { label: "View All Projects", href: "/#work" },
-      ],
-    };
-  }
-
-  // 4. NPTEL / CERTIFICATIONS INTENT
-  if (
-    q.includes("nptel") ||
-    q.includes("certification") ||
-    q.includes("certificate") ||
-    q.includes("graph theory") ||
-    q.includes("iit") ||
-    q.includes("silver") ||
-    q.includes("elite") ||
-    q.includes("madras") ||
-    q.includes("kharagpur")
-  ) {
-    return {
-      content:
-        "Yashvardhan holds the prestigious **NPTEL Elite + Silver Certificate in Algorithmic Graph Theory & Data Structures**, issued jointly by **IIT Madras and IIT Kharagpur** (Jan 2025 – Apr 2025):\n\n• **Proctored Score**: **77 / 100** (Top Percentile Nationwide).\n• **Theoretical Scope**: Network Flows (Ford-Fulkerson, Dinic's Algorithm), Shortest Path Trees (Dijkstra, Bellman-Ford), Bipartite Matching, and NP-completeness reductions.\n• **Practical Application**: Implemented these algorithms in his C++20 Algorithmic Graph Theory & Benchmark Engine.",
-      reasoningSteps: [
-        "Matched certification query: NPTEL Elite + Silver in Algorithmic Graph Theory",
-        "Verified proctored score: 77/100 (IIT Madras / Kharagpur)",
-        "Linked theoretical mastery to applied C++20 Graph Engine repository",
-      ],
-      actions: [
-        { label: "Explore Graph Engine Case Study", href: "/projects/algorithmic-graph-engine" },
-        { label: "View Resume PDF", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-      ],
-    };
-  }
-
-  // 5. COMPETITIVE PROGRAMMING / LEETCODE / CODEFORCES INTENT
-  if (
-    q.includes("leetcode") ||
-    q.includes("codeforces") ||
-    q.includes("dsa") ||
-    q.includes("competitive programming") ||
-    q.includes("problems") ||
-    q.includes("solved") ||
-    q.includes("codechef") ||
-    q.includes("hackerrank") ||
-    q.includes("bigcode") ||
-    q.includes("algorithm")
-  ) {
-    return {
-      content:
-        "Yashvardhan is an active competitive programmer with **over 500 algorithmic problems solved** across verified platforms:\n\n• **LeetCode**: 213+ problems solved (handle: [`yashvardhan_4`](https://leetcode.com/u/yashvardhan_4/)), focusing heavily on Trees, Dynamic Programming, and Graph Theory.\n• **Codeforces**: Pupil rank (Peak Rating: **1227**, handle: `yashvardhan_4`), 200+ contest problems solved.\n• **CodeChef**: 2-Star (Peak Rating: **1434**, handle: `yashvardhan_4`).\n• **HackerRank**: 5-Star Gold Badge in C++.\n• **Google BigCode 2026**: Ranked in the **Global Top 1,500** nationwide.",
-      reasoningSteps: [
-        "Retrieved competitive programming metrics from verified profiles",
-        "Aggregated problem counts: 500+ total (213+ LeetCode, 200+ Codeforces)",
-        "Verified contest ratings: Codeforces Pupil 1227, CodeChef 2-Star 1434",
-      ],
-      actions: [
-        { label: "LeetCode Profile ↗", href: "https://leetcode.com/u/yashvardhan_4/", isExternal: true },
-        { label: "Codeforces Profile ↗", href: "https://codeforces.com/profile/yashvardhan_4", isExternal: true },
-      ],
-    };
-  }
-
-  // 6. SHIVKUSH NURSERY PWA INTENT
-  if (
-    q.includes("shivkush") ||
-    q.includes("nursery") ||
-    q.includes("pwa") ||
-    q.includes("commercial") ||
-    q.includes("freelance") ||
-    q.includes("plants") ||
-    q.includes("agriculture") ||
-    q.includes("supabase") ||
-    q.includes("service worker")
-  ) {
-    return {
-      content:
-        "**Shivkush Nursery Management System** is a solo commercial software contract engineered by Yashvardhan for an agricultural plant nursery in Ahilyanagar, India (Dec 2025 – May 2026):\n\n• **Core Problem**: Enabled rural farmers in low-bandwidth 2G/3G zones to order agricultural plants without network interruptions.\n• **Offline-First PWA**: Engineered with a custom Service Worker (`CACHE_NAME = 'shivkush-v1'`), achieving **100% Lighthouse PWA audit compliance**.\n• **Database & Security**: Built on Supabase PostgreSQL with granular **Row-Level Security (RLS)** allowing anonymous ordering while restricting inventory management.\n• **Frontend & WebGL**: Interactive 3D WebGL plant visualization using Three.js and custom canvas particle systems.",
-      reasoningSteps: [
-        "Matched commercial project archive: Shivkush Hi-Tech Nursery PWA",
-        "Extracted technical architecture: Next.js, Three.js, Supabase PostgreSQL with RLS, Service Workers",
-        "Verified commercial deployment timeline: Dec 2025 – May 2026",
-      ],
-      actions: [
-        { label: "Read Detailed Case Study →", href: "/projects/shivkush-nursery-pwa" },
-        { label: "GitHub Profile", href: "https://github.com/Yashvardhan-4", isExternal: true },
-      ],
-    };
-  }
-
-  // 7. PRALAYVEER (SIH 2024) INTENT
-  if (
-    q.includes("pralayveer") ||
-    q.includes("sih") ||
-    q.includes("smart india") ||
-    q.includes("disaster") ||
-    q.includes("hackathon") ||
-    q.includes("shelter") ||
-    q.includes("evacuation") ||
-    q.includes("leaflet")
-  ) {
-    return {
-      content:
-        "**PralayVeer** is a rapid-response disaster preparedness platform built for the **Smart India Hackathon (SIH 2024)**, where Yashvardhan served as Lead Frontend Engineer and reached the **National Finals**:\n\n• **Core Functionality**: Real-time evacuation routing and accessible emergency shelter mapping for communities facing extreme weather events.\n• **Low-Bandwidth Architecture**: Built with lightweight Leaflet API integration, optimized for degraded mobile connectivity during crises.\n• **Accessibility**: Designed strictly adhering to WCAG 2.1 AA high-contrast standards for high-stress usability.",
-      reasoningSteps: [
-        "Matched hackathon project archive: PralayVeer (SIH 2024 Finalist)",
-        "Verified role: Lead Frontend Engineer",
-        "Retrieved technical stack: Leaflet API, WCAG AA accessible UI, Next.js",
-      ],
-      actions: [
-        { label: "Read Case Study →", href: "/projects/pralayveer-disaster-response" },
-      ],
-    };
-  }
-
-  // 8. STARTUP VALUATION PREDICTOR INTENT
-  if (
-    q.includes("startup") ||
-    q.includes("valuation") ||
-    q.includes("predictor") ||
-    q.includes("xgboost") ||
-    q.includes("machine learning") ||
-    q.includes("venture") ||
-    q.includes("finance")
-  ) {
-    return {
-      content:
-        "**Early-Stage Startup Valuation Predictor** is a machine learning supervised regression pipeline engineered by Yashvardhan:\n\n• **Objective**: Estimates pre-money valuations for tech ventures using founder background, market size, funding rounds, and growth metrics.\n• **Stack & Algorithms**: Engineered with Python, Scikit-Learn, and XGBoost.\n• **Methodology**: Applied 5-fold cross-validation, feature importance analysis, and log-transform regularization on skewed financial datasets.",
-      reasoningSteps: [
-        "Matched machine learning project: Early-Stage Startup Valuation Predictor",
-        "Extracted algorithms: XGBoost, Scikit-Learn regression pipeline",
-      ],
-      actions: [
-        { label: "Read Case Study →", href: "/projects/startup-valuation-predictor" },
-      ],
-    };
-  }
-
-  // 9. GRAPH THEORY BENCHMARK ENGINE INTENT
-  if (
-    q.includes("graph engine") ||
-    q.includes("c++") ||
-    q.includes("benchmark") ||
-    q.includes("dijkstra") ||
-    q.includes("ford fulkerson") ||
-    q.includes("dinic") ||
-    q.includes("max flow")
-  ) {
-    return {
-      content:
-        "**Algorithmic Graph Theory & Benchmark Engine** is a high-performance C++20 algorithms suite engineered by Yashvardhan:\n\n• **Algorithms Implemented**: Optimized Dijkstra's, Bellman-Ford, Ford-Fulkerson Maximum Flow, and Dinic's Algorithm.\n• **Empirical Benchmarks**: Tested across dense and sparse random graphs to measure execution time scaling and memory overhead.\n• **Visualizer**: Generates step-by-step state transition traces for visual verification of algorithm mechanics.",
-      reasoningSteps: [
-        "Matched C++20 systems project: Graph Theory & Benchmark Engine",
-        "Retrieved implemented algorithms: Dijkstra, Bellman-Ford, Ford-Fulkerson, Dinic",
-      ],
-      actions: [
-        { label: "Read Case Study →", href: "/projects/algorithmic-graph-engine" },
-      ],
-    };
-  }
-
-  // 10. TECHNICAL SKILLS & STACK INTENT
-  if (
-    q.includes("skills") ||
-    q.includes("tech stack") ||
-    q.includes("technologies") ||
-    q.includes("languages") ||
-    q.includes("frameworks") ||
-    q.includes("react") ||
-    q.includes("nextjs") ||
-    q.includes("next.js") ||
-    q.includes("typescript") ||
-    q.includes("c++") ||
-    q.includes("postgresql") ||
-    q.includes("docker") ||
-    q.includes("what do you use")
-  ) {
-    return {
-      content:
-        "Yashvardhan's core technical proficiencies:\n\n• **Languages**: C++ (C++20), TypeScript, JavaScript (ES6+), Python, SQL (PostgreSQL), HTML5/CSS3.\n• **Frontend & WebGL**: Next.js (App Router), React.js, Three.js, Canvas API, Tailwind CSS, Progressive Web Apps (PWAs).\n• **Backend & Databases**: Node.js, Express.js, PostgreSQL, Supabase, Row-Level Security (RLS), RESTful APIs, Service Workers.\n• **Engineering Tools**: Git, GitHub, Linux/Bash, Docker (Basics), Postman, Figma, Vercel.",
-      reasoningSteps: [
-        "Aggregated technical skills from verified codebase repositories and coursework",
-        "Categorized by Languages, Frontend, Backend & Systems, and Engineering Tools",
-      ],
-      actions: [
-        { label: "View All Projects", href: "/#work" },
-        { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-      ],
-    };
-  }
-
-  // 11. HIRING / INTERNSHIP / CONTACT INTENT
-  if (
-    q.includes("hire") ||
-    q.includes("contact") ||
-    q.includes("email") ||
-    q.includes("phone") ||
-    q.includes("internship") ||
-    q.includes("availability") ||
-    q.includes("job") ||
-    q.includes("opportunity") ||
-    q.includes("reach out") ||
-    q.includes("connect") ||
-    q.includes("collaborate") ||
-    q.includes("location") ||
-    q.includes("summer 2026")
-  ) {
-    return {
-      content:
-        "Yashvardhan is **actively open to Software Engineering Internships and Full-Stack Engineering roles** for Summer and Fall 2026:\n\n• **Location**: Pune, Maharashtra, India (open to Hybrid or Remote roles).\n• **Email**: [`yashvardhanborude7@gmail.com`](mailto:yashvardhanborude7@gmail.com)\n• **Phone**: `+91-7058230773`\n• **GitHub**: [`github.com/Yashvardhan-4`](https://github.com/Yashvardhan-4)\n• **LinkedIn**: [`linkedin.com/in/yashvardhan-borude`](https://linkedin.com/in/yashvardhan-borude)",
-      reasoningSteps: [
-        "Checked current availability status: Open for Summer/Fall 2026 SWE internships",
-        "Retrieved official contact channels: Email, Phone, GitHub, LinkedIn",
-      ],
-      actions: [
-        { label: "✉ Send Direct Email", href: "mailto:yashvardhanborude7@gmail.com" },
-        { label: "LinkedIn Profile ↗", href: "https://linkedin.com/in/yashvardhan-borude", isExternal: true },
-        { label: "Open Contact Form", href: "/#contact" },
-      ],
-    };
-  }
-
-  // 12. RESUME / CV INTENT
-  if (
-    q.includes("resume") ||
-    q.includes("cv") ||
-    q.includes("pdf") ||
-    q.includes("curriculum vitae") ||
-    q.includes("download")
-  ) {
-    return {
-      content:
-        "Yashvardhan's official verified **Curriculum Vitae (2026)** is embedded directly in this portfolio! It details his Computer Engineering degree at PCCOE (CGPA 8.86), NPTEL Elite+Silver award, 500+ competitive programming problem record, and commercial PWA contracts.\n\nYou can view it directly in the in-app CV viewer or download the official PDF file.",
-      reasoningSteps: [
-        "Located verified resume document: public/Resume/Yashvardhan_Borude_Resume.pdf",
-        "Generated direct view and download links",
-      ],
-      actions: [
-        { label: "📄 Open Verified Resume PDF", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-        { label: "Contact Yashvardhan", href: "/#contact" },
-      ],
-    };
-  }
-
-  // 13. OUT OF SCOPE / UNKNOWN QUERY FALLBACK
   return {
-    content:
-      "I am **Sprout AI**, Yashvardhan's dedicated portfolio companion. I'm strictly grounded in his software engineering projects, academic credentials at PCCOE Pune, and competitive programming achievements.\n\nWhile I can't answer general world trivia or unrelated queries, I'd love to tell you about:\n• **Yashvardhan's CGPA & NPTEL score** (PCCOE Pune, CGPA 8.86)\n• **The Shivkush Nursery PWA** (Commercial contract, Three.js & Supabase RLS)\n• **His 500+ LeetCode & Codeforces problems**\n• **His availability for Summer 2026 internships**",
-    reasoningSteps: [
-      "Detected query outside documented portfolio scope",
-      "Enforced zero-hallucination boundary directive",
-      "Offered 4 relevant portfolio topic prompts",
-    ],
-    actions: [
-      { label: "Shivkush PWA Case Study →", href: "/projects/shivkush-nursery-pwa" },
-      { label: "Academic Credentials", href: "/#about" },
-      { label: "View PDF Resume", href: "/Resume/Yashvardhan_Borude_Resume.pdf", isExternal: true },
-    ],
+    content: AI_KNOWLEDGE_CHUNKS[0].fullContent,
+    reasoningSteps: ["Provided verified overview"],
+    actions: AI_KNOWLEDGE_CHUNKS[0].actions || [],
   };
 }
 
-/**
- * Fast keyword search matcher for specific chunks.
- */
 export function matchKnowledgeChunk(query: string): { chunk: KnowledgeChunk; score: number } | null {
   const normalizedQuery = query.toLowerCase();
   const queryTokens = normalizedQuery.split(/\W+/).filter(Boolean);
@@ -602,38 +320,23 @@ export function matchKnowledgeChunk(query: string): { chunk: KnowledgeChunk; sco
 
   for (const chunk of AI_KNOWLEDGE_CHUNKS) {
     let score = 0;
-
-    if (normalizedQuery.includes(chunk.title.toLowerCase())) {
-      score += 15;
-    }
-
+    if (normalizedQuery.includes(chunk.title.toLowerCase())) score += 15;
     for (const kw of chunk.keywords) {
-      if (normalizedQuery.includes(kw.toLowerCase())) {
-        score += 8;
-      }
+      if (normalizedQuery.includes(kw.toLowerCase())) score += 8;
       for (const token of queryTokens) {
-        if (token === kw.toLowerCase() || (token.length > 3 && kw.toLowerCase().includes(token))) {
-          score += 4;
-        }
+        if (token === kw.toLowerCase() || (token.length > 3 && kw.toLowerCase().includes(token))) score += 4;
       }
     }
-
     const summaryLower = chunk.summary.toLowerCase();
     for (const token of queryTokens) {
-      if (summaryLower.includes(token)) {
-        score += 2;
-      }
+      if (summaryLower.includes(token)) score += 2;
     }
-
     if (score > highestScore) {
       highestScore = score;
       bestChunk = chunk;
     }
   }
 
-  if (highestScore > 0 && bestChunk) {
-    return { chunk: bestChunk, score: highestScore };
-  }
-
+  if (highestScore > 0 && bestChunk) return { chunk: bestChunk, score: highestScore };
   return { chunk: AI_KNOWLEDGE_CHUNKS[0], score: 1 };
 }

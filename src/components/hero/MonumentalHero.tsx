@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { AtmosphericBackground } from "./AtmosphericBackground";
 import Threads from "@/components/ui/Threads";
 import { DigitalExhibitionStage } from "./DigitalExhibitionStage";
 import { HoverHighlighter } from "@/components/ui/HoverHighlighter";
+import { MagneticPill } from "@/components/ui/MagneticPill";
 
 const Lanyard = dynamic(() => import("@/components/ui/Lanyard"), { ssr: false });
 
@@ -16,6 +18,16 @@ export function MonumentalHero() {
   const isLightMode = theme === "light";
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+
+  const heroContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroContainerRef,
+    offset: ["start start", "end start"],
+  });
+  const line1X = useTransform(scrollYProgress, [0, 0.7], [0, -48]);
+  const line2X = useTransform(scrollYProgress, [0, 0.7], [0, 48]);
+  const curtainOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.18]);
+  const lanyardLift = useTransform(scrollYProgress, [0, 0.85], [0, -40]);
 
   // Layout anchor references for master unbounded canvas
   const desktopAnchorRef = useRef<HTMLDivElement>(null);
@@ -43,7 +55,10 @@ export function MonumentalHero() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-hidden flex flex-col justify-between transition-colors duration-300">
+    <div
+      ref={heroContainerRef}
+      className="relative w-full min-h-[100svh] bg-[var(--bg)] text-[var(--fg)] overflow-hidden flex flex-col justify-between transition-colors duration-300 pb-10 sm:pb-14"
+    >
       {/* 1. ReactBits Background Animation: Threads (Active in Dark Mode for fluid WebGL ribbons on pitch black) */}
       <div
         className={`absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700 ${
@@ -120,42 +135,56 @@ export function MonumentalHero() {
               className="relative flex flex-col select-none py-1 pb-1 overflow-visible group/headline"
             >
               {/* Line 1: Expressive Editorial Italic Serif */}
-              <span
-                ref={line1Ref}
-                className="font-serif italic font-normal text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2 inline-block select-none transform-gpu"
+              <motion.div
                 style={{
-                  background:
-                    "linear-gradient(90deg, var(--fg) 0%, var(--fg) 32%, var(--accent) 52%, var(--fg) 70%, var(--fg) 100%)",
-                  backgroundSize: "220% auto",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
-                  opacity: hasMounted ? 1 : 0,
-                  filter: hasMounted ? "blur(0px)" : "blur(14px)",
-                  transform: hasMounted ? "translateY(0px) scale(1)" : "translateY(24px) scale(0.99)",
-                  transition: prefersReducedMotion
-                    ? "none"
-                    : "opacity 950ms cubic-bezier(0.16, 1, 0.3, 1), filter 950ms cubic-bezier(0.16, 1, 0.3, 1), transform 950ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  x: prefersReducedMotion ? 0 : line1X,
+                  opacity: prefersReducedMotion ? 1 : curtainOpacity,
                 }}
               >
-                Curiosity,
-              </span>
+                <span
+                  ref={line1Ref}
+                  className="font-serif italic font-normal text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-[0.92] tracking-[-0.025em] pb-1.5 sm:pb-2 inline-block select-none transform-gpu"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, var(--fg) 0%, var(--fg) 32%, var(--accent) 52%, var(--fg) 70%, var(--fg) 100%)",
+                    backgroundSize: "220% auto",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    animation: prefersReducedMotion ? "none" : "kineticShine 8.5s ease-in-out infinite",
+                    opacity: hasMounted ? 1 : 0,
+                    filter: hasMounted ? "blur(0px)" : "blur(14px)",
+                    transform: hasMounted ? "translateY(0px) scale(1)" : "translateY(24px) scale(0.99)",
+                    transition: prefersReducedMotion
+                      ? "none"
+                      : "opacity 950ms cubic-bezier(0.16, 1, 0.3, 1), filter 950ms cubic-bezier(0.16, 1, 0.3, 1), transform 950ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                >
+                  Curiosity,
+                </span>
+              </motion.div>
 
               {/* Line 2: Confident, Distinctive Sans-Serif Line */}
-              <div
-                ref={line2Ref}
-                className="font-display font-semibold text-3xl sm:text-5xl md:text-[2.75rem] lg:text-[3.5rem] xl:text-[4.25rem] leading-[1.02] tracking-[-0.035em] text-[var(--fg)] block select-none transform-gpu"
+              <motion.div
                 style={{
-                  opacity: hasMounted ? 1 : 0,
-                  filter: hasMounted ? "blur(0px)" : "blur(14px)",
-                  transform: hasMounted ? "translateY(0px) scale(1)" : "translateY(22px) scale(0.99)",
-                  transition: prefersReducedMotion
-                    ? "none"
-                    : "opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, filter 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms",
+                  x: prefersReducedMotion ? 0 : line2X,
+                  opacity: prefersReducedMotion ? 1 : curtainOpacity,
                 }}
               >
-                made tangible.
-              </div>
+                <div
+                  ref={line2Ref}
+                  className="font-display font-semibold text-3xl sm:text-5xl md:text-[2.75rem] lg:text-[3.5rem] xl:text-[4.25rem] leading-[1.02] tracking-[-0.035em] text-[var(--fg)] block select-none transform-gpu"
+                  style={{
+                    opacity: hasMounted ? 1 : 0,
+                    filter: hasMounted ? "blur(0px)" : "blur(14px)",
+                    transform: hasMounted ? "translateY(0px) scale(1)" : "translateY(22px) scale(0.99)",
+                    transition: prefersReducedMotion
+                      ? "none"
+                      : "opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, filter 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 140ms",
+                  }}
+                >
+                  made tangible.
+                </div>
+              </motion.div>
             </div>
 
             {/* Mobile Portrait Anchor */}
@@ -193,7 +222,7 @@ export function MonumentalHero() {
             <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[var(--border)] flex items-center gap-2.5">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" aria-hidden="true" />
               <span className="font-mono text-xs sm:text-[13px] text-[var(--fg)] tracking-wider uppercase font-semibold">
-                Computer Engineering · Builder
+                Computer Engineering · AI, Systems &amp; Full Stack
               </span>
             </div>
 
@@ -210,36 +239,45 @@ export function MonumentalHero() {
               .
             </p>
 
-            {/* Purpose-Driven Action Group */}
+            {/* Purpose-Driven Action Group (Magnetic Liquid-Fill Pills) */}
             <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
-              <a
+              <MagneticPill
+                as="a"
                 href="#work"
-                className="group relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[var(--fg)] text-[var(--bg)] font-sans text-xs sm:text-sm font-semibold tracking-tight transition-all duration-300 hover:opacity-90 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                variant="primary"
+                cursorLabel="EXPLORE"
+                className="px-5 sm:px-6 py-2.5 sm:py-3 font-sans text-xs sm:text-sm font-semibold tracking-tight"
               >
                 <span>Explore My Work</span>
-                <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5 text-[var(--bg)]" />
-              </a>
+                <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
+              </MagneticPill>
 
-              <a
+              <MagneticPill
+                as="a"
                 href="#contact"
-                className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs sm:text-sm font-sans font-medium text-[var(--fg)] hover:border-[var(--accent)] hover:bg-[var(--surface-hover)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                variant="secondary"
+                cursorLabel="SAY HELLO"
+                className="px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-sans font-medium"
               >
                 <span>Get in Touch</span>
-                <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-muted)] group-hover:text-[var(--accent)] transition-colors" />
-              </a>
+                <ArrowUpRight className="h-3.5 w-3.5 opacity-75" />
+              </MagneticPill>
 
-              <button
+              <MagneticPill
+                as="button"
                 type="button"
+                variant="secondary"
+                cursorLabel="VIEW CV"
                 onClick={() => {
                   if (typeof window !== "undefined") {
                     window.dispatchEvent(new CustomEvent("open-resume-modal"));
                   }
                 }}
-                className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs sm:text-sm font-sans font-medium text-[var(--fg)] hover:border-[var(--accent)] hover:bg-[var(--surface-hover)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
+                className="px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-sans font-medium"
               >
                 <span>Curriculum Vitae</span>
-                <ArrowUpRight className="h-3.5 w-3.5 text-[var(--fg-muted)] group-hover:text-[var(--accent)] transition-colors" />
-              </button>
+                <ArrowUpRight className="h-3.5 w-3.5 opacity-75" />
+              </MagneticPill>
             </div>
           </div>
 
@@ -264,7 +302,8 @@ export function MonumentalHero() {
 
       {/* Light Mode 3D Physics Lanyard: Anchored at top ceiling (top-0) spanning full-viewport bleed so swings/drags across headline are never clipped */}
       {hasMounted && isLightMode && (
-        <div
+        <motion.div
+          style={{ y: prefersReducedMotion ? 0 : lanyardLift }}
           className="hidden md:block absolute inset-0 w-full h-[100svh] min-h-[720px] z-30 pointer-events-none overflow-visible select-none"
           aria-label="Interactive 3D Engineering ID Lanyard"
         >
@@ -285,7 +324,7 @@ export function MonumentalHero() {
             breeze={0.35}
             anchor={0.74}
           />
-        </div>
+        </motion.div>
       )}
 
       {/* Subtle Scroll Affordance Indicator */}
@@ -329,10 +368,10 @@ export function MonumentalHero() {
                   }
                 }}
                 className="flex items-center gap-1.5 mt-0.5 text-left sm:text-right hover:opacity-80 transition-opacity cursor-pointer group"
-                title="Click to view credentials & curriculum vitae"
+                title="Open to Software & AI Engineering Internships — click to view resume"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-                <span className="text-[var(--fg)] font-medium group-hover:underline">Summer 2026 Internships</span>
+                <span className="text-[var(--fg)] font-medium group-hover:underline">Open to Internships</span>
               </button>
             </div>
           </div>
